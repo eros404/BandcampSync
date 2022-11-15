@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Eros404.BandcampSync.AppSettings\Eros404.BandcampSync.AppSettings.csproj" />
+      <ProjectReference Include="..\Eros404.BandcampSync.BandcampApi\Eros404.BandcampSync.BandcampApi.csproj" />
+      <ProjectReference Include="..\Eros404.BandcampSync.BandcampWebsite\Eros404.BandcampSync.BandcampWebsite.csproj" />
+      <ProjectReference Include="..\Eros404.BandcampSync.Core\Eros404.BandcampSync.Core.csproj" />
+      <ProjectReference Include="..\Eros404.BandcampSync.LocalCollection\Eros404.BandcampSync.LocalCollection.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+        <PackageReference Include="Spectre.Console" Version="0.45.0" />
+        <PackageReference Include="Spectre.Console.Cli" Version="0.45.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="appsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+</Project>
