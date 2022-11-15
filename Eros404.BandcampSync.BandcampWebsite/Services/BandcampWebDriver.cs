@@ -1,4 +1,5 @@
-﻿using Eros404.BandcampSync.BandcampWebsite.Pages;
+﻿using System.Text.Encodings.Web;
+using Eros404.BandcampSync.BandcampWebsite.Pages;
 using Eros404.BandcampSync.Core.Services;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -44,6 +45,11 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
         public bool Login(string userName, string password)
         {
             return new LoginPage(_driver, _baseAddress).Load().Login(userName, password).Loaded;
+        }
+
+        public void SetIdentityCookie(string value)
+        {
+            _driver.Manage().Cookies.AddCookie(new Cookie("identity", UrlEncoder.Create().Encode(value)));
         }
     }
 }

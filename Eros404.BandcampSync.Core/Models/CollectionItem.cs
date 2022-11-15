@@ -4,5 +4,6 @@
     {
         public string? Title { get; set; }
         public string? BandName { get; set; }
+        public string? RedownloadUrl { get; set; }
     }
 }
