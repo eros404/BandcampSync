@@ -9,6 +9,7 @@
             BandName = track.BandName;
             AlbumTitle = track.AlbumTitle;
             Number = track.Number;
+            RedownloadUrl = track.RedownloadUrl;
         }
 
         public int CompareTo(MissingTrack? other)

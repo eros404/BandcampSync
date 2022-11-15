@@ -11,6 +11,7 @@
             BandName = album.BandName;
             NumberOfTracks = album.NumberOfTracks;
             NumberOfMissingTracks = numberOfMissingTracks;
+            RedownloadUrl = album.RedownloadUrl;
         }
 
         public int CompareTo(MissingAlbum? other)

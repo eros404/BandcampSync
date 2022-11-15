@@ -6,23 +6,26 @@ using OpenQA.Selenium.Chrome;
 
 namespace Eros404.BandcampSync.BandcampWebsite.Services
 {
-    public class BandcampWebDriver : IBandcampWebDriver
+    public sealed class BandcampWebDriver : IBandcampWebDriver
     {
         private readonly string _baseAddress;
         private readonly IWebDriver _driver;
         public BandcampWebDriver(string baseAddress)
         {
             _baseAddress = baseAddress;
-            _driver = BuildDriver();
+            _driver = BuildDriver(baseAddress);
 
-            static IWebDriver BuildDriver()
+            static IWebDriver BuildDriver(string baseAddress)
             {
                 var options = new ChromeOptions();
 #if !DEBUG
                 options.AddArguments("headless");
 #endif
                 options.AddArguments("window-size=1920,1080");
-                return new ChromeDriver(options);
+                return new ChromeDriver(options)
+                {
+                    Url = baseAddress
+                };
             }
         }
 
@@ -32,7 +35,8 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        protected virtual void Dispose(bool disposing)
+
+        private void Dispose(bool disposing)
         {
             if (_disposed) return;
             if (disposing)
@@ -47,9 +51,16 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
             return new LoginPage(_driver, _baseAddress).Load().Login(userName, password).Loaded;
         }
 
-        public void SetIdentityCookie(string value)
+        public void OpenDownloadPage(string url)
         {
-            _driver.Manage().Cookies.AddCookie(new Cookie("identity", UrlEncoder.Create().Encode(value)));
+            new DownloadPage(_driver, _baseAddress, new Uri(url).Query).Load();
+        }
+
+        public IBandcampWebDriver SetIdentityCookie(string value)
+        {
+            _driver.Manage().Cookies.AddCookie(new Cookie("identity", UrlEncoder.Create().Encode(value),
+                new Uri(_baseAddress).Host, "/", null));
+            return this;
         }
     }
 }

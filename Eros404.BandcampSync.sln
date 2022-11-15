@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros404.BandcampSync.Consol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros404.BandcampSync.LocalCollection", "Eros404.BandcampSync.LocalCollection\Eros404.BandcampSync.LocalCollection.csproj", "{35A9CAF2-5CD3-49A5-8974-D837D3ED5E66}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros404.BandcampSync.Core", "Eros404.BandcampSync.Core\Eros404.BandcampSync.Core.csproj", "{69CA4AC1-2DE5-4333-9C7C-C7EC4C88DA8A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{35A9CAF2-5CD3-49A5-8974-D837D3ED5E66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35A9CAF2-5CD3-49A5-8974-D837D3ED5E66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35A9CAF2-5CD3-49A5-8974-D837D3ED5E66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69CA4AC1-2DE5-4333-9C7C-C7EC4C88DA8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69CA4AC1-2DE5-4333-9C7C-C7EC4C88DA8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69CA4AC1-2DE5-4333-9C7C-C7EC4C88DA8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69CA4AC1-2DE5-4333-9C7C-C7EC4C88DA8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

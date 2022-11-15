@@ -4,6 +4,6 @@
     {
         public const string Section = "BandcampCollection";
         public string IdentityCookie { get; set; } = "";
-        public string ApiUrl { get; set; } = "";
+        public string BaseUrl { get; set; } = "";
     }
 }

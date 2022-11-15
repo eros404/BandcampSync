@@ -15,11 +15,12 @@ namespace Eros404.BandcampSync.BandcampApi.Services
         private readonly HttpClient _client;
         public BandcampApiService(IOptions<BandcampOptions> options)
         {
-            var baseAddress = new Uri(options.Value.ApiUrl);
-            _cookieContainer.Add(baseAddress, new Cookie("identity", UrlEncoder.Create().Encode(options.Value.IdentityCookie)));
+            var baseUri = new Uri(options.Value.BaseUrl);
+            _cookieContainer.Add(baseUri,
+                new Cookie("identity", UrlEncoder.Create().Encode(options.Value.IdentityCookie), "/", baseUri.Host));
             _client = new HttpClient(new HttpClientHandler { CookieContainer = _cookieContainer })
             {
-                BaseAddress = baseAddress
+                BaseAddress = new Uri(baseUri, "api/")
             };
         }
 

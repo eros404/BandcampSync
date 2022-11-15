@@ -3,5 +3,6 @@
     public interface IBandcampWebDriverFactory
     {
         IBandcampWebDriver Create();
+        IBandcampWebDriver CreateWithIdentity();
     }
 }

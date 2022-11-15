@@ -32,6 +32,8 @@ var app = new CommandApp(new TypeRegistrar(services));
 app.Configure(config =>
 {
     config.AddCommand<LoginCommand>("login");
+    config.AddCommand<CompareCollectionsCommand>("compare");
+    config.AddCommand<SyncCommand>("sync");
     config.AddBranch<SetConfigSettings>("set", set =>
     {
         set.AddCommand<SetIdentityCookieCommand>("identity");
@@ -42,6 +44,5 @@ app.Configure(config =>
         view.AddCommand<SeeBandcampCollectionCommand>("bandcamp");
         view.AddCommand<SeeLocalCollectionCommand>("local");
     });
-    config.AddCommand<CompareCollectionsCommand>("compare");
 });
 return app.Run(args);
