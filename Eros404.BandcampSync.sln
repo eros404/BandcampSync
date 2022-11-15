@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros404.BandcampSync.BandcampApi", "Eros404.BandcampSync.BandcampApi\Eros404.BandcampSync.BandcampApi.csproj", "{9A317B6D-F9DF-4AF6-8121-835D92904546}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros404.BandcampSync.AppSettings", "Eros404.BandcampSync.AppSettings\Eros404.BandcampSync.AppSettings.csproj", "{06A48D1F-5C72-4AD0-B0C4-082F879CF9D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros404.BandcampSync.BandcampWebsite", "Eros404.BandcampSync.BandcampWebsite\Eros404.BandcampSync.BandcampWebsite.csproj", "{371BA031-321C-46A1-9AC7-E77BDC7523BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros404.BandcampSync.ConsoleApp", "Eros404.BandcampSync.ConsoleApp\Eros404.BandcampSync.ConsoleApp.csproj", "{C0B26C37-6D44-48DD-8208-57F173604184}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros404.BandcampSync.LocalCollection", "Eros404.BandcampSync.LocalCollection\Eros404.BandcampSync.LocalCollection.csproj", "{35A9CAF2-5CD3-49A5-8974-D837D3ED5E66}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9A317B6D-F9DF-4AF6-8121-835D92904546}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A317B6D-F9DF-4AF6-8121-835D92904546}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A317B6D-F9DF-4AF6-8121-835D92904546}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A317B6D-F9DF-4AF6-8121-835D92904546}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06A48D1F-5C72-4AD0-B0C4-082F879CF9D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06A48D1F-5C72-4AD0-B0C4-082F879CF9D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06A48D1F-5C72-4AD0-B0C4-082F879CF9D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06A48D1F-5C72-4AD0-B0C4-082F879CF9D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{371BA031-321C-46A1-9AC7-E77BDC7523BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{371BA031-321C-46A1-9AC7-E77BDC7523BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{371BA031-321C-46A1-9AC7-E77BDC7523BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{371BA031-321C-46A1-9AC7-E77BDC7523BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0B26C37-6D44-48DD-8208-57F173604184}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0B26C37-6D44-48DD-8208-57F173604184}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0B26C37-6D44-48DD-8208-57F173604184}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0B26C37-6D44-48DD-8208-57F173604184}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35A9CAF2-5CD3-49A5-8974-D837D3ED5E66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35A9CAF2-5CD3-49A5-8974-D837D3ED5E66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35A9CAF2-5CD3-49A5-8974-D837D3ED5E66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35A9CAF2-5CD3-49A5-8974-D837D3ED5E66}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
