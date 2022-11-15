@@ -1,4 +1,5 @@
 ﻿using System.Text.Encodings.Web;
+using Eros404.BandcampSync.BandcampWebsite.Extensions;
 using Eros404.BandcampSync.BandcampWebsite.Pages;
 using Eros404.BandcampSync.Core.Services;
 using OpenQA.Selenium;
@@ -51,9 +52,11 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
             return new LoginPage(_driver, _baseAddress).Load().Login(userName, password).Loaded;
         }
 
-        public void OpenDownloadPage(string url)
+        public void DownloadItem(string url)
         {
-            new DownloadPage(_driver, _baseAddress, new Uri(url).Query).Load();
+            var page = new DownloadPage(_driver, _baseAddress, new Uri(url).Query).Load();
+            if (page.DownloadIsExpired()) return;
+            page.Download();
         }
 
         public IBandcampWebDriver SetIdentityCookie(string value)

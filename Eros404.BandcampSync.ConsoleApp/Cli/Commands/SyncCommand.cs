@@ -35,7 +35,7 @@ public class SyncCommand : AsyncCommand<SyncSettings>
             var compareResult = bandcamp.Compare(local.Tracks);
             AnsiConsole.Write(compareResult.ToTable("Missing Items"));
             using var webDriver = _webDriverFactory.CreateWithIdentity();
-            webDriver.OpenDownloadPage(compareResult.MissingAlbums[0].RedownloadUrl);
+            webDriver.DownloadItem(compareResult.MissingAlbums[0].RedownloadUrl);
             AnsiConsole.Confirm("Oui?");
             return 0;
         }
