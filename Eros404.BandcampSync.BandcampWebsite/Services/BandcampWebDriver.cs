@@ -1,6 +1,7 @@
 ﻿using System.Text.Encodings.Web;
 using Eros404.BandcampSync.BandcampWebsite.Extensions;
 using Eros404.BandcampSync.BandcampWebsite.Pages;
+using Eros404.BandcampSync.Core.Models;
 using Eros404.BandcampSync.Core.Services;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -56,11 +57,11 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
             return new LoginPage(_driver, _baseAddress).Load().Login(userName, password).Loaded;
         }
 
-        public async Task<Stream?> DownloadItemAsync(string url)
+        public async Task<Stream?> DownloadItemAsync(string url, AudioFormat format)
         {
             var page = new DownloadPage(_driver, _baseAddress, new Uri(url).Query).Load();
             if (page.DownloadIsExpired()) return null;
-            var link = page.GetDownloadLink();
+            var link = page.GetDownloadLink(format);
             using var client = new HttpClient();
             var response = await client.GetAsync(link);
             return await response.Content.ReadAsStreamAsync();

@@ -31,7 +31,6 @@ var services = new ServiceCollection()
 var app = new CommandApp(new TypeRegistrar(services));
 app.Configure(config =>
 {
-    config.AddCommand<LoginCommand>("login");
     config.AddCommand<CompareCollectionsCommand>("compare");
     config.AddCommand<SyncCommand>("sync");
     config.AddBranch<SetConfigSettings>("set", set =>

@@ -1,4 +1,6 @@
 ﻿using Eros404.BandcampSync.BandcampWebsite.Extensions;
+using Eros404.BandcampSync.Core.Extensions;
+using Eros404.BandcampSync.Core.Models;
 using OpenQA.Selenium;
 
 namespace Eros404.BandcampSync.BandcampWebsite.Pages
@@ -20,11 +22,13 @@ namespace Eros404.BandcampSync.BandcampWebsite.Pages
         private IWebElement DownloadButton => Driver.FindElement(DownloadButtonBy);
         private IWebElement ReauthEmailInput => Driver.FindElement(By.CssSelector(".reauth-form > input.reauth-email"));
         private IWebElement ReauthSubmit => Driver.FindElement(By.CssSelector(".reauth-form > input.submit"));
+        private IWebElement ItemFormatButton => Driver.FindElement(By.ClassName("item-format"));
+        private IEnumerable<IWebElement> ItemFormatListElements => Driver.FindElements(By.CssSelector("ul.formats > li"));
 
         protected override void ExecuteLoad()
         {
             Driver.Navigate().GoToUrl(_url);
-            Driver.WaitForJsToLoad();
+            Driver.WaitForJsToLoad(30);
         }
 
         protected override bool EvaluateLoadedStatus()
@@ -54,8 +58,17 @@ namespace Eros404.BandcampSync.BandcampWebsite.Pages
 
         private void WaitUntilDownloadIsReady() => Driver.WaitUntil(driver => driver.FindElement(DownloadButtonBy).Displayed);
 
-        public string GetDownloadLink()
+        public string GetDownloadLink(AudioFormat audioFormat)
         {
+            ItemFormatButton.Click();
+            var itemFormatElement = ItemFormatListElements.ToList().Find(listEl =>
+                listEl.FindElement(By.ClassName("description")).Text == audioFormat.GetDisplayName());
+            if (itemFormatElement != null)
+            {
+                Driver.WaitUntil(_ => itemFormatElement.Displayed);
+                itemFormatElement.Click();
+                Driver.WaitForJsToLoad(30);
+            }
             WaitUntilDownloadIsReady();
             return DownloadButton.GetAttribute("href");
         }

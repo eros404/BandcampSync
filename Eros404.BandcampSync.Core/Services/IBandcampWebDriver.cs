@@ -1,8 +1,10 @@
-﻿namespace Eros404.BandcampSync.Core.Services
+﻿using Eros404.BandcampSync.Core.Models;
+
+namespace Eros404.BandcampSync.Core.Services
 {
     public interface IBandcampWebDriver : IDisposable
     {
         bool Login(string userName, string password);
-        Task<Stream?> DownloadItemAsync(string url);
+        Task<Stream?> DownloadItemAsync(string url, AudioFormat format);
     }
 }

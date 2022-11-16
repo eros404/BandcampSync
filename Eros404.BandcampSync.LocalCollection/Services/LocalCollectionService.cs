@@ -1,5 +1,6 @@
 ﻿using System.IO.Compression;
 using Eros404.BandcampSync.AppSettings.Models;
+using Eros404.BandcampSync.Core.Extensions;
 using Eros404.BandcampSync.Core.Models;
 using Eros404.BandcampSync.Core.Services;
 using Eros404.BandcampSync.LocalCollection.Extensions;
@@ -19,16 +20,10 @@ namespace Eros404.BandcampSync.LocalCollection.Services
 
         public Collection GetLocalCollection(bool asAlbums)
         {
+            var audioExtensions = (from object? audioFormat in Enum.GetValues(typeof(AudioFormat))
+                select ((AudioFormat)audioFormat).GetExtension()).ToList();
             var allFiles = Directory.GetFiles(_collectionPath, "*.*", SearchOption.AllDirectories)
-                .Where(filePath => new[]
-                {
-                    ".flac",
-                    ".mp3",
-                    ".wav",
-                    ".aac",
-                    ".ogg",
-                    ".aiff"
-                }.Contains(Path.GetExtension(filePath)))
+                .Where(filePath => audioExtensions.Contains(Path.GetExtension(filePath)))
                 .Select(TagLib.File.Create);
 
             return asAlbums ? new Collection

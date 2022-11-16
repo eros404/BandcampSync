@@ -4,6 +4,7 @@ using Eros404.BandcampSync.Core.Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using System.Diagnostics.CodeAnalysis;
+using Eros404.BandcampSync.Core.Models;
 
 namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands
 {
@@ -24,14 +25,10 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands
         {
             try
             {
-                var fanId = await _bandCampService.GetFanIdAsync();
-                if (fanId == null)
+                var compareResult = await CompareAsync(_bandCampService, _localCollectionService);
+                if (compareResult == null)
                     return 1;
-                var bandcamp = await _bandCampService.GetCollectionAsync((int)fanId);
-                if (bandcamp == null)
-                    return 1;
-                var local = _localCollectionService.GetLocalCollection(false);
-                AnsiConsole.Write(bandcamp.Compare(local.Tracks).ToTable("Missing Items"));
+                AnsiConsole.Write(compareResult.ToTable("Missing Items"));
                 return 0;
             }
             catch (Exception ex)
@@ -39,6 +36,19 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands
                 _logger.LogException(ex);
                 return 1;
             }
+        }
+
+        public static async Task<CollectionCompareResult?> CompareAsync(IBandcampApiService bandCampService,
+            ILocalCollectionService localCollectionService)
+        {
+            var fanId = await bandCampService.GetFanIdAsync();
+            if (fanId == null)
+                return null;
+            var bandcamp = await bandCampService.GetCollectionAsync((int)fanId);
+            if (bandcamp == null)
+                return null;
+            var local = localCollectionService.GetLocalCollection(false);
+            return bandcamp.Compare(local.Tracks);
         }
     }
 }

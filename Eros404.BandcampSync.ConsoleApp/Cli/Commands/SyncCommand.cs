@@ -26,47 +26,32 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
     {
         try
         {
-            var fanId = await _bandCampService.GetFanIdAsync();
-            if (fanId == null)
+            var compareResult = await CompareCollectionsCommand.CompareAsync(_bandCampService, _localCollectionService);
+            if (compareResult == null)
                 return 1;
-            var bandcamp = await _bandCampService.GetCollectionAsync((int)fanId);
-            if (bandcamp == null)
-                return 1;
-            var local = _localCollectionService.GetLocalCollection(false);
-            var compareResult = bandcamp.Compare(local.Tracks);
             AnsiConsole.Write(compareResult.ToTable("Missing Items"));
             if (!compareResult.MissingAlbums.Any() && !compareResult.MissingTracks.Any())
                 return 0;
+            
+            var selectedAlbums = SelectAlbumsToDownload(compareResult.MissingAlbums);
+            if (!selectedAlbums.Any())
+                return 0;
+            
             using var webDriver = _webDriverFactory.CreateWithIdentity();
-            if (compareResult.MissingAlbums.Any())
-            {
-                var dictionary = compareResult.MissingAlbums.ToDictionary(a => $"{a.Title} - {a.BandName}", a => a);
-                var selectedKeys = AnsiConsole.Prompt(
-                    new MultiSelectionPrompt<string>()
-                        .Title("[blue]Select albums to download:[/]")
-                        .NotRequired()
-                        .PageSize(10)
-                        .MoreChoicesText("[grey](Move up and down to reveal more albums)[/]")
-                        .InstructionsText(
-                            "[grey](Press [blue]<space>[/] to toggle an album, [green]<enter>[/] to accept)[/]")
-                        .AddChoices("All")
-                        .AddChoices(dictionary.Keys));
-                var selectedAlbums = selectedKeys.Contains("All")
-                    ? compareResult.MissingAlbums
-                    : selectedKeys.Select(key => dictionary[key]).ToList();
-                await AnsiConsole.Progress()
-                    .StartAsync(async ctx =>
+            await AnsiConsole.Progress()
+                .Columns(new TaskDescriptionColumn(), new ProgressBarColumn(), new PercentageColumn(),
+                    new RemainingTimeColumn(), new SpinnerColumn())
+                .StartAsync(async ctx =>
+                {
+                    var task = ctx.AddTask($"Downloding {selectedAlbums.Count} albums");
+                    foreach (var album in selectedAlbums)
                     {
-                        var task = ctx.AddTask($"Downloding {selectedAlbums.Count} albums");
-                        foreach (var album in selectedAlbums)
-                        {
-                            var stream = await webDriver.DownloadItemAsync(album.RedownloadUrl);
-                            if (stream != null)
-                                _localCollectionService.AddAlbum(stream, album);
-                            task.Increment(100 / selectedAlbums.Count);
-                        }
-                    });
-            }
+                        var stream = await webDriver.DownloadItemAsync(album.RedownloadUrl ?? "", settings.AudioFormat);
+                        if (stream != null)
+                            _localCollectionService.AddAlbum(stream, album);
+                        task.Increment(100 / selectedAlbums.Count);
+                    }
+                });
             return 0;
         }
         catch (Exception ex)
@@ -74,5 +59,26 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
             _logger.LogException(ex);
             return 1;
         }
+    }
+
+    private static List<MissingAlbum> SelectAlbumsToDownload(List<MissingAlbum> albums)
+    {
+        if (!albums.Any())
+            return new List<MissingAlbum>();
+        var dictionary = albums.ToDictionary(a => $"{a.Title} - {a.BandName}", a => a);
+        var all = $"All albums ({albums.Count})";
+        var selectedKeys = AnsiConsole.Prompt(
+            new MultiSelectionPrompt<string>()
+                .Title("[blue]Select albums to download:[/]")
+                .NotRequired()
+                .PageSize(10)
+                .MoreChoicesText("[grey](Move up and down to reveal more albums)[/]")
+                .InstructionsText(
+                    "[grey](Press [blue]<space>[/] to toggle an album, [green]<enter>[/] to accept)[/]")
+                .AddChoices(all)
+                .AddChoices(dictionary.Keys));
+        return selectedKeys.Contains(all)
+            ? albums
+            : selectedKeys.Select(key => dictionary[key]).ToList();
     }
 }
