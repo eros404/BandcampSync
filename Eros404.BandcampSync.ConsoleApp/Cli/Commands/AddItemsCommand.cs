@@ -21,6 +21,11 @@ public class AddItemsCommand : AsyncCommand<AddItemsSettings>
         _webDriverFactory = webDriverFactory;
     }
 
+    public override ValidationResult Validate(CommandContext context, AddItemsSettings settings) =>
+        settings.RedownLoadUrls == null || !settings.RedownLoadUrls.Any()
+            ? ValidationResult.Error("At least one link is expected.")
+            : base.Validate(context, settings);
+
     public override async Task<int> ExecuteAsync(CommandContext context, AddItemsSettings settings)
     {
         var fanId = await _bandCampService.GetFanIdAsync();
@@ -31,35 +36,40 @@ public class AddItemsCommand : AsyncCommand<AddItemsSettings>
             return -1;
         using var webDriver = _webDriverFactory.CreateWithIdentity();
         using var client = new HttpClient { Timeout = TimeSpan.FromMinutes(5) };
-        var redownloadUrl = settings.RedownLoadUrl;
-        if (!long.TryParse(System.Web.HttpUtility.ParseQueryString(new Uri(redownloadUrl).Query).Get("payment_id"),
-                out var paymentId))
-        {
-            AnsiConsole.MarkupLine("[red]Link not valid.[/]");
-            return -1;
-        }
-        var collectionItem = collection.GetAllItems().FirstOrDefault(i => i.GetPaymentId() == paymentId);
-        if (collectionItem == null)
-        {
-            AnsiConsole.MarkupLine("[red]No item with this reference in your Bandcamp collection.[/]");
-            return -1;
-        }
-    
-        await AnsiConsole.Status()
+        return await AnsiConsole.Status()
             .StartAsync("Downloading...", async _ =>
             {
-                switch (collectionItem)
+                for (var i = 0; i < settings.RedownLoadUrls!.Length; i++)
                 {
-                    case Album album:
-                        await DownloadAlbum(webDriver, client, redownloadUrl, album, settings.AudioFormat);
-                        break;
-                    case Track track:
-                        await DownloadTrack(webDriver, client, redownloadUrl, track, settings.AudioFormat);
-                        break;
-                }
-            });
+                    var redownloadUrl = settings.RedownLoadUrls[i];
+                    if (!long.TryParse(
+                            System.Web.HttpUtility.ParseQueryString(new Uri(redownloadUrl).Query).Get("payment_id"),
+                            out var paymentId))
+                    {
+                        AnsiConsole.MarkupLine($"[red][[{i}]] Link not valid.[/]");
+                        return -1;
+                    }
 
-        return 0;
+                    var collectionItem = collection.GetAllItems().FirstOrDefault(i => i.GetPaymentId() == paymentId);
+                    if (collectionItem == null)
+                    {
+                        AnsiConsole.MarkupLine($"[red][[{i}]] No item with this reference in your Bandcamp collection.[/]");
+                        return -1;
+                    }
+
+                    switch (collectionItem)
+                    {
+                        case Album album:
+                            await DownloadAlbum(webDriver, client, redownloadUrl, album, settings.AudioFormat);
+                            break;
+                        case Track track:
+                            await DownloadTrack(webDriver, client, redownloadUrl, track, settings.AudioFormat);
+                            break;
+                    }
+                }
+                AnsiConsole.MarkupLine($"[green]Done[/]");
+                return 0;
+            });
     }
     
     private async Task DownloadAlbum(IBandcampWebDriver webDriver, HttpClient client, string redownloadUrl,
@@ -90,7 +100,6 @@ public class AddItemsCommand : AsyncCommand<AddItemsSettings>
             var response = await client.GetAsync(result.DownloadLink);
             response.EnsureSuccessStatusCode();
             addToCollectionAction(await response.Content.ReadAsStreamAsync());
-            AnsiConsole.MarkupLine($"[green]Done[/]");
         }
     }
 }

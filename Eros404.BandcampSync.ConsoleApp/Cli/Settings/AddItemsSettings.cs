@@ -6,9 +6,9 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Settings;
 
 public class AddItemsSettings : CommandSettings
 {
-    [CommandArgument(0, "<downloadLink>")]
-    [Description("A download link provided by Bandcamp. Usually sent by mail.")]
-    public string RedownLoadUrl { get; set; } = "";
+    [CommandArgument(0, "[downloadLink]")]
+    [Description("Download links provided by Bandcamp. Usually sent by mail.")]
+    public string[]? RedownLoadUrls { get; set; }
     
     [CommandOption("-f|--format")]
     [DefaultValue(AudioFormat.MP3320)]
