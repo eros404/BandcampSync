@@ -8,12 +8,10 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands
 {
     internal class LoginCommand : Command<LoginSettings>
     {
-        private readonly ILogger _logger;
         private readonly IBandcampWebDriverFactory _webDriverFactory;
 
         public LoginCommand(ILogger logger, IBandcampWebDriverFactory webDriverFactory)
         {
-            _logger = logger;
             _webDriverFactory = webDriverFactory;
         }
 

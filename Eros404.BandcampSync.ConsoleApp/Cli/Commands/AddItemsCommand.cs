@@ -8,14 +8,12 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands;
 
 public class AddItemsCommand : AsyncCommand<AddItemsSettings>
 {
-    private readonly ILogger _logger;
     private readonly IBandcampApiService _bandCampService;
     private readonly ILocalCollectionService _localCollectionService;
     private readonly IBandcampWebDriverFactory _webDriverFactory;
 
     public AddItemsCommand(ILogger logger, IBandcampApiService bandCampService, ILocalCollectionService localCollectionService, IBandcampWebDriverFactory webDriverFactory)
     {
-        _logger = logger;
         _bandCampService = bandCampService;
         _localCollectionService = localCollectionService;
         _webDriverFactory = webDriverFactory;

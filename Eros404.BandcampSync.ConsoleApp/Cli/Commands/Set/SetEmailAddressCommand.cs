@@ -9,12 +9,10 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands.Set;
 
 internal class SetEmailAddressCommand : Command<SetEmailAddressSettings>
 {
-    private readonly ILogger _logger;
     private readonly IWritableOptions<EmailOptions> _emailOptions;
 
     public SetEmailAddressCommand(ILogger logger, IWritableOptions<EmailOptions> emailOptions)
     {
-        _logger = logger;
         _emailOptions = emailOptions;
     }
 

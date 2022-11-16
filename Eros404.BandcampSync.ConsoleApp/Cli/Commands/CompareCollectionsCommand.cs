@@ -9,13 +9,11 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands
 {
     internal class CompareCollectionsCommand : AsyncCommand<CompareCollectionsSettings>
     {
-        private readonly ILogger _logger;
         private readonly IBandcampApiService _bandCampService;
         private readonly ILocalCollectionService _localCollectionService;
 
         public CompareCollectionsCommand(ILogger logger, IBandcampApiService bandCampService, ILocalCollectionService localCollectionService)
         {
-            _logger = logger;
             _bandCampService = bandCampService;
             _localCollectionService = localCollectionService;
         }

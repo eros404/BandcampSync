@@ -24,7 +24,8 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
         _mailService = mailService;
     }
 
-    private int _numberOfNewLinksSent;
+    private int _numberOfItemDownloaded;
+    private int _numberOfNewLinkSent;
 
     public override async Task<int> ExecuteAsync(CommandContext context, SyncSettings settings)
     {
@@ -51,10 +52,12 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
                 foreach (var track in selectedTracks)
                     await DownloadTrack(webDriver, client, track, settings.AudioFormat);
             });
-        if (_numberOfNewLinksSent > 0)
+        AnsiConsole.MarkupLine(
+            $"[green]{_numberOfItemDownloaded}[/] item{(_numberOfItemDownloaded > 1 ? "s" : "")} downloaded.");
+        if (_numberOfNewLinkSent > 0)
         {
             AnsiConsole.MarkupLine(
-                $"[green]{_numberOfNewLinksSent}[/] link{(_numberOfNewLinksSent > 1 ? "s" : "")} have been sent to {_mailService.EmailAddress}");
+                $"[green]{_numberOfNewLinkSent}[/] link{(_numberOfNewLinkSent > 1 ? "s" : "")} have been sent to {_mailService.EmailAddress}.");
         }
         return 0;
     }
@@ -84,7 +87,7 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
             else
             {
                 AnsiConsole.MarkupLine($"New link sent.");
-                _numberOfNewLinksSent++;
+                _numberOfNewLinkSent++;
             }
         }
         else
@@ -93,6 +96,7 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
             var response = await client.GetAsync(result.DownloadLink);
             response.EnsureSuccessStatusCode();
             addToCollectionAction(await response.Content.ReadAsStreamAsync());
+            _numberOfItemDownloaded++;
         }
     }
 
