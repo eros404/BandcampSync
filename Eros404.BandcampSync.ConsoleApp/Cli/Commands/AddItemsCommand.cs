@@ -21,11 +21,6 @@ public class AddItemsCommand : AsyncCommand<AddItemsSettings>
         _webDriverFactory = webDriverFactory;
     }
 
-    public override ValidationResult Validate(CommandContext context, AddItemsSettings settings) =>
-        settings.RedownLoadUrls == null || !settings.RedownLoadUrls.Any()
-            ? ValidationResult.Error("At least one link is expected.")
-            : base.Validate(context, settings);
-
     public override async Task<int> ExecuteAsync(CommandContext context, AddItemsSettings settings)
     {
         var fanId = await _bandCampService.GetFanIdAsync();

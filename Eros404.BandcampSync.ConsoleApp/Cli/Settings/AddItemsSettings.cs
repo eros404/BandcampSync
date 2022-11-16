@@ -6,7 +6,7 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Settings;
 
 public class AddItemsSettings : CommandSettings
 {
-    [CommandArgument(0, "[downloadLink]")]
+    [CommandArgument(0, "<downloadLink>")]
     [Description("Download links provided by Bandcamp. Usually sent by mail.")]
     public string[]? RedownLoadUrls { get; set; }
     
