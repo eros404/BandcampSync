@@ -1,4 +1,5 @@
-﻿using Eros404.BandcampSync.AppSettings.Extensions;
+﻿using System.Reflection;
+using Eros404.BandcampSync.AppSettings.Extensions;
 using Eros404.BandcampSync.AppSettings.Models;
 using Eros404.BandcampSync.BandcampApi.Services;
 using Eros404.BandcampSync.BandcampWebsite.Services;
@@ -20,8 +21,10 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .Build();
 
+var executingAssembly = Assembly.GetExecutingAssembly();
+
 var services = new ServiceCollection()
-    .AddScoped(_ => System.Reflection.Assembly.GetExecutingAssembly())
+    .AddScoped(_ => executingAssembly)
     .ConfigureWritable<BandcampOptions>(configuration.GetSection(BandcampOptions.Section))
     .ConfigureWritable<LocalCollectionOptions>(configuration.GetSection(LocalCollectionOptions.Section))
     .ConfigureWritable<EmailOptions>(configuration.GetSection(EmailOptions.Section))
@@ -34,6 +37,7 @@ var services = new ServiceCollection()
 var app = new CommandApp(new TypeRegistrar(services));
 app.Configure(config =>
 {
+    config.SetApplicationName(executingAssembly.GetName().Name ?? "BandcampSync");
     config.AddCommand<CompareCollectionsCommand>("compare")
         .WithDescription("Display the items missing items of your Bandcamp collection.");
     config.AddCommand<SyncCommand>("sync")
@@ -52,11 +56,12 @@ app.Configure(config =>
         set.AddCommand<SetEmailAddressCommand>("email")
             .WithDescription("Change the email of your Bandcamp account.");
     });
-    config.AddBranch<SeeCollectionSettings>("see", view =>
+    config.AddBranch<SeeCollectionSettings>("see", see =>
     {
-        view.AddCommand<SeeBandcampCollectionCommand>("bandcamp")
+        see.SetDescription("Cammands to display your collections.");
+        see.AddCommand<SeeBandcampCollectionCommand>("bandcamp")
             .WithDescription("Display your Bandcamp collection.");
-        view.AddCommand<SeeLocalCollectionCommand>("local")
+        see.AddCommand<SeeLocalCollectionCommand>("local")
             .WithDescription("Display your local collection.");
     });
 });

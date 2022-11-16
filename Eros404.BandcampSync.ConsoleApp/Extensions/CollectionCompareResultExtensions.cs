@@ -25,7 +25,7 @@ namespace Eros404.BandcampSync.ConsoleApp.Extensions
             if (compareResult.MissingTracks.Any())
                 table.AddRow(compareResult.MissingTracks.ToTable());
 
-            if (!compareResult.MissingTracks.Any() && !compareResult.MissingTracks.Any())
+            if (!compareResult.MissingAlbums.Any() && !compareResult.MissingTracks.Any())
                 table.AddRow("No missing items.");
 
             return table;

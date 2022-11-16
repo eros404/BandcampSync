@@ -23,51 +23,43 @@ public class AddItemsCommand : AsyncCommand<AddItemsSettings>
 
     public override async Task<int> ExecuteAsync(CommandContext context, AddItemsSettings settings)
     {
-        try
+        var fanId = await _bandCampService.GetFanIdAsync();
+        if (fanId == null)
+            return -1;
+        var collection = await _bandCampService.GetCollectionAsync((int)fanId);
+        if (collection == null)
+            return -1;
+        using var webDriver = _webDriverFactory.CreateWithIdentity();
+        using var client = new HttpClient { Timeout = TimeSpan.FromMinutes(5) };
+        var redownloadUrl = settings.RedownLoadUrl;
+        if (!long.TryParse(System.Web.HttpUtility.ParseQueryString(new Uri(redownloadUrl).Query).Get("payment_id"),
+                out var paymentId))
         {
-            var fanId = await _bandCampService.GetFanIdAsync();
-            if (fanId == null)
-                return 1;
-            var collection = await _bandCampService.GetCollectionAsync((int)fanId);
-            if (collection == null)
-                return 1;
-            using var webDriver = _webDriverFactory.CreateWithIdentity();
-            using var client = new HttpClient();
-            var redownloadUrl = settings.RedownLoadUrl;
-            if (!long.TryParse(System.Web.HttpUtility.ParseQueryString(new Uri(redownloadUrl).Query).Get("payment_id"),
-                    out var paymentId))
+            AnsiConsole.MarkupLine("[red]Link not valid.[/]");
+            return -1;
+        }
+        var collectionItem = collection.GetAllItems().FirstOrDefault(i => i.GetPaymentId() == paymentId);
+        if (collectionItem == null)
+        {
+            AnsiConsole.MarkupLine("[red]No item with this reference in your Bandcamp collection.[/]");
+            return -1;
+        }
+    
+        await AnsiConsole.Status()
+            .StartAsync("Downloading...", async _ =>
             {
-                AnsiConsole.MarkupLine("[red]Link not valid.[/]");
-                return 1;
-            }
-            var collectionItem = collection.GetAllItems().FirstOrDefault(i => i.GetPaymentId() == paymentId);
-            if (collectionItem == null)
-            {
-                AnsiConsole.MarkupLine("[red]No item with this reference in your Bandcamp collection.[/]");
-                return 1;
-            }
-        
-            await AnsiConsole.Status()
-                .StartAsync("Downloading...", async _ =>
+                switch (collectionItem)
                 {
-                    switch (collectionItem)
-                    {
-                        case Album album:
-                            await DownloadAlbum(webDriver, client, redownloadUrl, album, settings.AudioFormat);
-                            break;
-                        case Track track:
-                            await DownloadTrack(webDriver, client, redownloadUrl, track, settings.AudioFormat);
-                            break;
-                    }
-                });
+                    case Album album:
+                        await DownloadAlbum(webDriver, client, redownloadUrl, album, settings.AudioFormat);
+                        break;
+                    case Track track:
+                        await DownloadTrack(webDriver, client, redownloadUrl, track, settings.AudioFormat);
+                        break;
+                }
+            });
 
-            return 0;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogException(ex);
-            return 1;
-        }
+        return 0;
     }
     
     private async Task DownloadAlbum(IBandcampWebDriver webDriver, HttpClient client, string redownloadUrl,

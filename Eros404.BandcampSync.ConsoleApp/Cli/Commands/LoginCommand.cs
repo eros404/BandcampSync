@@ -19,23 +19,15 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands
 
         public override int Execute([NotNull] CommandContext context, [NotNull] LoginSettings settings)
         {
-            try
+            using var webDriver = _webDriverFactory.Create();
+            if (!webDriver.Login(settings.UserName, AnsiConsole.Prompt(
+                new TextPrompt<string>("Bandcamp password:").Secret())))
             {
-                using var webDriver = _webDriverFactory.Create();
-                if (!webDriver.Login(settings.UserName, AnsiConsole.Prompt(
-                    new TextPrompt<string>("Bandcamp password:").Secret())))
-                {
-                    AnsiConsole.MarkupLine("[red]Connection failed. Try with other login details.[/]");
-                    return 1;
-                }
-                AnsiConsole.MarkupLine("[green]You are logged.[/]");
-                return 0;
+                AnsiConsole.MarkupLine("[red]Connection failed. Try with other login details.[/]");
+                return -1;
             }
-            catch (Exception ex)
-            {
-                _logger.LogException(ex);
-                return 1;
-            }
+            AnsiConsole.MarkupLine("[green]You are logged.[/]");
+            return 0;
         }
     }
 }

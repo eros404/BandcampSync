@@ -22,19 +22,11 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands
 
         public override async Task<int> ExecuteAsync(CommandContext context, CompareCollectionsSettings settings)
         {
-            try
-            {
-                var compareResult = await CompareAsync(_bandCampService, _localCollectionService);
-                if (compareResult == null)
-                    return 1;
-                AnsiConsole.Write(compareResult.ToTable("Missing Items"));
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogException(ex);
-                return 1;
-            }
+            var compareResult = await CompareAsync(_bandCampService, _localCollectionService);
+            if (compareResult == null)
+                return -1;
+            AnsiConsole.Write(compareResult.ToTable("Missing Items"));
+            return 0;
         }
 
         public static async Task<CollectionCompareResult?> CompareAsync(IBandcampApiService bandCampService,

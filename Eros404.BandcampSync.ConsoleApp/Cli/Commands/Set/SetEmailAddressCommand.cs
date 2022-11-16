@@ -20,16 +20,8 @@ internal class SetEmailAddressCommand : Command<SetEmailAddressSettings>
 
     public override int Execute([NotNull] CommandContext context, [NotNull] SetEmailAddressSettings settings)
     {
-        try
-        {
-            _emailOptions.Update(options => options.Address = settings.NewEmailAddress);
-            AnsiConsole.MarkupLine("[green]Done[/]");
-            return 0;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogException(ex);
-            return 1;
-        }
+        _emailOptions.Update(options => options.Address = settings.NewEmailAddress);
+        AnsiConsole.MarkupLine("[green]Done[/]");
+        return 0;
     }
 }

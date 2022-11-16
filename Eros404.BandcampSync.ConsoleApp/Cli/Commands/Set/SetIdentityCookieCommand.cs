@@ -20,18 +20,10 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands.Set
 
         public override int Execute([NotNull] CommandContext context, [NotNull] SetIdentityCookieSettings settings)
         {
-            try
-            {
-                _bandcampOptions.Update(options => options.IdentityCookie = AnsiConsole.Prompt(
-                    new TextPrompt<string>("Enter the cookie's value:").Secret()));
-                AnsiConsole.MarkupLine("[green]Done[/]");
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogException(ex);
-                return 1;
-            }
+            _bandcampOptions.Update(options => options.IdentityCookie = AnsiConsole.Prompt(
+                new TextPrompt<string>("Enter the cookie's value:").Secret()));
+            AnsiConsole.MarkupLine("[green]Done[/]");
+            return 0;
         }
     }
 }

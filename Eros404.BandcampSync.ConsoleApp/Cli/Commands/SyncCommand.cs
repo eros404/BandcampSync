@@ -28,43 +28,35 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
 
     public override async Task<int> ExecuteAsync(CommandContext context, SyncSettings settings)
     {
-        try
-        {
-            var compareResult = await CompareCollectionsCommand.CompareAsync(_bandCampService, _localCollectionService);
-            if (compareResult == null)
-                return 1;
-            AnsiConsole.Write(compareResult.ToTable("Missing Items"));
-            if (!compareResult.MissingAlbums.Any() && !compareResult.MissingTracks.Any())
-                return 0;
-            
-            var selectedAlbums = SelectAlbumsToDownload(compareResult.MissingAlbums);
-            var selectedTracks = SelectTracksToDownload(compareResult.MissingTracks);
-            if (!selectedAlbums.Any() && !selectedTracks.Any())
-                return 0;
-            
-            using var webDriver = _webDriverFactory.CreateWithIdentity();
-            using var client = new HttpClient();
-            await AnsiConsole.Status()
-                .StartAsync("Downloading...", async _ =>
-                {
-                    foreach (var album in selectedAlbums)
-                        await DownloadAlbum(webDriver, client, album, settings.AudioFormat);
-                    
-                    foreach (var track in selectedTracks)
-                        await DownloadTrack(webDriver, client, track, settings.AudioFormat);
-                });
-            if (_numberOfNewLinksSent > 0)
-            {
-                AnsiConsole.MarkupLine(
-                    $"[green]{_numberOfNewLinksSent}[/] link{(_numberOfNewLinksSent > 1 ? "s" : "")} have been sent to {_mailService.EmailAddress}");
-            }
+        var compareResult = await CompareCollectionsCommand.CompareAsync(_bandCampService, _localCollectionService);
+        if (compareResult == null)
+            return -1;
+        AnsiConsole.Write(compareResult.ToTable("Missing Items"));
+        if (!compareResult.MissingAlbums.Any() && !compareResult.MissingTracks.Any())
             return 0;
-        }
-        catch (Exception ex)
+        
+        var selectedAlbums = SelectAlbumsToDownload(compareResult.MissingAlbums);
+        var selectedTracks = SelectTracksToDownload(compareResult.MissingTracks);
+        if (!selectedAlbums.Any() && !selectedTracks.Any())
+            return 0;
+        
+        using var webDriver = _webDriverFactory.CreateWithIdentity();
+        using var client = new HttpClient { Timeout = TimeSpan.FromMinutes(5) };
+        await AnsiConsole.Status()
+            .StartAsync("Downloading...", async _ =>
+            {
+                foreach (var album in selectedAlbums)
+                    await DownloadAlbum(webDriver, client, album, settings.AudioFormat);
+                
+                foreach (var track in selectedTracks)
+                    await DownloadTrack(webDriver, client, track, settings.AudioFormat);
+            });
+        if (_numberOfNewLinksSent > 0)
         {
-            _logger.LogException(ex);
-            return 1;
+            AnsiConsole.MarkupLine(
+                $"[green]{_numberOfNewLinksSent}[/] link{(_numberOfNewLinksSent > 1 ? "s" : "")} have been sent to {_mailService.EmailAddress}");
         }
+        return 0;
     }
 
     private async Task DownloadAlbum(IBandcampWebDriver webDriver, HttpClient client, Album album,

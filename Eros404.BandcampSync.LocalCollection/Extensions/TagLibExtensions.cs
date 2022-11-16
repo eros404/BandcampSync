@@ -11,7 +11,7 @@ namespace Eros404.BandcampSync.LocalCollection.Extensions
                 Title = file.Tag.Title,
                 Number = file.Tag.Track,
                 AlbumTitle = file.Tag.Album,
-                BandName = string.Join(" ", file.Tag.AlbumArtists)
+                BandName = string.Join(" ", file.Tag.Performers)
             };
         }
         public static List<Track> ToTracks(this IEnumerable<TagLib.File> files) =>

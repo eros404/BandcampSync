@@ -7,6 +7,7 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Settings.See
     {
         [CommandOption("-a|--as-albums")]
         [DefaultValue(false)]
+        [Description("Display your local collection as a list of albums. Default is a list of tracks.")]
         public bool AsAlbums { get; init; }
     }
 }
