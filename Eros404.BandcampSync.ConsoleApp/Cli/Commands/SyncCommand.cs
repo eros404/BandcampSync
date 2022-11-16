@@ -34,23 +34,20 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
                 return 0;
             
             var selectedAlbums = SelectAlbumsToDownload(compareResult.MissingAlbums);
-            if (!selectedAlbums.Any())
+            var selectedTracks = SelectTracksToDownload(compareResult.MissingTracks);
+            if (!selectedAlbums.Any() && !selectedTracks.Any())
                 return 0;
             
             using var webDriver = _webDriverFactory.CreateWithIdentity();
-            await AnsiConsole.Progress()
-                .Columns(new TaskDescriptionColumn(), new ProgressBarColumn(), new PercentageColumn(),
-                    new RemainingTimeColumn(), new SpinnerColumn())
-                .StartAsync(async ctx =>
+            using var client = new HttpClient();
+            await AnsiConsole.Status()
+                .StartAsync("Downloading...", async _ =>
                 {
-                    var task = ctx.AddTask($"Downloding {selectedAlbums.Count} albums");
                     foreach (var album in selectedAlbums)
-                    {
-                        var stream = await webDriver.DownloadItemAsync(album.RedownloadUrl ?? "", settings.AudioFormat);
-                        if (stream != null)
-                            _localCollectionService.AddAlbum(stream, album);
-                        task.Increment(100 / selectedAlbums.Count);
-                    }
+                        await DownloadAlbum(webDriver, client, album, settings.AudioFormat);
+                    
+                    foreach (var track in selectedTracks)
+                        await DownloadTrack(webDriver, client, track, settings.AudioFormat);
                 });
             return 0;
         }
@@ -61,11 +58,41 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
         }
     }
 
+    private async Task DownloadAlbum(IBandcampWebDriver webDriver, HttpClient client, Album album,
+        AudioFormat audioFormat)
+    {
+        await DownloadCollectionItem(webDriver, client, album, album.ToString(), audioFormat,
+            stream => _localCollectionService.AddAlbum(stream, album));
+    }
+    private async Task DownloadTrack(IBandcampWebDriver webDriver, HttpClient client, Track track,
+        AudioFormat audioFormat)
+    {
+        await DownloadCollectionItem(webDriver, client, track, track.ToString(), audioFormat,
+            stream => _localCollectionService.AddTrack(stream, track, audioFormat));
+    }
+    private static async Task DownloadCollectionItem(IBandcampWebDriver webDriver, HttpClient client, CollectionItem item,
+        string itemDisplayName, AudioFormat audioFormat, Action<Stream> addToCollectionAction)
+    {
+        AnsiConsole.MarkupLine($"Preparing [blue]{itemDisplayName.EscapeMarkup()}[/] for download.");
+        var link = webDriver.GetDownloadLink(item.RedownloadUrl ?? "", audioFormat);
+        if (link == null)
+        {
+            AnsiConsole.MarkupLine($"Download link for [blue]{itemDisplayName.EscapeMarkup()}[/] expired.");
+        }
+        else
+        {
+            AnsiConsole.MarkupLine($"Downloading [blue]{itemDisplayName.EscapeMarkup()}[/].");
+            var response = await client.GetAsync(link);
+            response.EnsureSuccessStatusCode();
+            addToCollectionAction(await response.Content.ReadAsStreamAsync());
+        }
+    }
+
     private static List<MissingAlbum> SelectAlbumsToDownload(List<MissingAlbum> albums)
     {
         if (!albums.Any())
             return new List<MissingAlbum>();
-        var dictionary = albums.ToDictionary(a => $"{a.Title} - {a.BandName}", a => a);
+        var dictionary = albums.ToDictionary(a => a.ToString(), a => a);
         var all = $"All albums ({albums.Count})";
         var selectedKeys = AnsiConsole.Prompt(
             new MultiSelectionPrompt<string>()
@@ -79,6 +106,26 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
                 .AddChoices(dictionary.Keys));
         return selectedKeys.Contains(all)
             ? albums
+            : selectedKeys.Select(key => dictionary[key]).ToList();
+    }
+    private static List<MissingTrack> SelectTracksToDownload(List<MissingTrack> tracks)
+    {
+        if (!tracks.Any())
+            return new List<MissingTrack>();
+        var dictionary = tracks.ToDictionary(track => track.ToString(), a => a);
+        var all = $"All tracks ({tracks.Count})";
+        var selectedKeys = AnsiConsole.Prompt(
+            new MultiSelectionPrompt<string>()
+                .Title("[blue]Select tracks to download:[/]")
+                .NotRequired()
+                .PageSize(10)
+                .MoreChoicesText("[grey](Move up and down to reveal more tracks)[/]")
+                .InstructionsText(
+                    "[grey](Press [blue]<space>[/] to toggle a track, [green]<enter>[/] to accept)[/]")
+                .AddChoices(all)
+                .AddChoices(dictionary.Keys));
+        return selectedKeys.Contains(all)
+            ? tracks
             : selectedKeys.Select(key => dictionary[key]).ToList();
     }
 }

@@ -13,5 +13,10 @@
                 ? bandNameCompare
                 : string.Compare((Title ?? ""), other.Title, StringComparison.Ordinal);
         }
+
+        public override string ToString()
+        {
+            return $"{Title} - {BandName}";
+        }
     }
 }

@@ -35,5 +35,10 @@
         {
             return (Title, BandName, Number, AlbumTitle).GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return $"{Title} - {BandName}";
+        }
     }
 }

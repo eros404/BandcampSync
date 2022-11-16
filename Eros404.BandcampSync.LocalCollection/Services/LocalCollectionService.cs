@@ -46,5 +46,13 @@ namespace Eros404.BandcampSync.LocalCollection.Services
             Directory.CreateDirectory(directory);
             zip.ExtractToDirectory(directory);
         }
+
+        public void AddTrack(Stream stream, Track track, AudioFormat audioFormat)
+        {
+            var filePath = Path.Combine(_collectionPath,
+                $"{GetFileNameFriendly(track.BandName)} - {GetFileNameFriendly(track.Title)}{audioFormat.GetExtension()}");
+            using var fileStream = new FileStream(filePath, FileMode.Create);
+            stream.CopyTo(fileStream);
+        }
     }
 }
