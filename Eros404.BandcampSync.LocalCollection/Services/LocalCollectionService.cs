@@ -4,6 +4,7 @@ using Eros404.BandcampSync.Core.Extensions;
 using Eros404.BandcampSync.Core.Models;
 using Eros404.BandcampSync.Core.Services;
 using Eros404.BandcampSync.LocalCollection.Extensions;
+using Microsoft.Extensions.Options;
 
 namespace Eros404.BandcampSync.LocalCollection.Services
 {
@@ -11,7 +12,7 @@ namespace Eros404.BandcampSync.LocalCollection.Services
     {
         private readonly string _collectionPath;
 
-        public LocalCollectionService(IWritableOptions<LocalCollectionOptions> options)
+        public LocalCollectionService(IOptions<LocalCollectionOptions> options)
         {
             _collectionPath = options.Value.Path;
         }
@@ -42,7 +43,7 @@ namespace Eros404.BandcampSync.LocalCollection.Services
         {
             using var zip = new ZipArchive(stream, ZipArchiveMode.Read);
             var directory = Path.Combine(_collectionPath,
-                $"{GetFileNameFriendly(album.BandName)} - {GetFileNameFriendly(album.Title)}");
+                $"{GetFileNameFriendly(album.BandName ?? "")} - {GetFileNameFriendly(album.Title ?? "")}");
             Directory.CreateDirectory(directory);
             zip.ExtractToDirectory(directory);
         }
@@ -50,7 +51,7 @@ namespace Eros404.BandcampSync.LocalCollection.Services
         public void AddTrack(Stream stream, Track track, AudioFormat audioFormat)
         {
             var filePath = Path.Combine(_collectionPath,
-                $"{GetFileNameFriendly(track.BandName)} - {GetFileNameFriendly(track.Title)}{audioFormat.GetExtension()}");
+                $"{GetFileNameFriendly(track.BandName ?? "")} - {GetFileNameFriendly(track.Title ?? "")}{audioFormat.GetExtension()}");
             using var fileStream = new FileStream(filePath, FileMode.Create);
             stream.CopyTo(fileStream);
         }

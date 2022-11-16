@@ -11,6 +11,7 @@ using Eros404.BandcampSync.ConsoleApp.Cli.Settings.See;
 using Eros404.BandcampSync.ConsoleApp.Cli.Settings.Set;
 using Eros404.BandcampSync.Core.Services;
 using Eros404.BandcampSync.LocalCollection.Services;
+using Eros404.BandcampSync.Mail.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
@@ -23,10 +24,12 @@ var services = new ServiceCollection()
     .AddScoped(_ => System.Reflection.Assembly.GetExecutingAssembly())
     .ConfigureWritable<BandcampOptions>(configuration.GetSection(BandcampOptions.Section))
     .ConfigureWritable<LocalCollectionOptions>(configuration.GetSection(LocalCollectionOptions.Section))
+    .ConfigureWritable<EmailOptions>(configuration.GetSection(EmailOptions.Section))
     .AddScoped<ILogger, Logger>()
     .AddScoped<IBandcampApiService, BandcampApiService>()
     .AddScoped<IBandcampWebDriverFactory, BandcampWebDriverFactory>()
-    .AddScoped<ILocalCollectionService, LocalCollectionService>();
+    .AddScoped<ILocalCollectionService, LocalCollectionService>()
+    .AddScoped<IMailService, MailService>();
 
 var app = new CommandApp(new TypeRegistrar(services));
 app.Configure(config =>
@@ -37,6 +40,7 @@ app.Configure(config =>
     {
         set.AddCommand<SetIdentityCookieCommand>("identity");
         set.AddCommand<SetLocalCollectionPathCommand>("local");
+        set.AddCommand<SetEmailAddressCommand>("email");
     });
     config.AddBranch<SeeCollectionSettings>("see", view =>
     {

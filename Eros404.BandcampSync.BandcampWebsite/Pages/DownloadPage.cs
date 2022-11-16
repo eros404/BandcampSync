@@ -8,10 +8,12 @@ namespace Eros404.BandcampSync.BandcampWebsite.Pages
     internal class DownloadPage : Page<DownloadPage>
     {
         private readonly string _url;
+
         public DownloadPage(IWebDriver driver, string baseUrl) : base(driver, baseUrl)
         {
             _url = new Uri(new Uri(baseUrl), "/download").ToString();
         }
+
         public DownloadPage(IWebDriver driver, string baseUrl, string query) : base(driver, baseUrl)
         {
             _url = new Uri(new Uri(baseUrl), $"/download{query}").ToString();
@@ -23,7 +25,12 @@ namespace Eros404.BandcampSync.BandcampWebsite.Pages
         private IWebElement ReauthEmailInput => Driver.FindElement(By.CssSelector(".reauth-form > input.reauth-email"));
         private IWebElement ReauthSubmit => Driver.FindElement(By.CssSelector(".reauth-form > input.submit"));
         private IWebElement ItemFormatButton => Driver.FindElement(By.ClassName("item-format"));
-        private IEnumerable<IWebElement> ItemFormatListElements => Driver.FindElements(By.CssSelector("ul.formats > li"));
+
+        private IEnumerable<IWebElement> ReauthErrorMessages =>
+            Driver.FindElements(By.CssSelector(".email-reauth-error .error-msg"));
+
+        private IEnumerable<IWebElement> ItemFormatListElements =>
+            Driver.FindElements(By.CssSelector("ul.formats > li"));
 
         protected override void ExecuteLoad()
         {
@@ -56,7 +63,8 @@ namespace Eros404.BandcampSync.BandcampWebsite.Pages
             }
         }
 
-        private void WaitUntilDownloadIsReady() => Driver.WaitUntil(driver => driver.FindElement(DownloadButtonBy).Displayed);
+        private void WaitUntilDownloadIsReady() =>
+            Driver.WaitUntil(driver => driver.FindElement(DownloadButtonBy).Displayed);
 
         public string GetDownloadLink(AudioFormat audioFormat)
         {
@@ -69,8 +77,17 @@ namespace Eros404.BandcampSync.BandcampWebsite.Pages
                 itemFormatElement.Click();
                 Driver.WaitForJsToLoad(30);
             }
+
             WaitUntilDownloadIsReady();
             return DownloadButton.GetAttribute("href");
+        }
+
+        public bool SendReauthMail(string email)
+        {
+            ReauthEmailInput.SendKeys(email);
+            ReauthSubmit.Click();
+            Driver.WaitForJsToLoad();
+            return !ReauthEmailInput.Displayed;
         }
     }
 }

@@ -5,6 +5,6 @@ namespace Eros404.BandcampSync.Core.Services
     public interface IBandcampWebDriver : IDisposable
     {
         bool Login(string userName, string password);
-        string? GetDownloadLink(string url, AudioFormat format);
+        DownloadLinkResult GetDownloadLink(string url, AudioFormat format, string email);
     }
 }

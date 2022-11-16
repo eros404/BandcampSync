@@ -57,11 +57,14 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
             return new LoginPage(_driver, _baseAddress).Load().Login(userName, password).Loaded;
         }
 
-        public string? GetDownloadLink(string url, AudioFormat format)
+        public DownloadLinkResult GetDownloadLink(string url, AudioFormat format, string email)
         {
             var page = new DownloadPage(_driver, _baseAddress, new Uri(url).Query).Load();
-            if (page.DownloadIsExpired()) return null;
-            return page.GetDownloadLink(format);
+            if (page.DownloadIsExpired())
+            {
+                return page.SendReauthMail(email) ? DownloadLinkResult.Expired : DownloadLinkResult.WrongEmail;
+            }
+            return DownloadLinkResult.Success(page.GetDownloadLink(format));
         }
 
         public IBandcampWebDriver SetIdentityCookie(string value)

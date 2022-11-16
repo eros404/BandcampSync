@@ -13,14 +13,18 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
     private readonly IBandcampApiService _bandCampService;
     private readonly ILocalCollectionService _localCollectionService;
     private readonly IBandcampWebDriverFactory _webDriverFactory;
+    private readonly IMailService _mailService;
 
-    public SyncCommand(ILogger logger, IBandcampApiService bandCampService, ILocalCollectionService localCollectionService, IBandcampWebDriverFactory webDriverFactory)
+    public SyncCommand(ILogger logger, IBandcampApiService bandCampService, ILocalCollectionService localCollectionService, IBandcampWebDriverFactory webDriverFactory, IMailService mailService)
     {
         _logger = logger;
         _bandCampService = bandCampService;
         _localCollectionService = localCollectionService;
         _webDriverFactory = webDriverFactory;
+        _mailService = mailService;
     }
+
+    private int _numberOfNewLinksSent;
 
     public override async Task<int> ExecuteAsync(CommandContext context, SyncSettings settings)
     {
@@ -49,6 +53,14 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
                     foreach (var track in selectedTracks)
                         await DownloadTrack(webDriver, client, track, settings.AudioFormat);
                 });
+            if (_numberOfNewLinksSent > 0)
+            {
+                if (settings.Manual)
+                {
+                    AnsiConsole.MarkupLine(
+                        $"[green]{_numberOfNewLinksSent}[/] new link{(_numberOfNewLinksSent > 1 ? "s" : "")} have been sent to {_mailService.EmailAddress}");
+                }
+            }
             return 0;
         }
         catch (Exception ex)
@@ -70,19 +82,26 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
         await DownloadCollectionItem(webDriver, client, track, track.ToString(), audioFormat,
             stream => _localCollectionService.AddTrack(stream, track, audioFormat));
     }
-    private static async Task DownloadCollectionItem(IBandcampWebDriver webDriver, HttpClient client, CollectionItem item,
+    private async Task DownloadCollectionItem(IBandcampWebDriver webDriver, HttpClient client, CollectionItem item,
         string itemDisplayName, AudioFormat audioFormat, Action<Stream> addToCollectionAction)
     {
         AnsiConsole.MarkupLine($"Preparing [blue]{itemDisplayName.EscapeMarkup()}[/] for download.");
-        var link = webDriver.GetDownloadLink(item.RedownloadUrl ?? "", audioFormat);
-        if (link == null)
+        var result = webDriver.GetDownloadLink(item.RedownloadUrl ?? "", audioFormat, _mailService.EmailAddress);
+        if (result.HasExpired)
         {
             AnsiConsole.MarkupLine($"Download link for [blue]{itemDisplayName.EscapeMarkup()}[/] expired.");
+            if (result.InvalidEmail)
+                AnsiConsole.MarkupLine($"The email address {_mailService.EmailAddress} was rejected by Bandcamp.");
+            else
+            {
+                AnsiConsole.MarkupLine($"New link sent.");
+                _numberOfNewLinksSent++;
+            }
         }
         else
         {
             AnsiConsole.MarkupLine($"Downloading [blue]{itemDisplayName.EscapeMarkup()}[/].");
-            var response = await client.GetAsync(link);
+            var response = await client.GetAsync(result.DownloadLink);
             response.EnsureSuccessStatusCode();
             addToCollectionAction(await response.Content.ReadAsStreamAsync());
         }
