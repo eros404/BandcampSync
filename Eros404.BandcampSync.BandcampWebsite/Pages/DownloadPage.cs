@@ -26,9 +26,6 @@ namespace Eros404.BandcampSync.BandcampWebsite.Pages
         private IWebElement ReauthSubmit => Driver.FindElement(By.CssSelector(".reauth-form > input.submit"));
         private IWebElement ItemFormatButton => Driver.FindElement(By.ClassName("item-format"));
 
-        private IEnumerable<IWebElement> ReauthErrorMessages =>
-            Driver.FindElements(By.CssSelector(".email-reauth-error .error-msg"));
-
         private IEnumerable<IWebElement> ItemFormatListElements =>
             Driver.FindElements(By.CssSelector("ul.formats > li"));
 

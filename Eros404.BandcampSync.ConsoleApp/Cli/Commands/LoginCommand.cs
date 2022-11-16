@@ -1,8 +1,8 @@
-﻿using Eros404.BandcampSync.ConsoleApp.Cli.Settings;
+﻿using System.Diagnostics.CodeAnalysis;
+using Eros404.BandcampSync.ConsoleApp.Cli.Settings;
 using Eros404.BandcampSync.Core.Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands
 {

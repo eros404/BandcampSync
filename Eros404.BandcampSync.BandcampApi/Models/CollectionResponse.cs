@@ -33,8 +33,6 @@ namespace Eros404.BandcampSync.BandcampApi.Models
                             RedownloadUrl = GetRedownloadUrl(item)
                         });
                         break;
-                    default:
-                        break;
                 }
             });
             return collection;

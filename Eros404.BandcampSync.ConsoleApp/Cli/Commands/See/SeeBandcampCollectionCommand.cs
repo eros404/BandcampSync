@@ -3,7 +3,6 @@ using Eros404.BandcampSync.ConsoleApp.Extensions;
 using Eros404.BandcampSync.Core.Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands.See
 {
@@ -18,7 +17,7 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands.See
             _logger = logger;
         }
 
-        public override async Task<int> ExecuteAsync([NotNull] CommandContext context, [NotNull] SeeBandcampCollectionSettings settings)
+        public override async Task<int> ExecuteAsync(CommandContext context, SeeBandcampCollectionSettings settings)
         {
             try
             {

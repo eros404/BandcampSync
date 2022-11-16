@@ -4,8 +4,11 @@ using Spectre.Console.Cli;
 
 namespace Eros404.BandcampSync.ConsoleApp.Cli.Settings;
 
-public class SyncSettings : CommandSettings
+public class AddItemsSettings : CommandSettings
 {
+    [CommandArgument(0, "<downloadLink>")]
+    public string RedownLoadUrl { get; set; } = "";
+    
     [CommandOption("-f|--format")]
     [DefaultValue(AudioFormat.MP3320)]
     [Description("Default value is MP3V0. Other values: MP3320, FLAC, AAC, OggVorbis, ALAC, WAV, AIFF")]

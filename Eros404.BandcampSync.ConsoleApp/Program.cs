@@ -34,18 +34,30 @@ var services = new ServiceCollection()
 var app = new CommandApp(new TypeRegistrar(services));
 app.Configure(config =>
 {
-    config.AddCommand<CompareCollectionsCommand>("compare");
-    config.AddCommand<SyncCommand>("sync");
+    config.AddCommand<CompareCollectionsCommand>("compare")
+        .WithDescription("Display the items missing items of your Bandcamp collection.");
+    config.AddCommand<SyncCommand>("sync")
+        .WithDescription("Download the missing items of your Bandcamp collection.");
+    config.AddCommand<AddItemsCommand>("add")
+        .WithAlias("add-item")
+        .WithDescription("Download an item from your Bandcamp collection with a download link.")
+        .WithExample(new[] { "add", "-f", "FLAC", "\"http://bandcamp.com/download?payment_id={...}&reauth_sig={...}&reauth_ts={...}&sig={...}\"" });
     config.AddBranch<SetConfigSettings>("set", set =>
     {
-        set.AddCommand<SetIdentityCookieCommand>("identity");
-        set.AddCommand<SetLocalCollectionPathCommand>("local");
-        set.AddCommand<SetEmailAddressCommand>("email");
+        set.SetDescription("Commands to change your configuration.");
+        set.AddCommand<SetIdentityCookieCommand>("identity")
+            .WithDescription("Change your Bandcamp identity cookie.");
+        set.AddCommand<SetLocalCollectionPathCommand>("local")
+            .WithDescription("Change the location of your local collection (do not move any file).");
+        set.AddCommand<SetEmailAddressCommand>("email")
+            .WithDescription("Change the email of your Bandcamp account.");
     });
     config.AddBranch<SeeCollectionSettings>("see", view =>
     {
-        view.AddCommand<SeeBandcampCollectionCommand>("bandcamp");
-        view.AddCommand<SeeLocalCollectionCommand>("local");
+        view.AddCommand<SeeBandcampCollectionCommand>("bandcamp")
+            .WithDescription("Display your Bandcamp collection.");
+        view.AddCommand<SeeLocalCollectionCommand>("local")
+            .WithDescription("Display your local collection.");
     });
 });
 return app.Run(args);

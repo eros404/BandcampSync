@@ -1,5 +1,4 @@
 ﻿using System.Text.Encodings.Web;
-using Eros404.BandcampSync.BandcampWebsite.Extensions;
 using Eros404.BandcampSync.BandcampWebsite.Pages;
 using Eros404.BandcampSync.Core.Models;
 using Eros404.BandcampSync.Core.Services;
@@ -50,6 +49,11 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
                 _driver.Dispose();
             }
             _disposed = true;
+        }
+        
+        ~BandcampWebDriver()
+        {
+            Dispose(disposing: false);
         }
 
         public bool Login(string userName, string password)

@@ -1,15 +1,15 @@
-﻿using Eros404.BandcampSync.ConsoleApp.Cli.Settings.See;
+﻿using System.Diagnostics.CodeAnalysis;
+using Eros404.BandcampSync.ConsoleApp.Cli.Settings.See;
 using Eros404.BandcampSync.ConsoleApp.Extensions;
 using Eros404.BandcampSync.Core.Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands.See
 {
     internal class SeeLocalCollectionCommand : Command<SeeLocalCollectionSettings>
     {
-        private ILogger _logger;
+        private readonly ILogger _logger;
         private readonly ILocalCollectionService _localCollectionService;
 
         public SeeLocalCollectionCommand(ILogger logger, ILocalCollectionService collectionService)

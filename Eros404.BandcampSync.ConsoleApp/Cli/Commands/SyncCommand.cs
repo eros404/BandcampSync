@@ -55,11 +55,8 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
                 });
             if (_numberOfNewLinksSent > 0)
             {
-                if (settings.Manual)
-                {
-                    AnsiConsole.MarkupLine(
-                        $"[green]{_numberOfNewLinksSent}[/] new link{(_numberOfNewLinksSent > 1 ? "s" : "")} have been sent to {_mailService.EmailAddress}");
-                }
+                AnsiConsole.MarkupLine(
+                    $"[green]{_numberOfNewLinksSent}[/] link{(_numberOfNewLinksSent > 1 ? "s" : "")} have been sent to {_mailService.EmailAddress}");
             }
             return 0;
         }

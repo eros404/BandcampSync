@@ -11,6 +11,14 @@
             Tracks.Sort();
         }
 
+        public List<CollectionItem> GetAllItems()
+        {
+            var items = new List<CollectionItem>();
+            items.AddRange(Albums);
+            items.AddRange(Tracks);
+            return items;
+        }
+
         public CollectionCompareResult Compare(IEnumerable<Track> tracks)
         {
             var missingAlbums = new List<MissingAlbum>();

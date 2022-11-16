@@ -3,7 +3,6 @@ using Eros404.BandcampSync.ConsoleApp.Extensions;
 using Eros404.BandcampSync.Core.Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using System.Diagnostics.CodeAnalysis;
 using Eros404.BandcampSync.Core.Models;
 
 namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands
@@ -21,7 +20,7 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands
             _localCollectionService = localCollectionService;
         }
 
-        public override async Task<int> ExecuteAsync([NotNull] CommandContext context, [NotNull] CompareCollectionsSettings settings)
+        public override async Task<int> ExecuteAsync(CommandContext context, CompareCollectionsSettings settings)
         {
             try
             {
