@@ -21,9 +21,13 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
                 var options = new ChromeOptions();
 #if !DEBUG
                 options.AddArguments("headless");
+                options.AddArgument("log-level=3");
 #endif
                 options.AddArguments("window-size=1920,1080");
-                return new ChromeDriver(options)
+                var driverService = ChromeDriverService.CreateDefaultService();
+                driverService.HideCommandPromptWindow = true;
+                driverService.SuppressInitialDiagnosticInformation = true;
+                return new ChromeDriver(driverService, options)
                 {
                     Url = baseAddress
                 };
@@ -52,11 +56,14 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
             return new LoginPage(_driver, _baseAddress).Load().Login(userName, password).Loaded;
         }
 
-        public void DownloadItem(string url)
+        public async Task<Stream?> DownloadItemAsync(string url)
         {
             var page = new DownloadPage(_driver, _baseAddress, new Uri(url).Query).Load();
-            if (page.DownloadIsExpired()) return;
-            page.Download();
+            if (page.DownloadIsExpired()) return null;
+            var link = page.GetDownloadLink();
+            using var client = new HttpClient();
+            var response = await client.GetAsync(link);
+            return await response.Content.ReadAsStreamAsync();
         }
 
         public IBandcampWebDriver SetIdentityCookie(string value)

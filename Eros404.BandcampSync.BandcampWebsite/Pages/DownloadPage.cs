@@ -24,6 +24,7 @@ namespace Eros404.BandcampSync.BandcampWebsite.Pages
         protected override void ExecuteLoad()
         {
             Driver.Navigate().GoToUrl(_url);
+            Driver.WaitForJsToLoad();
         }
 
         protected override bool EvaluateLoadedStatus()
@@ -53,10 +54,10 @@ namespace Eros404.BandcampSync.BandcampWebsite.Pages
 
         private void WaitUntilDownloadIsReady() => Driver.WaitUntil(driver => driver.FindElement(DownloadButtonBy).Displayed);
 
-        public void Download()
+        public string GetDownloadLink()
         {
             WaitUntilDownloadIsReady();
-            DownloadButton.Click();
+            return DownloadButton.GetAttribute("href");
         }
     }
 }

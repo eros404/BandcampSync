@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Eros404.BandcampSync.BandcampWebsite.Extensions;
+using OpenQA.Selenium;
 
 namespace Eros404.BandcampSync.BandcampWebsite.Pages
 {
@@ -32,6 +33,7 @@ namespace Eros404.BandcampSync.BandcampWebsite.Pages
         protected override void ExecuteLoad()
         {
             Driver.Navigate().GoToUrl(_url);
+            Driver.WaitForJsToLoad();
         }
 
         public ProfilePage Login(string userName, string password)

@@ -1,12 +1,13 @@
 ﻿using Eros404.BandcampSync.ConsoleApp.Cli.Settings;
 using Eros404.BandcampSync.ConsoleApp.Extensions;
+using Eros404.BandcampSync.Core.Models;
 using Eros404.BandcampSync.Core.Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands;
 
-public class SyncCommand : AsyncCommand<SyncSettings>
+internal class SyncCommand : AsyncCommand<SyncSettings>
 {
     private readonly ILogger _logger;
     private readonly IBandcampApiService _bandCampService;
@@ -34,9 +35,38 @@ public class SyncCommand : AsyncCommand<SyncSettings>
             var local = _localCollectionService.GetLocalCollection(false);
             var compareResult = bandcamp.Compare(local.Tracks);
             AnsiConsole.Write(compareResult.ToTable("Missing Items"));
+            if (!compareResult.MissingAlbums.Any() && !compareResult.MissingTracks.Any())
+                return 0;
             using var webDriver = _webDriverFactory.CreateWithIdentity();
-            webDriver.DownloadItem(compareResult.MissingAlbums[0].RedownloadUrl);
-            AnsiConsole.Confirm("Oui?");
+            if (compareResult.MissingAlbums.Any())
+            {
+                var dictionary = compareResult.MissingAlbums.ToDictionary(a => $"{a.Title} - {a.BandName}", a => a);
+                var selectedKeys = AnsiConsole.Prompt(
+                    new MultiSelectionPrompt<string>()
+                        .Title("[blue]Select albums to download:[/]")
+                        .NotRequired()
+                        .PageSize(10)
+                        .MoreChoicesText("[grey](Move up and down to reveal more albums)[/]")
+                        .InstructionsText(
+                            "[grey](Press [blue]<space>[/] to toggle an album, [green]<enter>[/] to accept)[/]")
+                        .AddChoices("All")
+                        .AddChoices(dictionary.Keys));
+                var selectedAlbums = selectedKeys.Contains("All")
+                    ? compareResult.MissingAlbums
+                    : selectedKeys.Select(key => dictionary[key]).ToList();
+                await AnsiConsole.Progress()
+                    .StartAsync(async ctx =>
+                    {
+                        var task = ctx.AddTask($"Downloding {selectedAlbums.Count} albums");
+                        foreach (var album in selectedAlbums)
+                        {
+                            var stream = await webDriver.DownloadItemAsync(album.RedownloadUrl);
+                            if (stream != null)
+                                _localCollectionService.AddAlbum(stream, album);
+                            task.Increment(100 / selectedAlbums.Count);
+                        }
+                    });
+            }
             return 0;
         }
         catch (Exception ex)

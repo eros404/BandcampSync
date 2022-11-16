@@ -3,6 +3,6 @@
     public interface IBandcampWebDriver : IDisposable
     {
         bool Login(string userName, string password);
-        void DownloadItem(string url);
+        Task<Stream?> DownloadItemAsync(string url);
     }
 }
