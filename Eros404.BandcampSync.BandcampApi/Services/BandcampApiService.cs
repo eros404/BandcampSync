@@ -30,7 +30,7 @@ namespace Eros404.BandcampSync.BandcampApi.Services
             return response?.fan_id;
         }
 
-        public async Task<Collection?> GetCollectionAsync(int fanId, int count = 100)
+        public async Task<Collection?> GetCollectionAsync(int fanId, int count = 500)
         {
             var response = await _client.PostAsJsonAsync($"fancollection/1/collection_items", new
             {

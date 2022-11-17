@@ -7,6 +7,17 @@ namespace Eros404.BandcampSync.Core.Models
         public string? Title { get; set; }
         public string? BandName { get; set; }
         public string? RedownloadUrl { get; set; }
+        public string? DownloadLink { get; set; }
+
+        public override string ToString()
+        {
+            return this switch
+            {
+                Album album => album.ToString(),
+                Track track => track.ToString(),
+                _ => base.ToString() ?? ""
+            };
+        }
 
         public long? GetPaymentId()
         {
