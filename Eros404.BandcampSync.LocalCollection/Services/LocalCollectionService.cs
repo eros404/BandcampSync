@@ -37,7 +37,7 @@ namespace Eros404.BandcampSync.LocalCollection.Services
         }
 
         private static string GetFileNameFriendly(string content) => Path.GetInvalidFileNameChars()
-            .Aggregate(content, (current, c) => current.Replace(c.ToString(), string.Empty));
+            .Aggregate(content, (current, c) => current.Replace(c.ToString(), "-"));
 
         public void AddAlbum(Stream stream, Album album)
         {
