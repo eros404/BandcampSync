@@ -9,19 +9,19 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands;
 
 internal class SyncCommand : AsyncCommand<SyncSettings>
 {
-    private readonly ILogger _logger;
     private readonly IBandcampApiService _bandCampService;
     private readonly ILocalCollectionService _localCollectionService;
     private readonly IBandcampWebDriverFactory _webDriverFactory;
     private readonly IMailService _mailService;
+    private readonly IDownloadService _downloadService;
 
-    public SyncCommand(ILogger logger, IBandcampApiService bandCampService, ILocalCollectionService localCollectionService, IBandcampWebDriverFactory webDriverFactory, IMailService mailService)
+    public SyncCommand(IBandcampApiService bandCampService, ILocalCollectionService localCollectionService, IBandcampWebDriverFactory webDriverFactory, IMailService mailService, IDownloadService downloadService)
     {
-        _logger = logger;
         _bandCampService = bandCampService;
         _localCollectionService = localCollectionService;
         _webDriverFactory = webDriverFactory;
         _mailService = mailService;
+        _downloadService = downloadService;
     }
 
     private int _numberOfItemDownloaded;
@@ -57,12 +57,21 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
                 $"[green]{_numberOfNewLinkSent}[/] link{(_numberOfNewLinkSent > 1 ? "s" : "")} have been sent to {_mailService.EmailAddress}.");
         }
 
+#if DEBUG
+        _downloadService.DownloadStarted += (_, args) =>
+            AnsiConsole.MarkupLine($"Start [blue]{args.Item.ToString().EscapeMarkup()}[/] download.");
+#endif
+        _downloadService.DownloadFinished += (_, args) =>
+        {
+            _localCollectionService.AddItem(args.Stream, args.Item, settings.AudioFormat);
+            AnsiConsole.MarkupLine($"[blue]{args.Item.ToString().EscapeMarkup()}[/] downloaded.");
+            _numberOfItemDownloaded++;
+        };
         await AnsiConsole.Status()
             .StartAsync("Downloading...", async _ =>
             {
-                using var client = new HttpClient { Timeout = TimeSpan.FromMinutes(5) };
-                await DownloadMissingAlbums(client, selectedAlbums);
-                await DownloadMissingTracks(client, selectedTracks, settings.AudioFormat);
+                await _downloadService.DownloadMissingAlbums(selectedAlbums);
+                await _downloadService.DownloadMissingTracks(selectedTracks);
             });
         AnsiConsole.MarkupLine(
             $"[green]{_numberOfItemDownloaded}[/] item{(_numberOfItemDownloaded > 1 ? "s" : "")} downloaded.");
@@ -82,51 +91,6 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
         }
 
         item.DownloadLink = result.DownloadLink;
-    }
-
-    private async Task DownloadMissingAlbums(HttpClient client, List<MissingAlbum> missingAlbums)
-    {
-        const int batchSize = 25;
-        var numberOfAlbumBatches = (int)Math.Ceiling((double)missingAlbums.Count / batchSize);
-        for (var i = 0; i < numberOfAlbumBatches; i++)
-        {
-            var currentAlbums = missingAlbums.Skip(i * batchSize).Take(batchSize);
-            var tasks = currentAlbums.Select(album => DownloadAlbum(client, album));
-            await Task.WhenAll(tasks);
-        }
-    }
-    private async Task DownloadAlbum(HttpClient client, Album album)
-    {
-        await DownloadCollectionItem(client, album,
-            stream => _localCollectionService.AddAlbum(stream, album));
-    }
-    private async Task DownloadMissingTracks(HttpClient client, List<MissingTrack> missingTracks, AudioFormat audioFormat)
-    {
-        const int batchSize = 50;
-        var numberOfAlbumBatches = (int)Math.Ceiling((double)missingTracks.Count / batchSize);
-        for (var i = 0; i < numberOfAlbumBatches; i++)
-        {
-            var currentTracks = missingTracks.Skip(i * batchSize).Take(batchSize);
-            var tasks = currentTracks.Select(track => DownloadTrack(client, track, audioFormat));
-            await Task.WhenAll(tasks);
-        }
-    }
-    private async Task DownloadTrack(HttpClient client, Track track, AudioFormat audioFormat)
-    {
-        await DownloadCollectionItem(client, track,
-            stream => _localCollectionService.AddTrack(stream, track, audioFormat));
-    }
-    
-    private async Task DownloadCollectionItem(HttpClient client, CollectionItem item, Action<Stream> addToCollectionAction)
-    {
-#if DEBUG
-        AnsiConsole.MarkupLine($"Start [blue]{item.ToString().EscapeMarkup()}[/] download.");
-#endif
-        var response = await client.GetAsync(item.DownloadLink);
-        response.EnsureSuccessStatusCode();
-        addToCollectionAction(await response.Content.ReadAsStreamAsync());
-        AnsiConsole.MarkupLine($"[blue]{item.ToString().EscapeMarkup()}[/] downloaded.");
-        _numberOfItemDownloaded++;
     }
 
     private static List<MissingAlbum> SelectAlbumsToDownload(List<MissingAlbum> albums)

@@ -10,20 +10,18 @@ namespace Eros404.BandcampSync.LocalCollection.Services
 {
     public class LocalCollectionService : ILocalCollectionService
     {
-        private readonly string _collectionPath;
-
         public LocalCollectionService(IOptions<LocalCollectionOptions> options)
         {
-            _collectionPath = options.Value.Path;
+            CollectionPath = options.Value.Path;
         }
 
-        public string CollectionPath => _collectionPath;
+        public string CollectionPath { get; }
 
         public Collection GetLocalCollection(bool asAlbums)
         {
             var audioExtensions = (from object? audioFormat in Enum.GetValues(typeof(AudioFormat))
                 select ((AudioFormat)audioFormat).GetExtension()).ToList();
-            var allFiles = Directory.GetFiles(_collectionPath, "*.*", SearchOption.AllDirectories)
+            var allFiles = Directory.GetFiles(CollectionPath, "*.*", SearchOption.AllDirectories)
                 .Where(filePath => audioExtensions.Contains(Path.GetExtension(filePath)))
                 .Select(TagLib.File.Create);
 
@@ -42,7 +40,7 @@ namespace Eros404.BandcampSync.LocalCollection.Services
         public void AddAlbum(Stream stream, Album album)
         {
             using var zip = new ZipArchive(stream, ZipArchiveMode.Read);
-            var directory = Path.Combine(_collectionPath,
+            var directory = Path.Combine(CollectionPath,
                 $"{GetFileNameFriendly(album.BandName ?? "")} - {GetFileNameFriendly(album.Title ?? "")}");
             Directory.CreateDirectory(directory);
             zip.ExtractToDirectory(directory);
@@ -50,10 +48,23 @@ namespace Eros404.BandcampSync.LocalCollection.Services
 
         public void AddTrack(Stream stream, Track track, AudioFormat audioFormat)
         {
-            var filePath = Path.Combine(_collectionPath,
+            var filePath = Path.Combine(CollectionPath,
                 $"{GetFileNameFriendly(track.BandName ?? "")} - {GetFileNameFriendly(track.Title ?? "")}{audioFormat.GetExtension()}");
             using var fileStream = new FileStream(filePath, FileMode.Create);
             stream.CopyTo(fileStream);
+        }
+
+        public void AddItem(Stream stream, CollectionItem collectionItem, AudioFormat audioFormat)
+        {
+            switch (collectionItem)
+            {
+                case Album album:
+                    AddAlbum(stream, album);
+                    break;
+                case Track track:
+                    AddTrack(stream, track, audioFormat);
+                    break;
+            }
         }
     }
 }

@@ -28,11 +28,13 @@ var services = new ServiceCollection()
     .ConfigureWritable<BandcampOptions>(configuration.GetSection(BandcampOptions.Section))
     .ConfigureWritable<LocalCollectionOptions>(configuration.GetSection(LocalCollectionOptions.Section))
     .ConfigureWritable<EmailOptions>(configuration.GetSection(EmailOptions.Section))
+    .Configure<DownloadOptions>(configuration.GetSection(DownloadOptions.Section))
     .AddScoped<ILogger, Logger>()
     .AddScoped<IBandcampApiService, BandcampApiService>()
     .AddScoped<IBandcampWebDriverFactory, BandcampWebDriverFactory>()
     .AddScoped<ILocalCollectionService, LocalCollectionService>()
-    .AddScoped<IMailService, MailService>();
+    .AddScoped<IMailService, MailService>()
+    .AddScoped<IDownloadService, DownloadService>();
 
 var app = new CommandApp(new TypeRegistrar(services));
 app.Configure(config =>

@@ -11,13 +11,17 @@ public class AddItemsCommand : AsyncCommand<AddItemsSettings>
     private readonly IBandcampApiService _bandCampService;
     private readonly ILocalCollectionService _localCollectionService;
     private readonly IBandcampWebDriverFactory _webDriverFactory;
+    private readonly IDownloadService _downloadService;
 
-    public AddItemsCommand(ILogger logger, IBandcampApiService bandCampService, ILocalCollectionService localCollectionService, IBandcampWebDriverFactory webDriverFactory)
+    public AddItemsCommand(IBandcampApiService bandCampService, ILocalCollectionService localCollectionService, IBandcampWebDriverFactory webDriverFactory, IDownloadService downloadService)
     {
         _bandCampService = bandCampService;
         _localCollectionService = localCollectionService;
         _webDriverFactory = webDriverFactory;
+        _downloadService = downloadService;
     }
+    
+    private int _numberOfItemDownloaded;
 
     public override async Task<int> ExecuteAsync(CommandContext context, AddItemsSettings settings)
     {
@@ -27,11 +31,11 @@ public class AddItemsCommand : AsyncCommand<AddItemsSettings>
         var collection = await _bandCampService.GetCollectionAsync((int)fanId);
         if (collection == null)
             return -1;
-        using var webDriver = _webDriverFactory.CreateWithIdentity();
-        using var client = new HttpClient { Timeout = TimeSpan.FromMinutes(5) };
-        return await AnsiConsole.Status()
-            .StartAsync("Downloading...", async _ =>
+        var itemsToDownload = new List<CollectionItem>();
+        AnsiConsole.Status()
+            .Start("Preparing download...", _ =>
             {
+                using var webDriver = _webDriverFactory.CreateWithIdentity();
                 for (var i = 0; i < settings.RedownLoadUrls!.Length; i++)
                 {
                     var redownloadUrl = settings.RedownLoadUrls[i];
@@ -40,59 +44,61 @@ public class AddItemsCommand : AsyncCommand<AddItemsSettings>
                             out var paymentId))
                     {
                         AnsiConsole.MarkupLine($"[red][[{i}]] Link not valid.[/]");
-                        return -1;
+                        continue;
                     }
 
                     var collectionItem = collection.GetAllItems().FirstOrDefault(i => i.GetPaymentId() == paymentId);
                     if (collectionItem == null)
                     {
                         AnsiConsole.MarkupLine($"[red][[{i}]] No item with this reference in your Bandcamp collection.[/]");
-                        return -1;
+                        continue;
                     }
-
-                    switch (collectionItem)
+                    
+                    var result = webDriver.GetDownloadLink(redownloadUrl, settings.AudioFormat, "");
+                    if (result.HasExpired)
                     {
-                        case Album album:
-                            await DownloadAlbum(webDriver, client, redownloadUrl, album, settings.AudioFormat);
-                            break;
-                        case Track track:
-                            await DownloadTrack(webDriver, client, redownloadUrl, track, settings.AudioFormat);
-                            break;
+                        AnsiConsole.MarkupLine($"Download link for [blue]{collectionItem.ToString().EscapeMarkup()}[/] expired.");
+                    }
+                    else
+                    {
+                        AnsiConsole.MarkupLine($"[blue]{collectionItem.ToString().EscapeMarkup()}[/] ready for download.");
+                        collectionItem.DownloadLink = result.DownloadLink;
+                        itemsToDownload.Add(collectionItem);
                     }
                 }
-                AnsiConsole.MarkupLine($"[green]Done[/]");
-                return 0;
             });
-    }
-    
-    private async Task DownloadAlbum(IBandcampWebDriver webDriver, HttpClient client, string redownloadUrl,
-        Album album, AudioFormat audioFormat)
-    {
-        await DownloadCollectionItem(webDriver, client, redownloadUrl, album.ToString(), audioFormat,
-            stream => _localCollectionService.AddAlbum(stream, album));
-    }
-    private async Task DownloadTrack(IBandcampWebDriver webDriver, HttpClient client, string redownloadUrl,
-        Track track, AudioFormat audioFormat)
-    {
-        await DownloadCollectionItem(webDriver, client, redownloadUrl, track.ToString(), audioFormat,
-            stream => _localCollectionService.AddTrack(stream, track, audioFormat));
-    }
-    
-    private static async Task DownloadCollectionItem(IBandcampWebDriver webDriver, HttpClient client, string redownloadUrl,
-        string itemDisplayName, AudioFormat audioFormat, Action<Stream> addToCollectionAction)
-    {
-        AnsiConsole.MarkupLine($"Preparing [blue]{itemDisplayName.EscapeMarkup()}[/] for download.");
-        var result = webDriver.GetDownloadLink(redownloadUrl, audioFormat, "");
-        if (result.HasExpired)
+#if DEBUG
+        _downloadService.DownloadStarted += (_, args) =>
+            AnsiConsole.MarkupLine($"Start [blue]{args.Item.ToString().EscapeMarkup()}[/] download.");
+#endif
+        _downloadService.DownloadFinished += (_, args) =>
         {
-            AnsiConsole.MarkupLine($"Download link for [blue]{itemDisplayName.EscapeMarkup()}[/] expired.");
-        }
-        else
-        {
-            AnsiConsole.MarkupLine($"Downloading [blue]{itemDisplayName.EscapeMarkup()}[/].");
-            var response = await client.GetAsync(result.DownloadLink);
-            response.EnsureSuccessStatusCode();
-            addToCollectionAction(await response.Content.ReadAsStreamAsync());
-        }
+            _localCollectionService.AddItem(args.Stream, args.Item, settings.AudioFormat);
+            AnsiConsole.MarkupLine($"[blue]{args.Item.ToString().EscapeMarkup()}[/] downloaded.");
+            _numberOfItemDownloaded++;
+        };
+        await AnsiConsole.Status()
+            .StartAsync("Downloading...", async _ =>
+            {
+                var albumsToDownload = new List<Album>();
+                var tracksToDownload = new List<Track>();
+                itemsToDownload.ForEach(item =>
+                {
+                    switch (item)
+                    {
+                        case Album album:
+                            albumsToDownload.Add(album);
+                            break;
+                        case Track track:
+                            tracksToDownload.Add(track);
+                            break;
+                    }
+                });
+                await _downloadService.DownloadMissingAlbums(albumsToDownload);
+                await _downloadService.DownloadMissingTracks(tracksToDownload);
+            });
+        AnsiConsole.MarkupLine(
+            $"[green]{_numberOfItemDownloaded}[/] item{(_numberOfItemDownloaded > 1 ? "s" : "")} downloaded.");
+        return 0;
     }
 }

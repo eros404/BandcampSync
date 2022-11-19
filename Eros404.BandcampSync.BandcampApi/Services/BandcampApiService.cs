@@ -13,6 +13,7 @@ namespace Eros404.BandcampSync.BandcampApi.Services
     {
         private readonly CookieContainer _cookieContainer = new();
         private readonly HttpClient _client;
+        private readonly int _getItemsCount;
         public BandcampApiService(IOptions<BandcampOptions> options)
         {
             var baseUri = new Uri(options.Value.BaseUrl);
@@ -22,6 +23,7 @@ namespace Eros404.BandcampSync.BandcampApi.Services
             {
                 BaseAddress = new Uri(baseUri, "api/")
             };
+            _getItemsCount = options.Value.GetItemsCount;
         }
 
         public async Task<int?> GetFanIdAsync()
@@ -30,13 +32,13 @@ namespace Eros404.BandcampSync.BandcampApi.Services
             return response?.fan_id;
         }
 
-        public async Task<Collection?> GetCollectionAsync(int fanId, int count = 500)
+        public async Task<Collection?> GetCollectionAsync(int fanId)
         {
-            var response = await _client.PostAsJsonAsync($"fancollection/1/collection_items", new
+            var response = await _client.PostAsJsonAsync("fancollection/1/collection_items", new
             {
                 fan_id = fanId,
                 older_than_token = $"{GetNowTimeStamp()}::a::",
-                count
+                count = _getItemsCount
             });
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadFromJsonAsync<CollectionResponse>();

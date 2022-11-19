@@ -11,7 +11,7 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands.Set
     {
         private readonly IWritableOptions<BandcampOptions> _bandcampOptions;
 
-        public SetIdentityCookieCommand(ILogger logger, IWritableOptions<BandcampOptions> bandcampOptions)
+        public SetIdentityCookieCommand(IWritableOptions<BandcampOptions> bandcampOptions)
         {
             _bandcampOptions = bandcampOptions;
         }

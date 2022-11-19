@@ -10,7 +10,7 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands
     {
         private readonly IBandcampWebDriverFactory _webDriverFactory;
 
-        public LoginCommand(ILogger logger, IBandcampWebDriverFactory webDriverFactory)
+        public LoginCommand(IBandcampWebDriverFactory webDriverFactory)
         {
             _webDriverFactory = webDriverFactory;
         }

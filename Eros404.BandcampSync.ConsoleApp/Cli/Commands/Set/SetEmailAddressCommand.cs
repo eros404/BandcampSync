@@ -11,7 +11,7 @@ internal class SetEmailAddressCommand : Command<SetEmailAddressSettings>
 {
     private readonly IWritableOptions<EmailOptions> _emailOptions;
 
-    public SetEmailAddressCommand(ILogger logger, IWritableOptions<EmailOptions> emailOptions)
+    public SetEmailAddressCommand(IWritableOptions<EmailOptions> emailOptions)
     {
         _emailOptions = emailOptions;
     }

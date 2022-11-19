@@ -5,5 +5,6 @@
         public const string Section = "BandcampCollection";
         public string IdentityCookie { get; set; } = "";
         public string BaseUrl { get; set; } = "";
+        public int GetItemsCount { get; set; }
     }
 }

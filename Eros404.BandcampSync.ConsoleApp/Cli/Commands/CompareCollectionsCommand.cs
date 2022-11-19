@@ -12,7 +12,7 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands
         private readonly IBandcampApiService _bandCampService;
         private readonly ILocalCollectionService _localCollectionService;
 
-        public CompareCollectionsCommand(ILogger logger, IBandcampApiService bandCampService, ILocalCollectionService localCollectionService)
+        public CompareCollectionsCommand(IBandcampApiService bandCampService, ILocalCollectionService localCollectionService)
         {
             _bandCampService = bandCampService;
             _localCollectionService = localCollectionService;

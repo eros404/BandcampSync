@@ -9,12 +9,10 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands.See
 {
     internal class SeeLocalCollectionCommand : Command<SeeLocalCollectionSettings>
     {
-        private readonly ILogger _logger;
         private readonly ILocalCollectionService _localCollectionService;
 
-        public SeeLocalCollectionCommand(ILogger logger, ILocalCollectionService collectionService)
+        public SeeLocalCollectionCommand(ILocalCollectionService collectionService)
         {
-            _logger = logger;
             _localCollectionService = collectionService;
         }
 
