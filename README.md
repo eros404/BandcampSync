@@ -8,7 +8,7 @@ BandcampSync is a .NET tool that make easier to download your Bandcamp collectio
 
 ### Warnings
 
-This application need a authentication cookie to work. With this cookie, anybody can access your Bandcamp account freely.
+This application need an authentication cookie to work. With this cookie, anybody can access your Bandcamp account freely.
 
 You just have to trust me when I say that I don't collect any data with this cookie or use it with malicious purpose. You can also read the code of course.
 
