@@ -5,7 +5,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyName>bandcampsync</AssemblyName>
+        <AssemblyName>Eros404.BandcampSync</AssemblyName>
         <Company>Eros404</Company>
         <Product>BandcampSync</Product>
         <AssemblyVersion>0.1.0</AssemblyVersion>

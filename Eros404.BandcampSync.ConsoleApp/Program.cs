@@ -42,7 +42,7 @@ var services = new ServiceCollection()
 var app = new CommandApp(new TypeRegistrar(services));
 app.Configure(config =>
 {
-    config.SetApplicationName(executingAssembly.GetName().Name!);
+    config.SetApplicationName("bandcampsync");
     config.AddCommand<CompareCollectionsCommand>("compare")
         .WithDescription("Display the items missing items of your Bandcamp collection.");
     config.AddCommand<SyncCommand>("sync")
