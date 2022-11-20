@@ -1,8 +1,10 @@
-﻿# BandcampSync
+﻿![Github workflow badge](https://github.com/eros404/BandcampSync/actions/workflows/action.yml/badge.svg) ![NuGet badge](https://img.shields.io/nuget/v/Eros404.BandcampSync.svg)
+
+# BandcampSync
 
 ## Introduction
 
-BandcampSync is a tool that make easier to download your Bandcamp collection on a local device.
+BandcampSync is a .NET tool that make easier to download your Bandcamp collection on a local device.
 
 ### Warnings
 
@@ -13,20 +15,24 @@ You just have to trust me when I say that I don't collect any data with this coo
 In addition this cookie is stored on your computer in a not encrypted json file, so I encourage you to delete it when you are done :
 
 ```shell
-BandcampSync set identity ""
+bandcampsync set identity ""
 ```
 
 ## Getting Started
 
 ### Installation
 
-[Click here](https://github.com/eros404/BandcampSync/releases/download/v0.1.0-beta.1/BandcampSync.zip) to download the **Beta 1** release.
+You can run BandcampSync on Linux, macOS, and Windows (_tested only on windows_).
 
-BandcampSync is cross-platform and framework dependent.
+You must have [.NET 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) installed on your computer.
 
-So you can run it on Linux, macOS, and Windows but you must have [.NET 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) installed on your computer (_tested only on windows_).
+Then install the tool like this :
 
-Having [Google Chrome](https://www.google.com/intl/en_en/chrome/) installed on your computer is also required.
+```shell
+dotnet tool install --global Eros404.BandcampSync
+```
+
+Having [Google Chrome](https://www.google.com/intl/en_en/chrome/) installed is also required.
 
 ### Configuration
 
@@ -35,7 +41,7 @@ Having [Google Chrome](https://www.google.com/intl/en_en/chrome/) installed on y
 First you need to set your identity cookie :
 
 ```shell
-BandcampSync set identity "{cookie-value}"
+bandcampsync set identity "{cookie-value}"
 ```
 
 You can find `cookie-value` on your navigator **when you are logged in [Bandcamp](https://www.bandcamp.com)**.
@@ -50,7 +56,7 @@ With Firefox :
 Now you should see your Bandcamp collection with this command :
 
 ```shell
-BandcampSync see bandcamp
+bandcampsync see bandcamp
 ```
 
 #### Local collection path
@@ -58,13 +64,13 @@ BandcampSync see bandcamp
 Then, you must set the path of the directory containing your local collection :
 
 ```shell
-BandcampSync set local "{local-path}"
+bandcampsync set local "{local-path}"
 ```
 
 Now you should see your local collection with this command :
 
 ```shell
-BandcampSync see local
+bandcampsync see local
 ```
 
 ### Sync
@@ -72,7 +78,7 @@ BandcampSync see local
 To synchronize your Bandcamp collection with your local directory, use this command :
 
 ```shell
-BandcampSync sync -f {download-format}
+bandcampsync sync -f {download-format}
 ```
 
 If you don't specify the format option, the files will be download in the format MP3 320. Available value for the format option are : `MP3V0`, `MP3320`, `FLAC`, `AAC`, `OggVorbis`, `ALAC`, `WAV`, `AIFF`.
@@ -86,13 +92,13 @@ As you maybe know, some download links will be expired and Bandcamp will ask for
 In order to receive these mails during the synchronization, use this command :
 
 ```shell
-BandcampSync set email "{your-email}"
+bandcampsync set email "{your-email}"
 ```
 
 With the fresh links received by email, use this command :
 
 ```shell
-BandcampSync add -f {download-format} "{download-link-1}" "{download-link-2}" ... "{download-link-x}"
+bandcampsync add -f {download-format} "{download-link-1}" "{download-link-2}" ... "{download-link-x}"
 ```
 
 ## Resources
