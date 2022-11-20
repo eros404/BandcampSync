@@ -18,6 +18,14 @@ BandcampSync set identity ""
 
 ## Getting Started
 
+### Installation
+
+[Click here](https://github.com/eros404/BandcampSync/releases/download/v0.1.0-beta.1/BandcampSync.zip) to download the **Beta 1** release.
+
+BandcampSync is cross-platform and framework dependent.
+
+So you can run it on Linux, macOS, and Windows but you must have [.NET 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) installed on your computer (_tested only on windows_).
+
 ### Configuration
 
 #### Identity cookie
