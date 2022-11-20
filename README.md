@@ -26,6 +26,8 @@ BandcampSync is cross-platform and framework dependent.
 
 So you can run it on Linux, macOS, and Windows but you must have [.NET 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) installed on your computer (_tested only on windows_).
 
+Having [Google Chrome](https://www.google.com/intl/en_en/chrome/) installed on your computer is also required.
+
 ### Configuration
 
 #### Identity cookie
