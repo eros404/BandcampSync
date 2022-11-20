@@ -5,11 +5,13 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyName>BandcampSync</AssemblyName>
+        <AssemblyName>bandcampsync</AssemblyName>
         <Company>Eros404</Company>
         <Product>BandcampSync</Product>
         <AssemblyVersion>0.1.0</AssemblyVersion>
         <UserSecretsId>9dda5abe-2f55-487d-9f92-d3bed559018c</UserSecretsId>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>bandcampsync</ToolCommandName>
     </PropertyGroup>
 
     <ItemGroup>
