@@ -12,6 +12,6 @@ public class AddItemsSettings : CommandSettings
     
     [CommandOption("-f|--format")]
     [DefaultValue(AudioFormat.MP3320)]
-    [Description("Default value is MP3V0. Other values: MP3320, FLAC, AAC, OggVorbis, ALAC, WAV, AIFF")]
+    [Description("Default value is MP3320. Other values: MP3V0, FLAC, AAC, OggVorbis, ALAC, WAV, AIFF")]
     public AudioFormat AudioFormat { get; init; }
 }
