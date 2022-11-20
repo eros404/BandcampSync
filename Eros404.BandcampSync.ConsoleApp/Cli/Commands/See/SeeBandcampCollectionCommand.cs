@@ -9,12 +9,10 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands.See
     internal class SeeBandcampCollectionCommand : AsyncCommand<SeeBandcampCollectionSettings>
     {
         private readonly IBandcampApiService _bandCampService;
-        private readonly ILogger _logger;
 
-        public SeeBandcampCollectionCommand(IBandcampApiService bandCampService, ILogger logger)
+        public SeeBandcampCollectionCommand(IBandcampApiService bandCampService)
         {
             _bandCampService = bandCampService;
-            _logger = logger;
         }
 
         public override async Task<int> ExecuteAsync(CommandContext context, SeeBandcampCollectionSettings settings)

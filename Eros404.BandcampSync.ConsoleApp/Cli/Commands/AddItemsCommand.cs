@@ -47,7 +47,7 @@ public class AddItemsCommand : AsyncCommand<AddItemsSettings>
                         continue;
                     }
 
-                    var collectionItem = collection.GetAllItems().FirstOrDefault(i => i.GetPaymentId() == paymentId);
+                    var collectionItem = collection.GetAllItems().FirstOrDefault(item => item.GetPaymentId() == paymentId);
                     if (collectionItem == null)
                     {
                         AnsiConsole.MarkupLine($"[red][[{i}]] No item with this reference in your Bandcamp collection.[/]");

@@ -4,7 +4,6 @@ using Eros404.BandcampSync.BandcampApi.Models;
 using Eros404.BandcampSync.Core.Services;
 using Eros404.BandcampSync.AppSettings.Models;
 using System.Net;
-using System.Text.Encodings.Web;
 using Eros404.BandcampSync.BandcampApi.Extensions;
 using Microsoft.Extensions.Options;
 

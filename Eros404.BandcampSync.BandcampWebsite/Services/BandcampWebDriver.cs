@@ -1,5 +1,4 @@
-﻿using System.Text.Encodings.Web;
-using Eros404.BandcampSync.BandcampWebsite.Pages;
+﻿using Eros404.BandcampSync.BandcampWebsite.Pages;
 using Eros404.BandcampSync.Core.Models;
 using Eros404.BandcampSync.Core.Services;
 using OpenQA.Selenium;
