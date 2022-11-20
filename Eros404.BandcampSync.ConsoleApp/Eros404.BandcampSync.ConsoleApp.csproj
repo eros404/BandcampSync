@@ -8,7 +8,7 @@
         <AssemblyName>BandcampSync</AssemblyName>
         <Company>Eros404</Company>
         <Product>BandcampSync</Product>
-        <AssemblyVersion>v0.1.0-beta.1</AssemblyVersion>
+        <AssemblyVersion>0.1.0</AssemblyVersion>
         <UserSecretsId>9dda5abe-2f55-487d-9f92-d3bed559018c</UserSecretsId>
     </PropertyGroup>
 
