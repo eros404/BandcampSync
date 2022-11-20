@@ -17,11 +17,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 
+var executingAssembly = Assembly.GetExecutingAssembly();
+
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
+    #if DEBUG
+    .AddUserSecrets(executingAssembly)
+    #endif
     .Build();
-
-var executingAssembly = Assembly.GetExecutingAssembly();
 
 var services = new ServiceCollection()
     .AddScoped(_ => executingAssembly)

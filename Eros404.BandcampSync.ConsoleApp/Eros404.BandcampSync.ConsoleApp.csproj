@@ -9,6 +9,7 @@
         <Company>Eros404</Company>
         <Product>BandcampSync</Product>
         <AssemblyVersion>1.0</AssemblyVersion>
+        <UserSecretsId>9dda5abe-2f55-487d-9f92-d3bed559018c</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,6 +24,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
         <PackageReference Include="Spectre.Console" Version="0.45.0" />
         <PackageReference Include="Spectre.Console.Cli" Version="0.45.0" />
     </ItemGroup>

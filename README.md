@@ -10,9 +10,7 @@ This application need a authentication cookie to work. With this cookie, anybody
 
 You just have to trust me when I say that I don't collect any data with this cookie or use it with malicious purpose. You can also read the code of course.
 
-In addition this cookie is stored on your computer is a json file, so it's not secured at all.
-
-I encourage you to delete it when you are finished :
+In addition this cookie is stored on your computer in a not encrypted json file, so I encourage you to delete it when you are done :
 
 ```shell
 BandcampSync set identity ""
