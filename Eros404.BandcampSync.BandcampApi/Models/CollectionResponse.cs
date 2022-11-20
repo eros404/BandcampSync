@@ -2,7 +2,7 @@
 
 namespace Eros404.BandcampSync.BandcampApi.Models
 {
-    internal class CollectionResponse
+    internal class CollectionResponse : ErrorResponse
     {
         public List<CollectionItemResponse> items { get; set; } = new();
         public Dictionary<string, string> redownload_urls { get; set; } = new();

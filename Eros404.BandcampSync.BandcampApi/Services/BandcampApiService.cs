@@ -5,6 +5,7 @@ using Eros404.BandcampSync.Core.Services;
 using Eros404.BandcampSync.AppSettings.Models;
 using System.Net;
 using System.Text.Encodings.Web;
+using Eros404.BandcampSync.BandcampApi.Extensions;
 using Microsoft.Extensions.Options;
 
 namespace Eros404.BandcampSync.BandcampApi.Services
@@ -28,8 +29,9 @@ namespace Eros404.BandcampSync.BandcampApi.Services
 
         public async Task<int?> GetFanIdAsync()
         {
-            var response = await _client.GetFromJsonAsync<CollectionSummaryResponse>("fan/2/collection_summary");
-            return response?.fan_id;
+            var response = await _client.GetAsync("fan/2/collection_summary");
+            var collectionSummary = await response.EnsureSuccessAndReadFromJsonAsync<CollectionSummaryResponse>();
+            return collectionSummary?.fan_id;
         }
 
         public async Task<Collection?> GetCollectionAsync(int fanId)
@@ -40,8 +42,7 @@ namespace Eros404.BandcampSync.BandcampApi.Services
                 older_than_token = $"{GetNowTimeStamp()}::a::",
                 count = _getItemsCount
             });
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadFromJsonAsync<CollectionResponse>();
+            var content = await response.EnsureSuccessAndReadFromJsonAsync<CollectionResponse>();
             return content?.ToCollection();
 
             static int GetNowTimeStamp() =>
