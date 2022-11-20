@@ -73,8 +73,7 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
 
         public IBandcampWebDriver SetIdentityCookie(string value)
         {
-            _driver.Manage().Cookies.AddCookie(new Cookie("identity", UrlEncoder.Create().Encode(value),
-                new Uri(_baseAddress).Host, "/", null));
+            _driver.Manage().Cookies.AddCookie(new Cookie("identity", value, new Uri(_baseAddress).Host, "/", null));
             return this;
         }
     }

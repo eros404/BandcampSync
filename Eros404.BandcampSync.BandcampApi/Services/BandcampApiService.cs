@@ -19,7 +19,7 @@ namespace Eros404.BandcampSync.BandcampApi.Services
         {
             var baseUri = new Uri(options.Value.BaseUrl);
             _cookieContainer.Add(baseUri,
-                new Cookie("identity", UrlEncoder.Create().Encode(options.Value.IdentityCookie), "/", baseUri.Host));
+                new Cookie("identity", options.Value.IdentityCookie, "/", baseUri.Host));
             _client = new HttpClient(new HttpClientHandler { CookieContainer = _cookieContainer })
             {
                 BaseAddress = new Uri(baseUri, "api/")
