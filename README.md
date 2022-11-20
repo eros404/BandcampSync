@@ -2,7 +2,7 @@
 
 ## Introduction
 
-BandcampSync is tool that make easier to download your Bandcamp collection on a local device.
+BandcampSync is a tool that make easier to download your Bandcamp collection on a local device.
 
 ### Warnings
 
