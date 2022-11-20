@@ -43,7 +43,8 @@ app.Configure(config =>
     config.AddCommand<CompareCollectionsCommand>("compare")
         .WithDescription("Display the items missing items of your Bandcamp collection.");
     config.AddCommand<SyncCommand>("sync")
-        .WithDescription("Download the missing items of your Bandcamp collection.");
+        .WithDescription("Download the missing items of your Bandcamp collection.")
+        .WithExample(new[] { "sync", "-f", "FLAC" });
     config.AddCommand<AddItemsCommand>("add")
         .WithAlias("add-item")
         .WithDescription("Download an item from your Bandcamp collection with a download link.")
