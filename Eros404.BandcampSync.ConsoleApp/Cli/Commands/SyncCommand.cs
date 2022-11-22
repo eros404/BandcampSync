@@ -97,7 +97,7 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
     {
         if (!albums.Any())
             return new List<MissingAlbum>();
-        var dictionary = albums.ToDictionary(a => a.ToString(), a => a);
+        var dictionary = albums.ToDictionary(a => a.ToString().EscapeMarkup(), a => a);
         var all = $"All albums ({albums.Count})";
         var selectedKeys = AnsiConsole.Prompt(
             new MultiSelectionPrompt<string>()
@@ -117,7 +117,7 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
     {
         if (!tracks.Any())
             return new List<MissingTrack>();
-        var dictionary = tracks.ToDictionary(track => track.ToString(), a => a);
+        var dictionary = tracks.ToDictionary(track => track.ToString().EscapeMarkup(), a => a);
         var all = $"All tracks ({tracks.Count})";
         var selectedKeys = AnsiConsole.Prompt(
             new MultiSelectionPrompt<string>()
