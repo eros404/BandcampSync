@@ -17,13 +17,8 @@ namespace Eros404.BandcampSync.ConsoleApp.Extensions
             trackTable.AddColumn("[green]Album[/]");
             trackTable.AddColumn("[green]Band[/]");
             tracks.ToList().ForEach(track =>
-                trackTable.AddRow(new[]
-                {
-                    track.Number.ToString(),
-                    track.Title?.EscapeMarkup() ?? "",
-                    track.AlbumTitle?.EscapeMarkup() ?? "",
-                    track.BandName?.EscapeMarkup() ?? ""
-                }));
+                trackTable.AddRow(track.Number.ToString(), track.Title?.EscapeMarkup() ?? "",
+                    track.AlbumTitle?.EscapeMarkup() ?? "", track.BandName?.EscapeMarkup() ?? ""));
             return trackTable;
         }
     }

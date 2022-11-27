@@ -26,7 +26,7 @@ namespace Eros404.BandcampSync.BandcampApi.Models
                     case "track":
                         collection.Tracks.Add(new Track
                         {
-                            Number = item.featured_track_number,
+                            Number = item.featured_track_number ?? 0,
                             Title = item.item_title,
                             AlbumTitle = item.album_title,
                             BandName = item.band_name,
