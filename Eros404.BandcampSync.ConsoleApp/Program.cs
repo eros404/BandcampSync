@@ -17,20 +17,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 
-var executingAssembly = Assembly.GetExecutingAssembly();
-
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
-    #if DEBUG
-    .AddUserSecrets(executingAssembly)
-    #endif
     .Build();
 
-var services = new ServiceCollection()
-    .AddScoped(_ => executingAssembly)
-    .ConfigureWritable<BandcampOptions>(configuration.GetSection(BandcampOptions.Section))
-    .ConfigureWritable<LocalCollectionOptions>(configuration.GetSection(LocalCollectionOptions.Section))
-    .ConfigureWritable<EmailOptions>(configuration.GetSection(EmailOptions.Section))
+var services = new ServiceCollection();
+services.AddDataProtection();
+services
+    .RegisterUserSettingsService(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
+        "usersettings.json"))
+    .Configure<BandcampOptions>(configuration.GetSection(BandcampOptions.Section))
     .Configure<DownloadOptions>(configuration.GetSection(DownloadOptions.Section))
     .AddScoped<ILogger, Logger>()
     .AddScoped<IBandcampApiService, BandcampApiService>()
