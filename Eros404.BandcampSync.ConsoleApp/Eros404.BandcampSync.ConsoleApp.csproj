@@ -17,6 +17,7 @@
         <Authors>Eros404</Authors>
         <Description>A .NET tool that make easier to download your Bandcamp collection on a local device.</Description>
         <RepositoryUrl>https://github.com/eros404/BandcampSync</RepositoryUrl>
+        <FileVersion></FileVersion>
     </PropertyGroup>
 
     <ItemGroup>

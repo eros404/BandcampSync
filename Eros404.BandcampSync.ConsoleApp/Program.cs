@@ -21,10 +21,12 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .Build();
 
+var executingAssembly = Assembly.GetExecutingAssembly();
+
 var services = new ServiceCollection();
 services.AddDataProtection();
 services
-    .RegisterUserSettingsService(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
+    .RegisterUserSettingsService(Path.Combine(Path.GetDirectoryName(executingAssembly.Location)!,
         "usersettings.json"))
     .Configure<BandcampOptions>(configuration.GetSection(BandcampOptions.Section))
     .Configure<DownloadOptions>(configuration.GetSection(DownloadOptions.Section))
@@ -39,6 +41,7 @@ var app = new CommandApp(new TypeRegistrar(services));
 app.Configure(config =>
 {
     config.SetApplicationName("bandcampsync");
+    config.SetApplicationVersion(executingAssembly.GetName().Version!.ToString());
     config.AddCommand<CompareCollectionsCommand>("compare")
         .WithDescription("Display the items missing items of your Bandcamp collection.");
     config.AddCommand<SyncCommand>("sync")
