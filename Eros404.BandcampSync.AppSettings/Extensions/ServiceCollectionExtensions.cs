@@ -1,29 +1,22 @@
 ﻿using Eros404.BandcampSync.AppSettings.Services;
 using Eros404.BandcampSync.Core.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using System.Reflection;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace Eros404.BandcampSync.AppSettings.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection ConfigureWritable<T>(
-            this IServiceCollection services,
-            IConfigurationSection section,
-            string file = "appsettings.json") where T : class, new()
+
+        public static IServiceCollection RegisterUserSettingsService(this IServiceCollection services, string filePath)
         {
-            services.Configure<T>(section);
-            services.AddTransient<IWritableOptions<T>>(provider =>
+            return services.AddTransient<IUserSettingsService>(provider =>
             {
-                var executingAssembly = provider.GetService<Assembly>();
-                var options = provider.GetService<IOptionsMonitor<T>>();
-                if (executingAssembly == null || options == null)
+                var dataProtectionProviider = provider.GetService<IDataProtectionProvider>();
+                if (dataProtectionProviider == null)
                     throw new Exception();
-                return new WritableOptions<T>(executingAssembly, options, section.Key, file);
+                return new UserSettingsService(dataProtectionProviider, filePath);
             });
-            return services;
         }
     }
 }

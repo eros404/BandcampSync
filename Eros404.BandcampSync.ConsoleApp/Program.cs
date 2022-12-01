@@ -17,20 +17,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 
-var executingAssembly = Assembly.GetExecutingAssembly();
-
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
-    #if DEBUG
-    .AddUserSecrets(executingAssembly)
-    #endif
     .Build();
 
-var services = new ServiceCollection()
-    .AddScoped(_ => executingAssembly)
-    .ConfigureWritable<BandcampOptions>(configuration.GetSection(BandcampOptions.Section))
-    .ConfigureWritable<LocalCollectionOptions>(configuration.GetSection(LocalCollectionOptions.Section))
-    .ConfigureWritable<EmailOptions>(configuration.GetSection(EmailOptions.Section))
+var executingAssembly = Assembly.GetExecutingAssembly();
+
+var services = new ServiceCollection();
+services.AddDataProtection();
+services
+    .RegisterUserSettingsService(Path.Combine(Path.GetDirectoryName(executingAssembly.Location)!,
+        "usersettings.json"))
+    .Configure<BandcampOptions>(configuration.GetSection(BandcampOptions.Section))
     .Configure<DownloadOptions>(configuration.GetSection(DownloadOptions.Section))
     .AddScoped<ILogger, Logger>()
     .AddScoped<IBandcampApiService, BandcampApiService>()
@@ -43,6 +41,7 @@ var app = new CommandApp(new TypeRegistrar(services));
 app.Configure(config =>
 {
     config.SetApplicationName("bandcampsync");
+    config.SetApplicationVersion(executingAssembly.GetName().Version!.ToString());
     config.AddCommand<CompareCollectionsCommand>("compare")
         .WithDescription("Display the items missing items of your Bandcamp collection.");
     config.AddCommand<SyncCommand>("sync")
