@@ -1,10 +1,8 @@
 ﻿using System.IO.Compression;
-using Eros404.BandcampSync.AppSettings.Models;
 using Eros404.BandcampSync.Core.Extensions;
 using Eros404.BandcampSync.Core.Models;
 using Eros404.BandcampSync.Core.Services;
 using Eros404.BandcampSync.LocalCollection.Extensions;
-using Microsoft.Extensions.Options;
 
 namespace Eros404.BandcampSync.LocalCollection.Services
 {

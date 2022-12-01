@@ -1,9 +1,7 @@
 ﻿using Eros404.BandcampSync.AppSettings.Extensions;
-using Eros404.BandcampSync.AppSettings.Models;
 using Eros404.BandcampSync.Core.Models;
 using Eros404.BandcampSync.Core.Services;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -37,8 +35,6 @@ public class UserSettingsService : IUserSettingsService
     {
         _userSettings[key] = newValue;
         var settingsObject = JObject.FromObject(_userSettings);
-        if (settingsObject == null)
-            return;
         File.WriteAllText(_filePath, JsonConvert.SerializeObject(settingsObject, Formatting.Indented));
     }
 

@@ -1,9 +1,6 @@
 ﻿using Eros404.BandcampSync.AppSettings.Services;
 using Eros404.BandcampSync.Core.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using System.Reflection;
 using Microsoft.AspNetCore.DataProtection;
 
 namespace Eros404.BandcampSync.AppSettings.Extensions
