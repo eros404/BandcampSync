@@ -8,6 +8,6 @@ public class SyncSettings : CommandSettings
 {
     [CommandOption("-f|--format")]
     [DefaultValue(AudioFormat.MP3320)]
-    [Description("Default value is MP3320. Other values: MP3V0, FLAC, AAC, OggVorbis, ALAC, WAV, AIFF")]
+    [Description("Accepted values are `MP3320` (default), `MP3V0`, `FLAC`, `AAC`, `OggVorbis`, `ALAC`, `WAV`, `AIFF`")]
     public AudioFormat AudioFormat { get; init; }
 }
