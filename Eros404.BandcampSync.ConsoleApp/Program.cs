@@ -43,9 +43,9 @@ app.Configure(config =>
     config.SetApplicationName("bandcampsync");
     config.SetApplicationVersion(executingAssembly.GetName().Version!.ToString());
     config.AddCommand<CompareCollectionsCommand>("compare")
-        .WithDescription("Display the items missing items of your Bandcamp collection.");
+        .WithDescription("Displays all the items that are missing in the local collection.");
     config.AddCommand<SyncCommand>("sync")
-        .WithDescription("Download the missing items in your local collection.")
+        .WithDescription("Download the items that are missing in the local collection.")
         .WithExample(new[] { "sync", "-f", "FLAC" });
     config.AddCommand<AddItemsCommand>("add")
         .WithAlias("add-item")
@@ -55,11 +55,11 @@ app.Configure(config =>
     {
         set.SetDescription("Commands to change your configuration.");
         set.AddCommand<SetIdentityCookieCommand>("identity")
-            .WithDescription("Change your Bandcamp identity cookie.");
+            .WithDescription("Set your Bandcamp identity cookie.");
         set.AddCommand<SetLocalCollectionPathCommand>("local")
-            .WithDescription("Change the location of your local collection (do not move any file).");
+            .WithDescription("Set the location of your local collection.");
         set.AddCommand<SetEmailAddressCommand>("email")
-            .WithDescription("Change the email of your Bandcamp account.");
+            .WithDescription("Set the email linked with your Bandcamp account.");
     });
     config.AddBranch<SeeCollectionSettings>("see", see =>
     {
