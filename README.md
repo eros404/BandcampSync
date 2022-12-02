@@ -2,7 +2,9 @@
 
 # BandcampSync
 
-BandcampSync is a .NET tool that make easier to download your Bandcamp collection on a local device
+BandcampSync is a .NET tool that make easier to download your Bandcamp collection on a local device.
+
+BandcampSync **is not** developed by Bandcamp or another organisation. I (Eros404) am the only maintener of this code.
 
 Check the [wiki](https://github.com/eros404/BandcampSync/wiki/Getting-Started) to get started.
 
