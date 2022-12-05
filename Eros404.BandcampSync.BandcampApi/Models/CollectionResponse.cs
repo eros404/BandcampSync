@@ -1,4 +1,5 @@
-﻿using Eros404.BandcampSync.Core.Models;
+﻿using Eros404.BandcampSync.BandcampApi.Extensions;
+using Eros404.BandcampSync.Core.Models;
 
 namespace Eros404.BandcampSync.BandcampApi.Models
 {
@@ -6,9 +7,10 @@ namespace Eros404.BandcampSync.BandcampApi.Models
     {
         public List<CollectionItemResponse> items { get; set; } = new();
         public Dictionary<string, string> redownload_urls { get; set; } = new();
-        private string GetRedownloadUrl(CollectionItemResponse item) => redownload_urls[$"p{item.sale_item_id}"];
         public Collection ToCollection()
         {
+            var redownloadUrls = redownload_urls.ToDictionary(keyValue => keyValue.Key.KeepOnlyNumericCharacters(),
+                keyValue => keyValue.Value);
             var collection = new Collection();
             items.ForEach(item =>
             {
@@ -20,7 +22,7 @@ namespace Eros404.BandcampSync.BandcampApi.Models
                             Title = item.item_title,
                             NumberOfTracks = item.num_streamable_tracks,
                             BandName = item.band_name,
-                            RedownloadUrl = GetRedownloadUrl(item)
+                            RedownloadUrl = redownloadUrls[item.sale_item_id.ToString()]
                         });
                         break;
                     case "track":
@@ -30,7 +32,7 @@ namespace Eros404.BandcampSync.BandcampApi.Models
                             Title = item.item_title,
                             AlbumTitle = item.album_title,
                             BandName = item.band_name,
-                            RedownloadUrl = GetRedownloadUrl(item)
+                            RedownloadUrl = redownloadUrls[item.sale_item_id.ToString()]
                         });
                         break;
                 }
