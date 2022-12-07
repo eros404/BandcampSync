@@ -22,7 +22,8 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
             return webDriverType switch
             {
                 SeleniumWebDriverType.Chrome => BuildChromeDriver(baseAddress),
-                SeleniumWebDriverType.Firefox => BuildFirefoxDriver(baseAddress)
+                SeleniumWebDriverType.Firefox => BuildFirefoxDriver(baseAddress),
+                _ => throw new ArgumentOutOfRangeException(nameof(webDriverType), webDriverType, null)
             };
             
             static IWebDriver BuildFirefoxDriver(string baseAddress)

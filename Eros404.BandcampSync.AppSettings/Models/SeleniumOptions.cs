@@ -2,5 +2,5 @@
 
 public class SeleniumOptions
 {
-    public string WebDriver { get; set; }
+    public string WebDriver { get; set; } = "";
 }
