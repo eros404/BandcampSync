@@ -2,7 +2,7 @@
 {
     public class BandcampOptions
     {
-        public const string Section = "BandcampCollection";
+        public const string Section = "Bandcamp";
         public string BaseUrl { get; set; } = "";
         public int GetItemsCount { get; set; }
     }

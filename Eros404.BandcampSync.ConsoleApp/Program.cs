@@ -29,8 +29,7 @@ services.AddDataProtection();
 services
     .RegisterUserSettingsService(Path.Combine(Path.GetDirectoryName(executingAssembly.Location)!,
         "usersettings.json"))
-    .Configure<BandcampOptions>(configuration.GetSection(BandcampOptions.Section))
-    .Configure<DownloadOptions>(configuration.GetSection(DownloadOptions.Section))
+    .ConfigureAllOptions(configuration)
     .AddScoped<ILogger, Logger>()
     .AddScoped<IBandcampApiService, BandcampApiService>()
     .AddScoped<IBandcampWebDriverFactory, BandcampWebDriverFactory>()

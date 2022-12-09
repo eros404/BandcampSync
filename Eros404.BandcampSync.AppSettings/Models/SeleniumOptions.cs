@@ -2,5 +2,6 @@
 
 public class SeleniumOptions
 {
+    public const string Section = "Selenium";
     public string WebDriver { get; set; } = "";
 }

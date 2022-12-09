@@ -1,7 +1,9 @@
-﻿using Eros404.BandcampSync.AppSettings.Services;
+﻿using Eros404.BandcampSync.AppSettings.Models;
+using Eros404.BandcampSync.AppSettings.Services;
 using Eros404.BandcampSync.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.Extensions.Configuration;
 
 namespace Eros404.BandcampSync.AppSettings.Extensions
 {
@@ -16,6 +18,14 @@ namespace Eros404.BandcampSync.AppSettings.Extensions
                     throw new Exception();
                 return new UserSettingsService(dataProtectionProviider, filePath);
             });
+        }
+
+        public static IServiceCollection ConfigureAllOptions(this IServiceCollection services, IConfigurationRoot configuration)
+        {
+            return services
+                .Configure<BandcampOptions>(configuration.GetSection(BandcampOptions.Section))
+                .Configure<DownloadOptions>(configuration.GetSection(DownloadOptions.Section))
+                .Configure<SeleniumOptions>(configuration.GetSection(SeleniumOptions.Section));
         }
     }
 }
