@@ -1,8 +1,10 @@
-﻿using Eros404.BandcampSync.BandcampWebsite.Pages;
+﻿using Eros404.BandcampSync.BandcampWebsite.Models;
+using Eros404.BandcampSync.BandcampWebsite.Pages;
 using Eros404.BandcampSync.Core.Models;
 using Eros404.BandcampSync.Core.Services;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
 
 namespace Eros404.BandcampSync.BandcampWebsite.Services
 {
@@ -10,12 +12,37 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
     {
         private readonly string _baseAddress;
         private readonly IWebDriver _driver;
-        public BandcampWebDriver(string baseAddress)
+        public BandcampWebDriver(string baseAddress, SeleniumWebDriverType webDriverType)
         {
             _baseAddress = baseAddress;
-            _driver = BuildDriver(baseAddress);
-
-            static IWebDriver BuildDriver(string baseAddress)
+            _driver = BuildDriver(baseAddress, webDriverType);
+        }
+        private static IWebDriver BuildDriver(string baseAddress, SeleniumWebDriverType webDriverType)
+        {
+            return webDriverType switch
+            {
+                SeleniumWebDriverType.Chrome => BuildChromeDriver(baseAddress),
+                SeleniumWebDriverType.Firefox => BuildFirefoxDriver(baseAddress),
+                _ => throw new ArgumentOutOfRangeException(nameof(webDriverType), webDriverType, null)
+            };
+            
+            static IWebDriver BuildFirefoxDriver(string baseAddress)
+            {
+                var options = new FirefoxOptions();
+#if !DEBUG
+                options.AddArguments("headless");
+                options.AddArgument("log-level=3");
+#endif
+                options.AddArguments("window-size=1920,1080");
+                var driverService = FirefoxDriverService.CreateDefaultService();
+                driverService.HideCommandPromptWindow = true;
+                driverService.SuppressInitialDiagnosticInformation = true;
+                return new FirefoxDriver(driverService, options)
+                {
+                    Url = baseAddress
+                };   
+            }
+            static IWebDriver BuildChromeDriver(string baseAddress)
             {
                 var options = new ChromeOptions();
 #if !DEBUG
@@ -23,13 +50,13 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
                 options.AddArgument("log-level=3");
 #endif
                 options.AddArguments("window-size=1920,1080");
-                var driverService = ChromeDriverService.CreateDefaultService();
+                var driverService =ChromeDriverService.CreateDefaultService();
                 driverService.HideCommandPromptWindow = true;
                 driverService.SuppressInitialDiagnosticInformation = true;
                 return new ChromeDriver(driverService, options)
                 {
                     Url = baseAddress
-                };
+                };   
             }
         }
 
