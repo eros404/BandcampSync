@@ -11,7 +11,7 @@ using Eros404.BandcampSync.ConsoleApp.Cli.Infrastructure;
 using Eros404.BandcampSync.ConsoleApp.Cli.Settings.See;
 using Eros404.BandcampSync.ConsoleApp.Cli.Settings.Set;
 using Eros404.BandcampSync.Core.Services;
-using Eros404.BandcampSync.LocalCollection.Services;
+using Eros404.BandcampSync.LocalCollection.Extensions;
 using Eros404.BandcampSync.Mail.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +22,7 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 var executingAssembly = Assembly.GetExecutingAssembly();
+var currentDirectory = Environment.CurrentDirectory;
 
 var services = new ServiceCollection();
 services.AddDataProtection();
@@ -33,7 +34,7 @@ services
     .AddScoped<ILogger, Logger>()
     .AddScoped<IBandcampApiService, BandcampApiService>()
     .AddScoped<IBandcampWebDriverFactory, BandcampWebDriverFactory>()
-    .AddScoped<ILocalCollectionService, LocalCollectionService>()
+    .RegisterLocalCollectionService(currentDirectory)
     .AddScoped<IMailService, MailService>()
     .AddScoped<IDownloadService, DownloadService>();
 
@@ -45,19 +46,15 @@ app.Configure(config =>
     config.AddCommand<CompareCollectionsCommand>("compare")
         .WithDescription("Displays all the items that are missing in the local collection.");
     config.AddCommand<SyncCommand>("sync")
-        .WithDescription("Download the items that are missing in the local collection.")
-        .WithExample(new[] { "sync", "-f", "FLAC" });
+        .WithDescription("Download the items that are missing in the local collection.");
     config.AddCommand<AddItemsCommand>("add")
         .WithAlias("add-item")
-        .WithDescription("Download an item from your Bandcamp collection with a download link.")
-        .WithExample(new[] { "add", "-f", "FLAC", "\"http://bandcamp.com/download?payment_id={...}&reauth_sig={...}&reauth_ts={...}&sig={...}\"" });
+        .WithDescription("Download an item from your Bandcamp collection with a download link.");
     config.AddBranch<SetConfigSettings>("set", set =>
     {
         set.SetDescription("Commands to change your configuration.");
         set.AddCommand<SetIdentityCookieCommand>("identity")
             .WithDescription("Set your Bandcamp identity cookie.");
-        set.AddCommand<SetLocalCollectionPathCommand>("local")
-            .WithDescription("Set the location of your local collection.");
         set.AddCommand<SetEmailAddressCommand>("email")
             .WithDescription("Set the email linked with your Bandcamp account.");
     });
