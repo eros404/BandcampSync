@@ -5,6 +5,8 @@ using Eros404.BandcampSync.Core.Services;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
+using WebDriverManager;
+using WebDriverManager.DriverConfigs.Impl;
 
 namespace Eros404.BandcampSync.BandcampWebsite.Services
 {
@@ -28,6 +30,7 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
             
             static IWebDriver BuildFirefoxDriver(string baseAddress)
             {
+                new DriverManager().SetUpDriver(new FirefoxConfig());
                 var options = new FirefoxOptions();
 #if !DEBUG
                 options.AddArguments("headless");
@@ -44,6 +47,7 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
             }
             static IWebDriver BuildChromeDriver(string baseAddress)
             {
+                new DriverManager().SetUpDriver(new ChromeConfig());
                 var options = new ChromeOptions();
 #if !DEBUG
                 options.AddArguments("headless");
