@@ -2,7 +2,6 @@
 
 public enum UserSettings
 {
-    LocalCollectionBasePath,
     BandcampIdentityCookie,
     EmailAddress
 }

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Eros404.BandcampSync.AppSettings.Models;
+﻿using Eros404.BandcampSync.AppSettings.Models;
 using Eros404.BandcampSync.BandcampWebsite.Models;
 using Eros404.BandcampSync.Core.Models;
 using Eros404.BandcampSync.Core.Services;

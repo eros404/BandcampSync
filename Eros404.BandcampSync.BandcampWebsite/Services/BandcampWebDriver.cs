@@ -50,7 +50,7 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
                 options.AddArgument("log-level=3");
 #endif
                 options.AddArguments("window-size=1920,1080");
-                var driverService =ChromeDriverService.CreateDefaultService();
+                var driverService = ChromeDriverService.CreateDefaultService();
                 driverService.HideCommandPromptWindow = true;
                 driverService.SuppressInitialDiagnosticInformation = true;
                 return new ChromeDriver(driverService, options)

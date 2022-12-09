@@ -15,6 +15,10 @@ public class UserSettingsService : IUserSettingsService
 
     public UserSettingsService(IDataProtectionProvider dataProtectionProvider, string filePath)
     {
+        if (!File.Exists(filePath))
+        {
+            File.Create(filePath).Dispose();
+        }
         _userSettings = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(filePath)) ??
                         new Dictionary<string, string>();
         _protector = dataProtectionProvider.CreateProtector("BandcampSync.UserSettings");
