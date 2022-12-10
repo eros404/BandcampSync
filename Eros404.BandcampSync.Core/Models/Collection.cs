@@ -7,10 +7,8 @@
 
         public void AddDistinct(Collection collection)
         {
-            Albums.AddRange(collection.Albums);
-            Tracks.AddRange(collection.Tracks);
-            Albums = Albums.Distinct().ToList();
-            Tracks = Tracks.Distinct().ToList();
+            Albums.AddRange(collection.Albums.Except(Albums));
+            Tracks.AddRange(collection.Tracks.Except(Tracks));
         }
 
         public void SortItems()

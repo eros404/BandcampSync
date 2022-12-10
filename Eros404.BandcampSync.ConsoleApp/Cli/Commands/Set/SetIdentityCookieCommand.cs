@@ -16,6 +16,7 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands.Set
             _userSettingsService = userSettingsService;
         }
 
+        [SuppressMessage("ReSharper", "RedundantNullableFlowAttribute")]
         public override int Execute([NotNull] CommandContext context, [NotNull] SetIdentityCookieSettings settings)
         {
             _userSettingsService.UpdateValue(UserSettings.BandcampIdentityCookie, AnsiConsole.Prompt(

@@ -17,10 +17,7 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands.See
 
         public override async Task<int> ExecuteAsync(CommandContext context, SeeBandcampCollectionSettings settings)
         {
-            var fanId = await _bandCampService.GetFanIdAsync();
-            if (fanId == null)
-                return -1;
-            var collection = await _bandCampService.GetCollectionAsync((int)fanId);
+            var collection = await _bandCampService.GetCollectionAsync();
             if (collection == null)
                 return -1;
 

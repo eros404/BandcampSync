@@ -16,6 +16,7 @@ internal class SetEmailAddressCommand : Command<SetEmailAddressSettings>
         _userSettingsService = userSettingsService;
     }
 
+    [SuppressMessage("ReSharper", "RedundantNullableFlowAttribute")]
     public override int Execute([NotNull] CommandContext context, [NotNull] SetEmailAddressSettings settings)
     {
         _userSettingsService.UpdateValue(UserSettings.EmailAddress, settings.NewEmailAddress);

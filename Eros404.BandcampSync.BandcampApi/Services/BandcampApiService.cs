@@ -27,14 +27,20 @@ namespace Eros404.BandcampSync.BandcampApi.Services
             _getItemsCount = options.Value.GetItemsCount;
         }
 
-        public async Task<int?> GetFanIdAsync()
+        public async Task<Collection?> GetCollectionAsync()
+        {
+            var fanId = await GetFanIdAsync();
+            return fanId == null ? null : await GetCollectionAsync((int)fanId);
+        }
+
+        private async Task<int?> GetFanIdAsync()
         {
             var response = await _client.GetAsync("fan/2/collection_summary");
             var collectionSummary = await response.EnsureSuccessAndReadFromJsonAsync<CollectionSummaryResponse>();
             return collectionSummary?.fan_id;
         }
 
-        public async Task<Collection?> GetCollectionAsync(int fanId)
+        private async Task<Collection?> GetCollectionAsync(int fanId)
         {
             CollectionResponse? lastResponse = null;
             Collection? collection = null;
@@ -45,14 +51,14 @@ namespace Eros404.BandcampSync.BandcampApi.Services
                     : await FetchItems(fanId, lastResponse.last_token!);
                 if (collection == null)
                 {
-                    collection = lastResponse.ToCollection();
+                    collection = lastResponse?.ToCollection();
                 }
-                else
+                else if (lastResponse != null)
                 {
                     collection.AddDistinct(lastResponse.ToCollection());
                 }
                 Console.WriteLine("pass");
-            } while (lastResponse.more_available && !string.IsNullOrEmpty(lastResponse.last_token));
+            } while (lastResponse is { more_available: true } && !string.IsNullOrEmpty(lastResponse.last_token));
             return collection;
         }
         

@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using Eros404.BandcampSync.AppSettings.Extensions;
-using Eros404.BandcampSync.AppSettings.Models;
 using Eros404.BandcampSync.BandcampApi.Services;
 using Eros404.BandcampSync.BandcampWebsite.Services;
 using Eros404.BandcampSync.ConsoleApp;

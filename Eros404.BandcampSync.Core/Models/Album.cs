@@ -20,7 +20,7 @@
                 return false;
             return Title == other.Title &&
                    BandName == other.BandName &&
-                   NumberOfTracks == NumberOfTracks;
+                   NumberOfTracks == other.NumberOfTracks;
         }
         public override bool Equals(object? obj)
         {

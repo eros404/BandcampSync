@@ -16,6 +16,7 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands.See
             _localCollectionService = collectionService;
         }
 
+        [SuppressMessage("ReSharper", "RedundantNullableFlowAttribute")]
         public override int Execute([NotNull] CommandContext context, [NotNull] SeeLocalCollectionSettings settings)
         {
             var collection = _localCollectionService.GetLocalCollection(settings.AsAlbums);

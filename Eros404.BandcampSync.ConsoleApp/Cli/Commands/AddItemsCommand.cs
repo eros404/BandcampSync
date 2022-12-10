@@ -25,10 +25,7 @@ public class AddItemsCommand : AsyncCommand<AddItemsSettings>
 
     public override async Task<int> ExecuteAsync(CommandContext context, AddItemsSettings settings)
     {
-        var fanId = await _bandCampService.GetFanIdAsync();
-        if (fanId == null)
-            return -1;
-        var collection = await _bandCampService.GetCollectionAsync((int)fanId);
+        var collection = await _bandCampService.GetCollectionAsync();
         if (collection == null)
             return -1;
         var itemsToDownload = new List<CollectionItem>();

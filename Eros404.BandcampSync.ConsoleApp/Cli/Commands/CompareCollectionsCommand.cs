@@ -30,10 +30,7 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands
         public static async Task<CollectionCompareResult?> CompareAsync(IBandcampApiService bandCampService,
             ILocalCollectionService localCollectionService)
         {
-            var fanId = await bandCampService.GetFanIdAsync();
-            if (fanId == null)
-                return null;
-            var bandcamp = await bandCampService.GetCollectionAsync((int)fanId);
+            var bandcamp = await bandCampService.GetCollectionAsync();
             if (bandcamp == null)
                 return null;
             var local = localCollectionService.GetLocalCollection(false);
