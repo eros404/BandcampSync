@@ -28,7 +28,7 @@
         }
         public override int GetHashCode()
         {
-            return (Title, BandName, NumberOfTracks).GetHashCode();
+            return (Title, BandName).GetHashCode();
         }
 
         public override string ToString()

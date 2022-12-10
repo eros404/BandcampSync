@@ -2,8 +2,8 @@
 {
     public class Track : CollectionItem, IEquatable<Track>, IComparable<Track>
     {
-        public uint Number { get; set; }
-        public string? AlbumTitle { get; set; }
+        public uint Number { get; init; }
+        public string? AlbumTitle { get; init; }
 
         public int CompareTo(Track? other)
         {
