@@ -9,19 +9,19 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands;
 
 internal class SyncCommand : AsyncCommand<SyncSettings>
 {
-    private readonly IBandcampApiService _bandCampService;
     private readonly ILocalCollectionService _localCollectionService;
     private readonly IBandcampWebDriverFactory _webDriverFactory;
     private readonly IMailService _mailService;
     private readonly IDownloadService _downloadService;
+    private readonly IComparatorService _comparatorService;
 
-    public SyncCommand(IBandcampApiService bandCampService, ILocalCollectionService localCollectionService, IBandcampWebDriverFactory webDriverFactory, IMailService mailService, IDownloadService downloadService)
+    public SyncCommand(ILocalCollectionService localCollectionService, IBandcampWebDriverFactory webDriverFactory, IMailService mailService, IDownloadService downloadService, IComparatorService comparatorService)
     {
-        _bandCampService = bandCampService;
         _localCollectionService = localCollectionService;
         _webDriverFactory = webDriverFactory;
         _mailService = mailService;
         _downloadService = downloadService;
+        _comparatorService = comparatorService;
     }
 
     private int _numberOfItemDownloaded;
@@ -29,7 +29,7 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
 
     public override async Task<int> ExecuteAsync(CommandContext context, SyncSettings settings)
     {
-        var compareResult = await CompareCollectionsCommand.CompareAsync(_bandCampService, _localCollectionService);
+        var compareResult = await _comparatorService.CompareLocalWithBandcamp();
         if (compareResult == null)
             return -1;
         AnsiConsole.Write(compareResult.ToTable("Missing Items"));

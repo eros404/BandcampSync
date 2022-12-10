@@ -24,14 +24,18 @@ public class PhantomService : IPhantomService
         switch (item)
         {
             case Album album:
-                _phantoms.Albums.Add(album);
+                if (!_phantoms.Albums.Contains(album))
+                    _phantoms.Albums.Add(album);
                 break;
             case Track track:
-                _phantoms.Tracks.Add(track);
+                if (!_phantoms.Tracks.Contains(track))
+                    _phantoms.Tracks.Add(track);
                 break;
         }
         SavePhantoms();
     }
+
+    public void AddPhantoms(List<CollectionItem> items) => items.ForEach(AddPhantom);
 
     public void RemovePhantom(CollectionItem item)
     {

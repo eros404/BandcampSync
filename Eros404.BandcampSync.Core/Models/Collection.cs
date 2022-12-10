@@ -11,6 +11,12 @@
             Tracks.AddRange(collection.Tracks.Except(Tracks));
         }
 
+        public void Remove(Collection collection)
+        {
+            Albums = Albums.Except(collection.Albums).ToList();
+            Tracks = Tracks.Except(collection.Tracks).ToList();
+        }
+
         public void SortItems()
         {
             Albums.Sort();
