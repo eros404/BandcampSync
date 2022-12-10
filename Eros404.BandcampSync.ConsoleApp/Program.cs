@@ -13,6 +13,7 @@ using Eros404.BandcampSync.ConsoleApp.Cli.Settings.Set;
 using Eros404.BandcampSync.Core.Services;
 using Eros404.BandcampSync.LocalCollection.Extensions;
 using Eros404.BandcampSync.Mail.Services;
+using Eros404.BandcampSync.Phantom.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
@@ -34,6 +35,7 @@ services
     .AddScoped<IBandcampApiService, BandcampApiService>()
     .AddScoped<IBandcampWebDriverFactory, BandcampWebDriverFactory>()
     .RegisterLocalCollectionService(currentDirectory)
+    .RegisterPhantomService(currentDirectory)
     .AddScoped<IMailService, MailService>()
     .AddScoped<IDownloadService, DownloadService>();
 
