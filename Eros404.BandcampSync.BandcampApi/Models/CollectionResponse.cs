@@ -7,6 +7,8 @@ namespace Eros404.BandcampSync.BandcampApi.Models
     {
         public List<CollectionItemResponse> items { get; set; } = new();
         public Dictionary<string, string> redownload_urls { get; set; } = new();
+        public bool more_available { get; set; }
+        public string? last_token { get; set; }
         public Collection ToCollection()
         {
             var redownloadUrls = redownload_urls.ToDictionary(keyValue => keyValue.Key.KeepOnlyNumericCharacters(),

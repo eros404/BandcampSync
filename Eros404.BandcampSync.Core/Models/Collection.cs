@@ -5,6 +5,14 @@
         public List<Album> Albums { get; set; } = new();
         public List<Track> Tracks { get; set; } = new();
 
+        public void AddDistinct(Collection collection)
+        {
+            Albums.AddRange(collection.Albums);
+            Tracks.AddRange(collection.Tracks);
+            Albums = Albums.Distinct().ToList();
+            Tracks = Tracks.Distinct().ToList();
+        }
+
         public void SortItems()
         {
             Albums.Sort();

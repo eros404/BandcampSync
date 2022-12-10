@@ -36,17 +36,35 @@ namespace Eros404.BandcampSync.BandcampApi.Services
 
         public async Task<Collection?> GetCollectionAsync(int fanId)
         {
+            CollectionResponse? lastResponse = null;
+            Collection? collection = null;
+            do
+            {
+                lastResponse = lastResponse == null
+                    ? await FetchItems(fanId, $"{DateTime.UtcNow.GetTimeStamp()}::a::")
+                    : await FetchItems(fanId, lastResponse.last_token!);
+                if (collection == null)
+                {
+                    collection = lastResponse.ToCollection();
+                }
+                else
+                {
+                    collection.AddDistinct(lastResponse.ToCollection());
+                }
+                Console.WriteLine("pass");
+            } while (lastResponse.more_available && !string.IsNullOrEmpty(lastResponse.last_token));
+            return collection;
+        }
+        
+        private async Task<CollectionResponse?> FetchItems(int fanId, string olderThanToken)
+        {
             var response = await _client.PostAsJsonAsync("fancollection/1/collection_items", new
             {
                 fan_id = fanId,
-                older_than_token = $"{GetNowTimeStamp()}::a::",
+                older_than_token = olderThanToken,
                 count = _getItemsCount
             });
-            var content = await response.EnsureSuccessAndReadFromJsonAsync<CollectionResponse>();
-            return content?.ToCollection();
-
-            static int GetNowTimeStamp() =>
-                (int) DateTime.UtcNow.AddDays(1).Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+            return await response.EnsureSuccessAndReadFromJsonAsync<CollectionResponse>();
         }
     }
 }
