@@ -57,7 +57,6 @@ namespace Eros404.BandcampSync.BandcampApi.Services
                 {
                     collection.AddDistinct(lastResponse.ToCollection());
                 }
-                Console.WriteLine("pass");
             } while (lastResponse is { more_available: true } && !string.IsNullOrEmpty(lastResponse.last_token));
             return collection;
         }

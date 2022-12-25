@@ -21,7 +21,6 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands.See
         {
             var collection = _localCollectionService.GetLocalCollection(settings.AsAlbums);
             AnsiConsole.Write(collection.ToTable("Local Collection"));
-            AnsiConsole.WriteLine(_localCollectionService.CollectionPath);
             return 0;
         }
     }
