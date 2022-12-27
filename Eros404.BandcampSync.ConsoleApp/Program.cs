@@ -68,11 +68,13 @@ app.Configure(config =>
         see.AddCommand<SeeBandcampCollectionCommand>("bandcamp")
             .WithDescription("Display your Bandcamp collection");
         see.AddCommand<SeeLocalCollectionCommand>("local")
-            .WithDescription("Display your local collection");
+            .WithDescription("Display the local collection");
+        see.AddCommand<SeePhantomCollectionCommand>("phantoms")
+            .WithDescription("Display the phantom collection");
     });
     config.AddBranch<PhantomSettings>("phantoms", phantoms =>
     {
-        phantoms.SetDescription("Commands to manage the phantoms of the local collection");
+        phantoms.SetDescription("Commands to manage the phantom collection");
         phantoms.AddCommand<AddPhantomCommand>("add")
             .WithDescription("Choose and phantomize some missing items");
         phantoms.AddCommand<RemovePhantomCommand>("remove")

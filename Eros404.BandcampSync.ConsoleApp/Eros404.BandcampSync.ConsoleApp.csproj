@@ -8,11 +8,11 @@
         <AssemblyName>Eros404.BandcampSync</AssemblyName>
         <Company>Eros404</Company>
         <Product>BandcampSync</Product>
-        <AssemblyVersion>1.2.5.0</AssemblyVersion>
+        <AssemblyVersion>1.2.5.1</AssemblyVersion>
         <UserSecretsId>9dda5abe-2f55-487d-9f92-d3bed559018c</UserSecretsId>
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>bandcampsync</ToolCommandName>
-        <PackageVersion>1.2.5.0</PackageVersion>
+        <PackageVersion>1.2.5.1</PackageVersion>
         <Title>BandcampSync</Title>
         <Authors>Eros404</Authors>
         <Description>A .NET tool that make easier to download your Bandcamp collection on a local device.</Description>
@@ -21,22 +21,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Eros404.BandcampSync.AppSettings\Eros404.BandcampSync.AppSettings.csproj"/>
-        <ProjectReference Include="..\Eros404.BandcampSync.BandcampApi\Eros404.BandcampSync.BandcampApi.csproj"/>
-        <ProjectReference Include="..\Eros404.BandcampSync.BandcampWebsite\Eros404.BandcampSync.BandcampWebsite.csproj"/>
-        <ProjectReference Include="..\Eros404.BandcampSync.Comparator\Eros404.BandcampSync.Comparator.csproj"/>
-        <ProjectReference Include="..\Eros404.BandcampSync.Core\Eros404.BandcampSync.Core.csproj"/>
-        <ProjectReference Include="..\Eros404.BandcampSync.LocalCollection\Eros404.BandcampSync.LocalCollection.csproj"/>
-        <ProjectReference Include="..\Eros404.BandcampSync.Mail\Eros404.BandcampSync.Mail.csproj"/>
-        <ProjectReference Include="..\Eros404.BandcampSync.Phantom\Eros404.BandcampSync.Phantom.csproj"/>
+        <ProjectReference Include="..\Eros404.BandcampSync.AppSettings\Eros404.BandcampSync.AppSettings.csproj" />
+        <ProjectReference Include="..\Eros404.BandcampSync.BandcampApi\Eros404.BandcampSync.BandcampApi.csproj" />
+        <ProjectReference Include="..\Eros404.BandcampSync.BandcampWebsite\Eros404.BandcampSync.BandcampWebsite.csproj" />
+        <ProjectReference Include="..\Eros404.BandcampSync.Comparator\Eros404.BandcampSync.Comparator.csproj" />
+        <ProjectReference Include="..\Eros404.BandcampSync.Core\Eros404.BandcampSync.Core.csproj" />
+        <ProjectReference Include="..\Eros404.BandcampSync.LocalCollection\Eros404.BandcampSync.LocalCollection.csproj" />
+        <ProjectReference Include="..\Eros404.BandcampSync.Mail\Eros404.BandcampSync.Mail.csproj" />
+        <ProjectReference Include="..\Eros404.BandcampSync.Phantom\Eros404.BandcampSync.Phantom.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0"/>
-        <PackageReference Include="Spectre.Console" Version="0.45.0"/>
-        <PackageReference Include="Spectre.Console.Cli" Version="0.45.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
+        <PackageReference Include="Spectre.Console" Version="0.45.0" />
+        <PackageReference Include="Spectre.Console.Cli" Version="0.45.0" />
     </ItemGroup>
 
     <ItemGroup>
