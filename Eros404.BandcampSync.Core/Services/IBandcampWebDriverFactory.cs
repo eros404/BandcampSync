@@ -1,8 +1,7 @@
-﻿namespace Eros404.BandcampSync.Core.Services
+﻿namespace Eros404.BandcampSync.Core.Services;
+
+public interface IBandcampWebDriverFactory
 {
-    public interface IBandcampWebDriverFactory
-    {
-        IBandcampWebDriver Create();
-        IBandcampWebDriver CreateWithIdentity();
-    }
+    IBandcampWebDriver Create();
+    IBandcampWebDriver CreateWithIdentity();
 }

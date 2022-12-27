@@ -1,6 +1,5 @@
-﻿namespace Eros404.BandcampSync.ConsoleApp.Cli.Settings.See
+﻿namespace Eros404.BandcampSync.ConsoleApp.Cli.Settings.See;
+
+internal class SeeBandcampCollectionSettings : SeeCollectionSettings
 {
-    internal class SeeBandcampCollectionSettings : SeeCollectionSettings
-    {
-    }
 }

@@ -4,25 +4,24 @@ using Eros404.BandcampSync.Core.Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
-namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands.See
+namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands.See;
+
+internal class SeeBandcampCollectionCommand : AsyncCommand<SeeBandcampCollectionSettings>
 {
-    internal class SeeBandcampCollectionCommand : AsyncCommand<SeeBandcampCollectionSettings>
+    private readonly IBandcampApiService _bandCampService;
+
+    public SeeBandcampCollectionCommand(IBandcampApiService bandCampService)
     {
-        private readonly IBandcampApiService _bandCampService;
+        _bandCampService = bandCampService;
+    }
 
-        public SeeBandcampCollectionCommand(IBandcampApiService bandCampService)
-        {
-            _bandCampService = bandCampService;
-        }
+    public override async Task<int> ExecuteAsync(CommandContext context, SeeBandcampCollectionSettings settings)
+    {
+        var collection = await _bandCampService.GetCollectionAsync();
+        if (collection == null)
+            return -1;
 
-        public override async Task<int> ExecuteAsync(CommandContext context, SeeBandcampCollectionSettings settings)
-        {
-            var collection = await _bandCampService.GetCollectionAsync();
-            if (collection == null)
-                return -1;
-
-            AnsiConsole.Write(collection.ToTable("Bandcamp Collection"));
-            return 0;
-        }
+        AnsiConsole.Write(collection.ToTable("Bandcamp Collection"));
+        return 0;
     }
 }

@@ -1,12 +1,11 @@
 ﻿using Eros404.BandcampSync.Core.Models;
 
-namespace Eros404.BandcampSync.Core.Services
-{
-    public interface ILocalCollectionService
-    {
-        string CollectionPath { get; }
+namespace Eros404.BandcampSync.Core.Services;
 
-        Collection GetLocalCollection(bool asAlbums);
-        void AddItem(Stream stream, CollectionItem collectionItem, AudioFormat audioFormat);
-    }
+public interface ILocalCollectionService
+{
+    string CollectionPath { get; }
+
+    Collection GetLocalCollection(bool asAlbums);
+    void AddItem(Stream stream, CollectionItem collectionItem, AudioFormat audioFormat);
 }

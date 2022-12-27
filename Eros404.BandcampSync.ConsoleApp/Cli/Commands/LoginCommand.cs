@@ -4,29 +4,29 @@ using Eros404.BandcampSync.Core.Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
-namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands
+namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands;
+
+internal class LoginCommand : Command<LoginSettings>
 {
-    internal class LoginCommand : Command<LoginSettings>
+    private readonly IBandcampWebDriverFactory _webDriverFactory;
+
+    public LoginCommand(IBandcampWebDriverFactory webDriverFactory)
     {
-        private readonly IBandcampWebDriverFactory _webDriverFactory;
+        _webDriverFactory = webDriverFactory;
+    }
 
-        public LoginCommand(IBandcampWebDriverFactory webDriverFactory)
-        {
-            _webDriverFactory = webDriverFactory;
-        }
-
-        [SuppressMessage("ReSharper", "RedundantNullableFlowAttribute")]
-        public override int Execute([NotNull] CommandContext context, [NotNull] LoginSettings settings)
-        {
-            using var webDriver = _webDriverFactory.Create();
-            if (!webDriver.Login(settings.UserName, AnsiConsole.Prompt(
+    [SuppressMessage("ReSharper", "RedundantNullableFlowAttribute")]
+    public override int Execute([NotNull] CommandContext context, [NotNull] LoginSettings settings)
+    {
+        using var webDriver = _webDriverFactory.Create();
+        if (!webDriver.Login(settings.UserName, AnsiConsole.Prompt(
                 new TextPrompt<string>("Bandcamp password:").Secret())))
-            {
-                AnsiConsole.MarkupLine("[red]Connection failed. Try with other login details.[/]");
-                return -1;
-            }
-            AnsiConsole.MarkupLine("[green]You are logged.[/]");
-            return 0;
+        {
+            AnsiConsole.MarkupLine("[red]Connection failed. Try with other login details.[/]");
+            return -1;
         }
+
+        AnsiConsole.MarkupLine("[green]You are logged.[/]");
+        return 0;
     }
 }

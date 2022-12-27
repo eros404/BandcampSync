@@ -9,7 +9,8 @@ public class ComparatorService : IComparatorService
     private readonly ILocalCollectionService _localCollectionService;
     private readonly IPhantomService _phantomService;
 
-    public ComparatorService(IBandcampApiService bandCampService, ILocalCollectionService localCollectionService, IPhantomService phantomService)
+    public ComparatorService(IBandcampApiService bandCampService, ILocalCollectionService localCollectionService,
+        IPhantomService phantomService)
     {
         _bandCampService = bandCampService;
         _localCollectionService = localCollectionService;
@@ -21,10 +22,7 @@ public class ComparatorService : IComparatorService
         var bandcamp = await _bandCampService.GetCollectionAsync();
         if (bandcamp == null)
             return null;
-        if (!ignorePhantoms)
-        {
-            bandcamp.Remove(_phantomService.GetPhantoms());
-        }
+        if (!ignorePhantoms) bandcamp.Remove(_phantomService.GetPhantoms());
         var local = _localCollectionService.GetLocalCollection(false);
         return bandcamp.Compare(local.Tracks);
     }

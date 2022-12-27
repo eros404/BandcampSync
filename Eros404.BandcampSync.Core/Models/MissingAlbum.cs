@@ -1,22 +1,24 @@
-﻿namespace Eros404.BandcampSync.Core.Models
+﻿namespace Eros404.BandcampSync.Core.Models;
+
+public class MissingAlbum : Album, IComparable<MissingAlbum>
 {
-    public class MissingAlbum : Album, IComparable<MissingAlbum>
+    public MissingAlbum()
     {
-        public uint NumberOfMissingTracks { get; set; }
+    }
 
-        public MissingAlbum() { }
-        public MissingAlbum(Album album, uint numberOfMissingTracks)
-        {
-            Title = album.Title;
-            BandName = album.BandName;
-            NumberOfTracks = album.NumberOfTracks;
-            NumberOfMissingTracks = numberOfMissingTracks;
-            RedownloadUrl = album.RedownloadUrl;
-        }
+    public MissingAlbum(Album album, uint numberOfMissingTracks)
+    {
+        Title = album.Title;
+        BandName = album.BandName;
+        NumberOfTracks = album.NumberOfTracks;
+        NumberOfMissingTracks = numberOfMissingTracks;
+        RedownloadUrl = album.RedownloadUrl;
+    }
 
-        public int CompareTo(MissingAlbum? other)
-        {
-            return base.CompareTo(other);
-        }
+    public uint NumberOfMissingTracks { get; set; }
+
+    public int CompareTo(MissingAlbum? other)
+    {
+        return base.CompareTo(other);
     }
 }

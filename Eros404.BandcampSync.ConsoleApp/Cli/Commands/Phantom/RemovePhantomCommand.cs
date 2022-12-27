@@ -9,8 +9,8 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands.Phantom;
 
 public class RemovePhantomCommand : Command<RemovePhantomSettings>
 {
-    private readonly IPhantomService _phantomService;
     private readonly ILogger _logger;
+    private readonly IPhantomService _phantomService;
 
     public RemovePhantomCommand(IPhantomService phantomService, ILogger logger)
     {
@@ -30,7 +30,7 @@ public class RemovePhantomCommand : Command<RemovePhantomSettings>
 
         var phantomItems = new List<CollectionItem>(phantoms.Albums);
         phantomItems.AddRange(phantoms.Tracks);
-        
+
         _phantomService.RemovePhantoms(MyConsole.SelectItems(phantomItems, "Select phantoms to remove", true)
             .ToArray());
         AnsiConsole.MarkupLine("[green]Done[/]");

@@ -6,5 +6,6 @@ public class DownloadStartedEventArgs : EventArgs
     {
         Item = item;
     }
+
     public CollectionItem Item { get; set; }
 }

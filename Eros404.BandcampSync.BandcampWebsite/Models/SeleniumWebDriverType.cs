@@ -2,5 +2,6 @@
 
 public enum SeleniumWebDriverType
 {
-    Firefox, Chrome
+    Firefox,
+    Chrome
 }

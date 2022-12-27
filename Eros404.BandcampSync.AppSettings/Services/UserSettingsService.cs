@@ -9,20 +9,32 @@ namespace Eros404.BandcampSync.AppSettings.Services;
 
 public class UserSettingsService : IUserSettingsService
 {
-    private readonly Dictionary<string, string> _userSettings;
-    private readonly IDataProtector _protector;
     private readonly string _filePath;
+    private readonly IDataProtector _protector;
+    private readonly Dictionary<string, string> _userSettings;
 
     public UserSettingsService(IDataProtectionProvider dataProtectionProvider, string filePath)
     {
-        if (!File.Exists(filePath))
-        {
-            File.Create(filePath).Dispose();
-        }
+        if (!File.Exists(filePath)) File.Create(filePath).Dispose();
         _userSettings = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(filePath)) ??
                         new Dictionary<string, string>();
         _protector = dataProtectionProvider.CreateProtector("BandcampSync.UserSettings");
         _filePath = filePath;
+    }
+
+    public string GetValue(UserSettings key)
+    {
+        return key.IsEncrypted()
+            ? GetEncryptedValueOrEmptyString(key.ToString())
+            : GetValueOrEmptyString(key.ToString());
+    }
+
+    public void UpdateValue(UserSettings key, string newValue)
+    {
+        if (key.IsEncrypted())
+            UpdateEncryptedValue(key.ToString(), newValue);
+        else
+            UpdateValue(key.ToString(), newValue);
     }
 
     private string GetValueOrEmptyString(string key)
@@ -45,20 +57,5 @@ public class UserSettingsService : IUserSettingsService
     private void UpdateEncryptedValue(string key, string newValue)
     {
         UpdateValue(key, _protector.Protect(newValue));
-    }
-
-    public string GetValue(UserSettings key)
-    {
-        return key.IsEncrypted()
-            ? GetEncryptedValueOrEmptyString(key.ToString())
-            : GetValueOrEmptyString(key.ToString());
-    }
-
-    public void UpdateValue(UserSettings key, string newValue)
-    {
-        if (key.IsEncrypted())
-            UpdateEncryptedValue(key.ToString(), newValue);
-        else
-            UpdateValue(key.ToString(), newValue);
     }
 }

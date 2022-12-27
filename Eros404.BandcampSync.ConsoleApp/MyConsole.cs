@@ -14,6 +14,7 @@ public static class MyConsole
         await actions[selection]();
         return selection;
     }
+
     public static string Selection(Dictionary<string, Action> actions, string title)
     {
         var selection = AnsiConsole.Prompt(

@@ -17,7 +17,20 @@ public class PhantomService : IPhantomService
             : JsonSerializer.Deserialize<Collection>(File.ReadAllText(_phantomFilePath)) ?? new Collection();
     }
 
-    public Collection GetPhantoms() => _phantoms;
+    public Collection GetPhantoms()
+    {
+        return _phantoms;
+    }
+
+    public void AddPhantoms(params CollectionItem[] items)
+    {
+        Array.ForEach(items, AddPhantom);
+    }
+
+    public void RemovePhantoms(params CollectionItem[] items)
+    {
+        Array.ForEach(items, RemovePhantom);
+    }
 
     private void AddPhantom(CollectionItem item)
     {
@@ -32,10 +45,9 @@ public class PhantomService : IPhantomService
                     _phantoms.Tracks.Add(track);
                 break;
         }
+
         SavePhantoms();
     }
-
-    public void AddPhantoms(params CollectionItem[] items) => Array.ForEach(items, AddPhantom);
 
     private void RemovePhantom(CollectionItem item)
     {
@@ -48,17 +60,13 @@ public class PhantomService : IPhantomService
                 _phantoms.Tracks.Remove(track);
                 break;
         }
+
         SavePhantoms();
     }
 
-    public void RemovePhantoms(params CollectionItem[] items) => Array.ForEach(items, RemovePhantom);
-
     private void SavePhantoms()
     {
-        if (!File.Exists(_phantomFilePath))
-        {
-            File.Create(_phantomFilePath).Dispose();
-        }
+        if (!File.Exists(_phantomFilePath)) File.Create(_phantomFilePath).Dispose();
         File.WriteAllText(_phantomFilePath, JsonSerializer.Serialize(_phantoms));
     }
 }

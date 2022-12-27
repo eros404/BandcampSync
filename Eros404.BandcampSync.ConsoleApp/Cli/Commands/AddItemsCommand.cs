@@ -1,4 +1,5 @@
-﻿using Eros404.BandcampSync.ConsoleApp.Cli.Settings;
+﻿using System.Web;
+using Eros404.BandcampSync.ConsoleApp.Cli.Settings;
 using Eros404.BandcampSync.Core.Models;
 using Eros404.BandcampSync.Core.Services;
 using Spectre.Console;
@@ -9,19 +10,20 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands;
 public class AddItemsCommand : AsyncCommand<AddItemsSettings>
 {
     private readonly IBandcampApiService _bandCampService;
+    private readonly IDownloadService _downloadService;
     private readonly ILocalCollectionService _localCollectionService;
     private readonly IBandcampWebDriverFactory _webDriverFactory;
-    private readonly IDownloadService _downloadService;
 
-    public AddItemsCommand(IBandcampApiService bandCampService, ILocalCollectionService localCollectionService, IBandcampWebDriverFactory webDriverFactory, IDownloadService downloadService)
+    private int _numberOfItemDownloaded;
+
+    public AddItemsCommand(IBandcampApiService bandCampService, ILocalCollectionService localCollectionService,
+        IBandcampWebDriverFactory webDriverFactory, IDownloadService downloadService)
     {
         _bandCampService = bandCampService;
         _localCollectionService = localCollectionService;
         _webDriverFactory = webDriverFactory;
         _downloadService = downloadService;
     }
-    
-    private int _numberOfItemDownloaded;
 
     public override async Task<int> ExecuteAsync(CommandContext context, AddItemsSettings settings)
     {
@@ -37,28 +39,32 @@ public class AddItemsCommand : AsyncCommand<AddItemsSettings>
                 {
                     var redownloadUrl = settings.RedownLoadUrls[i];
                     if (!long.TryParse(
-                            System.Web.HttpUtility.ParseQueryString(new Uri(redownloadUrl).Query).Get("payment_id"),
+                            HttpUtility.ParseQueryString(new Uri(redownloadUrl).Query).Get("payment_id"),
                             out var paymentId))
                     {
                         AnsiConsole.MarkupLine($"[red][[{i}]] Link not valid.[/]");
                         continue;
                     }
 
-                    var collectionItem = collection.GetAllItems().FirstOrDefault(item => item.GetPaymentId() == paymentId);
+                    var collectionItem = collection.GetAllItems()
+                        .FirstOrDefault(item => item.GetPaymentId() == paymentId);
                     if (collectionItem == null)
                     {
-                        AnsiConsole.MarkupLine($"[red][[{i}]] No item with this reference in your Bandcamp collection.[/]");
+                        AnsiConsole.MarkupLine(
+                            $"[red][[{i}]] No item with this reference in your Bandcamp collection.[/]");
                         continue;
                     }
-                    
+
                     var result = webDriver.GetDownloadLink(redownloadUrl, settings.AudioFormat, "");
                     if (result.HasExpired)
                     {
-                        AnsiConsole.MarkupLine($"Download link for [blue]{collectionItem.ToString().EscapeMarkup()}[/] expired.");
+                        AnsiConsole.MarkupLine(
+                            $"Download link for [blue]{collectionItem.ToString().EscapeMarkup()}[/] expired.");
                     }
                     else
                     {
-                        AnsiConsole.MarkupLine($"[blue]{collectionItem.ToString().EscapeMarkup()}[/] ready for download.");
+                        AnsiConsole.MarkupLine(
+                            $"[blue]{collectionItem.ToString().EscapeMarkup()}[/] ready for download.");
                         collectionItem.DownloadLink = result.DownloadLink;
                         itemsToDownload.Add(collectionItem);
                     }

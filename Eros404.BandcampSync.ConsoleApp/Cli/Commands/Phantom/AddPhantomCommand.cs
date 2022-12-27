@@ -8,9 +8,9 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands.Phantom;
 
 public class AddPhantomCommand : AsyncCommand<AddPhantomSettings>
 {
-    private readonly IPhantomService _phantomService;
     private readonly IComparatorService _comparatorService;
     private readonly ILogger _logger;
+    private readonly IPhantomService _phantomService;
 
     public AddPhantomCommand(IPhantomService phantomService, IComparatorService comparatorService, ILogger logger)
     {
@@ -32,14 +32,10 @@ public class AddPhantomCommand : AsyncCommand<AddPhantomSettings>
 
         var selectedAlbums = new List<MissingAlbum>();
         if (missingItems.MissingAlbums.Any())
-        {
             selectedAlbums = MyConsole.SelectItems(missingItems.MissingAlbums, "Select albums to phantomize", false);
-        }
         var selectedTracks = new List<MissingTrack>();
         if (missingItems.MissingTracks.Any())
-        {
             selectedTracks = MyConsole.SelectItems(missingItems.MissingTracks, "Select tracks to phantomize", false);
-        }
 
         var selectedItems = new List<CollectionItem>(selectedAlbums);
         selectedItems.AddRange(selectedTracks);

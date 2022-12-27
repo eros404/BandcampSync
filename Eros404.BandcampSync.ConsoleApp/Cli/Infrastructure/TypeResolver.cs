@@ -1,32 +1,23 @@
 ﻿using Spectre.Console.Cli;
 
-namespace Eros404.BandcampSync.ConsoleApp.Cli.Infrastructure
+namespace Eros404.BandcampSync.ConsoleApp.Cli.Infrastructure;
+
+internal sealed class TypeResolver : ITypeResolver, IDisposable
 {
-    internal sealed class TypeResolver : ITypeResolver, IDisposable
+    private readonly IServiceProvider _provider;
+
+    public TypeResolver(IServiceProvider provider)
     {
-        private readonly IServiceProvider _provider;
+        _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+    }
 
-        public TypeResolver(IServiceProvider provider)
-        {
-            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
-        }
+    public void Dispose()
+    {
+        if (_provider is IDisposable disposable) disposable.Dispose();
+    }
 
-        public void Dispose()
-        {
-            if (_provider is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
-        }
-
-        public object? Resolve(Type? type)
-        {
-            if (type == null)
-            {
-                return null;
-            }
-
-            return _provider.GetService(type);
-        }
+    public object? Resolve(Type? type)
+    {
+        return type == null ? null : _provider.GetService(type);
     }
 }

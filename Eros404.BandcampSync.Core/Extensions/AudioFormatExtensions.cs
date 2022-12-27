@@ -4,7 +4,9 @@ namespace Eros404.BandcampSync.Core.Extensions;
 
 public static class AudioFormatExtensions
 {
-    public static string GetExtension(this AudioFormat audioFormat) => audioFormat switch
+    public static string GetExtension(this AudioFormat audioFormat)
+    {
+        return audioFormat switch
         {
             AudioFormat.MP3V0 => ".mp3",
             AudioFormat.MP3320 => ".mp3",
@@ -16,16 +18,21 @@ public static class AudioFormatExtensions
             AudioFormat.AIFF => ".aiff",
             _ => string.Empty
         };
-    public static string GetDisplayName(this AudioFormat audioFormat) => audioFormat switch
+    }
+
+    public static string GetDisplayName(this AudioFormat audioFormat)
     {
-        AudioFormat.MP3V0 => "MP3 V0",
-        AudioFormat.MP3320 => "MP3 320",
-        AudioFormat.FLAC => "FLAC",
-        AudioFormat.AAC => "AAC",
-        AudioFormat.OggVorbis => "Ogg Vorbis",
-        AudioFormat.ALAC => "ALAC",
-        AudioFormat.WAV => "WAV",
-        AudioFormat.AIFF => "AIFF",
-        _ => string.Empty
-    };
+        return audioFormat switch
+        {
+            AudioFormat.MP3V0 => "MP3 V0",
+            AudioFormat.MP3320 => "MP3 320",
+            AudioFormat.FLAC => "FLAC",
+            AudioFormat.AAC => "AAC",
+            AudioFormat.OggVorbis => "Ogg Vorbis",
+            AudioFormat.ALAC => "ALAC",
+            AudioFormat.WAV => "WAV",
+            AudioFormat.AIFF => "AIFF",
+            _ => string.Empty
+        };
+    }
 }

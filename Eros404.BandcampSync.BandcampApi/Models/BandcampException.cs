@@ -3,5 +3,6 @@
 public class BandcampException : Exception
 {
     public BandcampException(string? message) : base(message)
-    {}
+    {
+    }
 }

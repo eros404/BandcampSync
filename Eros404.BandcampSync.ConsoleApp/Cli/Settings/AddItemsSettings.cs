@@ -9,7 +9,7 @@ public class AddItemsSettings : CommandSettings
     [CommandArgument(0, "<downloadLink>")]
     [Description("Download links provided by Bandcamp (usually sent by mail).")]
     public string[]? RedownLoadUrls { get; set; }
-    
+
     [CommandOption("-f|--format")]
     [DefaultValue(AudioFormat.MP3320)]
     [Description("Accepted values are `MP3320` (default), `MP3V0`, `FLAC`, `AAC`, `OggVorbis`, `ALAC`, `WAV`, `AIFF`")]

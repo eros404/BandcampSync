@@ -5,7 +5,8 @@ namespace Eros404.BandcampSync.BandcampApi.Extensions;
 
 public static class HttpResponseMessageExtensions
 {
-    internal static async Task<T?> EnsureSuccessAndReadFromJsonAsync<T>(this HttpResponseMessage response) where T : ErrorResponse
+    internal static async Task<T?> EnsureSuccessAndReadFromJsonAsync<T>(this HttpResponseMessage response)
+        where T : ErrorResponse
     {
         response.EnsureSuccessStatusCode();
         var errorContent = await response.Content.ReadFromJsonAsync<T>();

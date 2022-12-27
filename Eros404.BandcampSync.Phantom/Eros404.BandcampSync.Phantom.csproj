@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Eros404.BandcampSync.Core\Eros404.BandcampSync.Core.csproj" />
+        <ProjectReference Include="..\Eros404.BandcampSync.Core\Eros404.BandcampSync.Core.csproj"/>
     </ItemGroup>
 
 </Project>

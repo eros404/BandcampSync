@@ -7,8 +7,8 @@ namespace Eros404.BandcampSync.BandcampApi.Services;
 
 public class DownloadService : IDownloadService
 {
-    private readonly HttpClient _client;
     private readonly int _albumBatchSize;
+    private readonly HttpClient _client;
     private readonly int _trackBatchSize;
 
     public DownloadService(IOptions<DownloadOptions> options)
@@ -20,7 +20,7 @@ public class DownloadService : IDownloadService
 
     public event EventHandler<DownloadStartedEventArgs>? DownloadStarted;
     public event EventHandler<DownloadFinishedEventArgs>? DownloadFinished;
-    
+
     public async Task DownloadMissingAlbums(IReadOnlyCollection<Album> missingAlbums)
     {
         var numberOfAlbumBatches = (int)Math.Ceiling((double)missingAlbums.Count / _albumBatchSize);
@@ -31,7 +31,7 @@ public class DownloadService : IDownloadService
             await Task.WhenAll(tasks);
         }
     }
-    
+
     public async Task DownloadMissingTracks(IReadOnlyCollection<Track> missingTracks)
     {
         var numberOfAlbumBatches = (int)Math.Ceiling((double)missingTracks.Count / _trackBatchSize);
@@ -42,7 +42,7 @@ public class DownloadService : IDownloadService
             await Task.WhenAll(tasks);
         }
     }
-    
+
     private async Task DownloadCollectionItem(HttpClient client, CollectionItem item)
     {
         DownloadStarted?.Invoke(this, new DownloadStartedEventArgs(item));
