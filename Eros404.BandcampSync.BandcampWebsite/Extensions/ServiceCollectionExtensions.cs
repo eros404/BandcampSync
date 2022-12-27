@@ -16,7 +16,7 @@ public static class ServiceCollectionExtensions
             var bandcampOptions = provider.GetService<IOptions<BandcampOptions>>();
             var seleniumOptions = provider.GetService<IOptions<SeleniumOptions>>();
             var userSettingsService = provider.GetService<IUserSettingsService>();
-            if (seleniumOptions == null || userSettingsService == null)
+            if (bandcampOptions == null || seleniumOptions == null || userSettingsService == null)
                 throw new Exception("Could not register BandcampWebDriverFactory");
             return new BandcampWebDriverFactory(bandcampOptions, seleniumOptions, userSettingsService, driverDownloadDirectory);
         });

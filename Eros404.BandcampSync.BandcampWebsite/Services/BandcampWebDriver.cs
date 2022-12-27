@@ -24,14 +24,14 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
             var driverManager = new DriverManager(driverDownloadDirectory);
             return webDriverType switch
             {
-                SeleniumWebDriverType.Chrome => BuildChromeDriver(baseAddress),
-                SeleniumWebDriverType.Firefox => BuildFirefoxDriver(baseAddress),
+                SeleniumWebDriverType.Chrome => BuildChromeDriver(driverManager, baseAddress),
+                SeleniumWebDriverType.Firefox => BuildFirefoxDriver(driverManager, baseAddress),
                 _ => throw new ArgumentOutOfRangeException(nameof(webDriverType), webDriverType, null)
             };
             
-            static IWebDriver BuildFirefoxDriver(string baseAddress)
+            static IWebDriver BuildFirefoxDriver(DriverManager driverManager, string baseAddress)
             {
-                new DriverManager().SetUpDriver(new FirefoxConfig());
+                driverManager.SetUpDriver(new FirefoxConfig());
                 var options = new FirefoxOptions();
 #if !DEBUG
                 options.AddArguments("headless");
@@ -46,9 +46,9 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
                     Url = baseAddress
                 };   
             }
-            static IWebDriver BuildChromeDriver(string baseAddress)
+            static IWebDriver BuildChromeDriver(DriverManager driverManager, string baseAddress)
             {
-                new DriverManager().SetUpDriver(new ChromeConfig());
+                driverManager.SetUpDriver(new ChromeConfig());
                 var options = new ChromeOptions();
 #if !DEBUG
                 options.AddArguments("headless");

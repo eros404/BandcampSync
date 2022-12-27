@@ -2,7 +2,6 @@
 using Eros404.BandcampSync.AppSettings.Extensions;
 using Eros404.BandcampSync.BandcampApi.Services;
 using Eros404.BandcampSync.BandcampWebsite.Extensions;
-using Eros404.BandcampSync.BandcampWebsite.Services;
 using Eros404.BandcampSync.Comparator.Services;
 using Eros404.BandcampSync.ConsoleApp;
 using Eros404.BandcampSync.ConsoleApp.Cli.Commands;
