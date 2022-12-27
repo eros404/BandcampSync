@@ -36,8 +36,8 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
         if (!compareResult.MissingAlbums.Any() && !compareResult.MissingTracks.Any())
             return 0;
         
-        var selectedAlbums = SelectAlbumsToDownload(compareResult.MissingAlbums);
-        var selectedTracks = SelectTracksToDownload(compareResult.MissingTracks);
+        var selectedAlbums = MyConsole.SelectItems(compareResult.MissingAlbums, "Select albums to download", true);
+        var selectedTracks = MyConsole.SelectItems(compareResult.MissingTracks, "Select tracks to download", true);
         if (!selectedAlbums.Any() && !selectedTracks.Any())
             return 0;
         
@@ -93,46 +93,5 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
         }
 
         item.DownloadLink = result.DownloadLink;
-    }
-
-    private static List<MissingAlbum> SelectAlbumsToDownload(List<MissingAlbum> albums)
-    {
-        if (!albums.Any())
-            return new List<MissingAlbum>();
-        var dictionary = albums.ToDictionary(a => a.ToString().EscapeMarkup(), a => a);
-        var all = $"All albums ({albums.Count})";
-        var selectedKeys = AnsiConsole.Prompt(
-            new MultiSelectionPrompt<string>()
-                .Title("[blue]Select albums to download:[/]")
-                .NotRequired()
-                .PageSize(10)
-                .MoreChoicesText("[grey](Move up and down to reveal more albums)[/]")
-                .InstructionsText(
-                    "[grey](Press [blue]<space>[/] to toggle an album, [green]<enter>[/] to accept)[/]")
-                .AddChoices(all)
-                .AddChoices(dictionary.Keys));
-        return selectedKeys.Contains(all)
-            ? albums
-            : selectedKeys.Select(key => dictionary[key]).ToList();
-    }
-    private static List<MissingTrack> SelectTracksToDownload(List<MissingTrack> tracks)
-    {
-        if (!tracks.Any())
-            return new List<MissingTrack>();
-        var dictionary = tracks.ToDictionary(track => track.ToString().EscapeMarkup(), a => a);
-        var all = $"All tracks ({tracks.Count})";
-        var selectedKeys = AnsiConsole.Prompt(
-            new MultiSelectionPrompt<string>()
-                .Title("[blue]Select tracks to download:[/]")
-                .NotRequired()
-                .PageSize(10)
-                .MoreChoicesText("[grey](Move up and down to reveal more tracks)[/]")
-                .InstructionsText(
-                    "[grey](Press [blue]<space>[/] to toggle a track, [green]<enter>[/] to accept)[/]")
-                .AddChoices(all)
-                .AddChoices(dictionary.Keys));
-        return selectedKeys.Contains(all)
-            ? tracks
-            : selectedKeys.Select(key => dictionary[key]).ToList();
     }
 }

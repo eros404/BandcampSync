@@ -5,9 +5,11 @@ using Eros404.BandcampSync.BandcampWebsite.Services;
 using Eros404.BandcampSync.Comparator.Services;
 using Eros404.BandcampSync.ConsoleApp;
 using Eros404.BandcampSync.ConsoleApp.Cli.Commands;
+using Eros404.BandcampSync.ConsoleApp.Cli.Commands.Phantom;
 using Eros404.BandcampSync.ConsoleApp.Cli.Commands.See;
 using Eros404.BandcampSync.ConsoleApp.Cli.Commands.Set;
 using Eros404.BandcampSync.ConsoleApp.Cli.Infrastructure;
+using Eros404.BandcampSync.ConsoleApp.Cli.Settings.Phantom;
 using Eros404.BandcampSync.ConsoleApp.Cli.Settings.See;
 using Eros404.BandcampSync.ConsoleApp.Cli.Settings.Set;
 using Eros404.BandcampSync.Core.Services;
@@ -46,27 +48,35 @@ app.Configure(config =>
     config.SetApplicationName("bandcampsync");
     config.SetApplicationVersion(executingAssembly.GetName().Version!.ToString());
     config.AddCommand<CompareCollectionsCommand>("compare")
-        .WithDescription("Displays all the items that are missing in the local collection.");
+        .WithDescription("Displays all the missing items");
     config.AddCommand<SyncCommand>("sync")
-        .WithDescription("Download the items that are missing in the local collection.");
+        .WithDescription("Choose and download some missing items");
     config.AddCommand<AddItemsCommand>("add")
         .WithAlias("add-item")
-        .WithDescription("Download an item from your Bandcamp collection with a download link.");
+        .WithDescription("Download some items with download links");
     config.AddBranch<SetConfigSettings>("set", set =>
     {
-        set.SetDescription("Commands to change your configuration.");
+        set.SetDescription("Commands to change your configuration");
         set.AddCommand<SetIdentityCookieCommand>("identity")
-            .WithDescription("Set your Bandcamp identity cookie.");
+            .WithDescription("Set your Bandcamp identity cookie");
         set.AddCommand<SetEmailAddressCommand>("email")
-            .WithDescription("Set the email linked with your Bandcamp account.");
+            .WithDescription("Set the email linked with your Bandcamp account");
     });
     config.AddBranch<SeeCollectionSettings>("see", see =>
     {
-        see.SetDescription("Cammands to display your collections.");
+        see.SetDescription("Cammands to display your collections");
         see.AddCommand<SeeBandcampCollectionCommand>("bandcamp")
-            .WithDescription("Display your Bandcamp collection.");
+            .WithDescription("Display your Bandcamp collection");
         see.AddCommand<SeeLocalCollectionCommand>("local")
-            .WithDescription("Display your local collection.");
+            .WithDescription("Display your local collection");
+    });
+    config.AddBranch<PhantomSettings>("phantoms", phantoms =>
+    {
+        phantoms.SetDescription("Commands to manage the phantoms of the local collection");
+        phantoms.AddCommand<AddPhantomCommand>("add")
+            .WithDescription("Choose and phantomize some missing items");
+        phantoms.AddCommand<RemovePhantomCommand>("remove")
+            .WithDescription("Choose and remove some phantoms");
     });
 });
 return app.Run(args);

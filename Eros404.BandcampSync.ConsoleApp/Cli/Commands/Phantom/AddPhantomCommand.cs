@@ -33,51 +33,18 @@ public class AddPhantomCommand : AsyncCommand<AddPhantomSettings>
         var selectedAlbums = new List<MissingAlbum>();
         if (missingItems.MissingAlbums.Any())
         {
-            selectedAlbums = SelectAlbumsToPhantomize(missingItems.MissingAlbums);
+            selectedAlbums = MyConsole.SelectItems(missingItems.MissingAlbums, "Select albums to phantomize", false);
         }
         var selectedTracks = new List<MissingTrack>();
         if (missingItems.MissingTracks.Any())
         {
-            selectedTracks = SelectTracksToPhantomize(missingItems.MissingTracks);
+            selectedTracks = MyConsole.SelectItems(missingItems.MissingTracks, "Select tracks to phantomize", false);
         }
 
         var selectedItems = new List<CollectionItem>(selectedAlbums);
         selectedItems.AddRange(selectedTracks);
-        _phantomService.AddPhantoms(selectedItems);
+        _phantomService.AddPhantoms(selectedItems.ToArray());
         AnsiConsole.MarkupLine("[green]Done[/]");
         return 0;
-    }
-    
-    private static List<MissingAlbum> SelectAlbumsToPhantomize(List<MissingAlbum> albums)
-    {
-        if (!albums.Any())
-            return new List<MissingAlbum>();
-        var dictionary = albums.ToDictionary(a => a.ToString().EscapeMarkup(), a => a);
-        var selectedKeys = AnsiConsole.Prompt(
-            new MultiSelectionPrompt<string>()
-                .Title("[blue]Select albums to phantomize:[/]")
-                .NotRequired()
-                .PageSize(10)
-                .MoreChoicesText("[grey](Move up and down to reveal more albums)[/]")
-                .InstructionsText(
-                    "[grey](Press [blue]<space>[/] to toggle an album, [green]<enter>[/] to accept)[/]")
-                .AddChoices(dictionary.Keys));
-        return selectedKeys.Select(key => dictionary[key]).ToList();
-    }
-    private static List<MissingTrack> SelectTracksToPhantomize(List<MissingTrack> tracks)
-    {
-        if (!tracks.Any())
-            return new List<MissingTrack>();
-        var dictionary = tracks.ToDictionary(a => a.ToString().EscapeMarkup(), a => a);
-        var selectedKeys = AnsiConsole.Prompt(
-            new MultiSelectionPrompt<string>()
-                .Title("[blue]Select tracks to phantomize:[/]")
-                .NotRequired()
-                .PageSize(10)
-                .MoreChoicesText("[grey](Move up and down to reveal more tracks)[/]")
-                .InstructionsText(
-                    "[grey](Press [blue]<space>[/] to toggle a track, [green]<enter>[/] to accept)[/]")
-                .AddChoices(dictionary.Keys));
-        return selectedKeys.Select(key => dictionary[key]).ToList();
     }
 }

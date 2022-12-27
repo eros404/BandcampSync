@@ -19,7 +19,7 @@ public class PhantomService : IPhantomService
 
     public Collection GetPhantoms() => _phantoms;
 
-    public void AddPhantom(CollectionItem item)
+    private void AddPhantom(CollectionItem item)
     {
         switch (item)
         {
@@ -35,9 +35,9 @@ public class PhantomService : IPhantomService
         SavePhantoms();
     }
 
-    public void AddPhantoms(List<CollectionItem> items) => items.ForEach(AddPhantom);
+    public void AddPhantoms(params CollectionItem[] items) => Array.ForEach(items, AddPhantom);
 
-    public void RemovePhantom(CollectionItem item)
+    private void RemovePhantom(CollectionItem item)
     {
         switch (item)
         {
@@ -50,6 +50,8 @@ public class PhantomService : IPhantomService
         }
         SavePhantoms();
     }
+
+    public void RemovePhantoms(params CollectionItem[] items) => Array.ForEach(items, RemovePhantom);
 
     private void SavePhantoms()
     {
