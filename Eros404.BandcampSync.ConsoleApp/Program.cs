@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Eros404.BandcampSync.AppSettings.Extensions;
 using Eros404.BandcampSync.BandcampApi.Services;
+using Eros404.BandcampSync.BandcampWebsite.Extensions;
 using Eros404.BandcampSync.BandcampWebsite.Services;
 using Eros404.BandcampSync.Comparator.Services;
 using Eros404.BandcampSync.ConsoleApp;
@@ -35,7 +36,7 @@ services
     .ConfigureAllOptions(configuration)
     .AddScoped<ILogger, Logger>()
     .AddScoped<IBandcampApiService, BandcampApiService>()
-    .AddScoped<IBandcampWebDriverFactory, BandcampWebDriverFactory>()
+    .RegisterBandcampWebDriverFactory(Path.GetDirectoryName(executingAssembly.Location)!)
     .RegisterLocalCollectionService(currentDirectory)
     .RegisterPhantomService(currentDirectory)
     .AddScoped<IComparatorService, ComparatorService>()

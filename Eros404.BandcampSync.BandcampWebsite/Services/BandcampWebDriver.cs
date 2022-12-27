@@ -14,13 +14,14 @@ namespace Eros404.BandcampSync.BandcampWebsite.Services
     {
         private readonly string _baseAddress;
         private readonly IWebDriver _driver;
-        public BandcampWebDriver(string baseAddress, SeleniumWebDriverType webDriverType)
+        public BandcampWebDriver(string baseAddress, SeleniumWebDriverType webDriverType, string driverDownloadDirectory)
         {
             _baseAddress = baseAddress;
-            _driver = BuildDriver(baseAddress, webDriverType);
+            _driver = BuildDriver(baseAddress, webDriverType, driverDownloadDirectory);
         }
-        private static IWebDriver BuildDriver(string baseAddress, SeleniumWebDriverType webDriverType)
+        private static IWebDriver BuildDriver(string baseAddress, SeleniumWebDriverType webDriverType, string driverDownloadDirectory)
         {
+            var driverManager = new DriverManager(driverDownloadDirectory);
             return webDriverType switch
             {
                 SeleniumWebDriverType.Chrome => BuildChromeDriver(baseAddress),

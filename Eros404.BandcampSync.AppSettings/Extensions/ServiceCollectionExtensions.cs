@@ -15,7 +15,7 @@ namespace Eros404.BandcampSync.AppSettings.Extensions
             {
                 var dataProtectionProviider = provider.GetService<IDataProtectionProvider>();
                 if (dataProtectionProviider == null)
-                    throw new Exception();
+                    throw new Exception("Could not register UserSettingsService");
                 return new UserSettingsService(dataProtectionProviider, filePath);
             });
         }
