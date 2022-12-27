@@ -4,9 +4,9 @@ namespace Eros404.BandcampSync.Core.Models
 {
     public abstract class CollectionItem
     {
-        public string? Title { get; set; }
-        public string? BandName { get; set; }
-        public string? RedownloadUrl { get; set; }
+        public string? Title { get; init; }
+        public string? BandName { get; init; }
+        public string? RedownloadUrl { get; init; }
         public string? DownloadLink { get; set; }
 
         public override string ToString()

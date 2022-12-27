@@ -15,6 +15,7 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands
             _webDriverFactory = webDriverFactory;
         }
 
+        [SuppressMessage("ReSharper", "RedundantNullableFlowAttribute")]
         public override int Execute([NotNull] CommandContext context, [NotNull] LoginSettings settings)
         {
             using var webDriver = _webDriverFactory.Create();

@@ -1,5 +1,8 @@
-﻿namespace Eros404.BandcampSync.BandcampApi.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Eros404.BandcampSync.BandcampApi.Models
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     internal class CollectionItemResponse
     {
         public long item_id { get; set; }

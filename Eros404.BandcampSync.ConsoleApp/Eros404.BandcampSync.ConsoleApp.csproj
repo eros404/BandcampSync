@@ -24,9 +24,11 @@
       <ProjectReference Include="..\Eros404.BandcampSync.AppSettings\Eros404.BandcampSync.AppSettings.csproj" />
       <ProjectReference Include="..\Eros404.BandcampSync.BandcampApi\Eros404.BandcampSync.BandcampApi.csproj" />
       <ProjectReference Include="..\Eros404.BandcampSync.BandcampWebsite\Eros404.BandcampSync.BandcampWebsite.csproj" />
+      <ProjectReference Include="..\Eros404.BandcampSync.Comparator\Eros404.BandcampSync.Comparator.csproj" />
       <ProjectReference Include="..\Eros404.BandcampSync.Core\Eros404.BandcampSync.Core.csproj" />
       <ProjectReference Include="..\Eros404.BandcampSync.LocalCollection\Eros404.BandcampSync.LocalCollection.csproj" />
       <ProjectReference Include="..\Eros404.BandcampSync.Mail\Eros404.BandcampSync.Mail.csproj" />
+      <ProjectReference Include="..\Eros404.BandcampSync.Phantom\Eros404.BandcampSync.Phantom.csproj" />
     </ItemGroup>
 
     <ItemGroup>

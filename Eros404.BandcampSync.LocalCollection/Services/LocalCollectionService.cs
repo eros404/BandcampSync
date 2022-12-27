@@ -35,7 +35,7 @@ namespace Eros404.BandcampSync.LocalCollection.Services
         private static string GetFileNameFriendly(string content) => Path.GetInvalidFileNameChars()
             .Aggregate(content, (current, c) => current.Replace(c.ToString(), "-"));
 
-        public void AddAlbum(Stream stream, Album album)
+        private void AddAlbum(Stream stream, Album album)
         {
             using var zip = new ZipArchive(stream, ZipArchiveMode.Read);
             var directory = Path.Combine(CollectionPath,
@@ -44,7 +44,7 @@ namespace Eros404.BandcampSync.LocalCollection.Services
             zip.ExtractToDirectory(directory);
         }
 
-        public void AddTrack(Stream stream, Track track, AudioFormat audioFormat)
+        private void AddTrack(Stream stream, Track track, AudioFormat audioFormat)
         {
             var filePath = Path.Combine(CollectionPath,
                 $"{GetFileNameFriendly(track.BandName ?? "")} - {GetFileNameFriendly(track.Title ?? "")}{audioFormat.GetExtension()}");

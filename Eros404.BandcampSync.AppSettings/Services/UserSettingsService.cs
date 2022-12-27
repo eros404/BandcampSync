@@ -27,12 +27,12 @@ public class UserSettingsService : IUserSettingsService
 
     private string GetValueOrEmptyString(string key)
     {
-        return _userSettings.TryGetValue(key, out string value) ? value : "";
+        return _userSettings.TryGetValue(key, out var value) ? value : "";
     }
 
     private string GetEncryptedValueOrEmptyString(string key)
     {
-        return _userSettings.TryGetValue(key, out string value) ? _protector.Unprotect(value) : "";
+        return _userSettings.TryGetValue(key, out var value) ? _protector.Unprotect(value) : "";
     }
 
     private void UpdateValue(string key, string newValue)

@@ -20,7 +20,7 @@
                 return false;
             return Title == other.Title &&
                    BandName == other.BandName &&
-                   NumberOfTracks == NumberOfTracks;
+                   NumberOfTracks == other.NumberOfTracks;
         }
         public override bool Equals(object? obj)
         {
@@ -28,7 +28,7 @@
         }
         public override int GetHashCode()
         {
-            return (Title, BandName, NumberOfTracks).GetHashCode();
+            return (Title, BandName).GetHashCode();
         }
 
         public override string ToString()

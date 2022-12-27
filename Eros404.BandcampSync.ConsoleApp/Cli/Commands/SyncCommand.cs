@@ -9,19 +9,19 @@ namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands;
 
 internal class SyncCommand : AsyncCommand<SyncSettings>
 {
-    private readonly IBandcampApiService _bandCampService;
     private readonly ILocalCollectionService _localCollectionService;
     private readonly IBandcampWebDriverFactory _webDriverFactory;
     private readonly IMailService _mailService;
     private readonly IDownloadService _downloadService;
+    private readonly IComparatorService _comparatorService;
 
-    public SyncCommand(IBandcampApiService bandCampService, ILocalCollectionService localCollectionService, IBandcampWebDriverFactory webDriverFactory, IMailService mailService, IDownloadService downloadService)
+    public SyncCommand(ILocalCollectionService localCollectionService, IBandcampWebDriverFactory webDriverFactory, IMailService mailService, IDownloadService downloadService, IComparatorService comparatorService)
     {
-        _bandCampService = bandCampService;
         _localCollectionService = localCollectionService;
         _webDriverFactory = webDriverFactory;
         _mailService = mailService;
         _downloadService = downloadService;
+        _comparatorService = comparatorService;
     }
 
     private int _numberOfItemDownloaded;
@@ -29,15 +29,15 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
 
     public override async Task<int> ExecuteAsync(CommandContext context, SyncSettings settings)
     {
-        var compareResult = await CompareCollectionsCommand.CompareAsync(_bandCampService, _localCollectionService);
+        var compareResult = await _comparatorService.CompareLocalWithBandcamp();
         if (compareResult == null)
             return -1;
         AnsiConsole.Write(compareResult.ToTable("Missing Items"));
         if (!compareResult.MissingAlbums.Any() && !compareResult.MissingTracks.Any())
             return 0;
         
-        var selectedAlbums = SelectAlbumsToDownload(compareResult.MissingAlbums);
-        var selectedTracks = SelectTracksToDownload(compareResult.MissingTracks);
+        var selectedAlbums = MyConsole.SelectItems(compareResult.MissingAlbums, "Select albums to download", true);
+        var selectedTracks = MyConsole.SelectItems(compareResult.MissingTracks, "Select tracks to download", true);
         if (!selectedAlbums.Any() && !selectedTracks.Any())
             return 0;
         
@@ -93,46 +93,5 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
         }
 
         item.DownloadLink = result.DownloadLink;
-    }
-
-    private static List<MissingAlbum> SelectAlbumsToDownload(List<MissingAlbum> albums)
-    {
-        if (!albums.Any())
-            return new List<MissingAlbum>();
-        var dictionary = albums.ToDictionary(a => a.ToString().EscapeMarkup(), a => a);
-        var all = $"All albums ({albums.Count})";
-        var selectedKeys = AnsiConsole.Prompt(
-            new MultiSelectionPrompt<string>()
-                .Title("[blue]Select albums to download:[/]")
-                .NotRequired()
-                .PageSize(10)
-                .MoreChoicesText("[grey](Move up and down to reveal more albums)[/]")
-                .InstructionsText(
-                    "[grey](Press [blue]<space>[/] to toggle an album, [green]<enter>[/] to accept)[/]")
-                .AddChoices(all)
-                .AddChoices(dictionary.Keys));
-        return selectedKeys.Contains(all)
-            ? albums
-            : selectedKeys.Select(key => dictionary[key]).ToList();
-    }
-    private static List<MissingTrack> SelectTracksToDownload(List<MissingTrack> tracks)
-    {
-        if (!tracks.Any())
-            return new List<MissingTrack>();
-        var dictionary = tracks.ToDictionary(track => track.ToString().EscapeMarkup(), a => a);
-        var all = $"All tracks ({tracks.Count})";
-        var selectedKeys = AnsiConsole.Prompt(
-            new MultiSelectionPrompt<string>()
-                .Title("[blue]Select tracks to download:[/]")
-                .NotRequired()
-                .PageSize(10)
-                .MoreChoicesText("[grey](Move up and down to reveal more tracks)[/]")
-                .InstructionsText(
-                    "[grey](Press [blue]<space>[/] to toggle a track, [green]<enter>[/] to accept)[/]")
-                .AddChoices(all)
-                .AddChoices(dictionary.Keys));
-        return selectedKeys.Contains(all)
-            ? tracks
-            : selectedKeys.Select(key => dictionary[key]).ToList();
     }
 }
