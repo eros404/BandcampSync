@@ -6,6 +6,6 @@ public interface IDownloadService
 {
     event EventHandler<DownloadStartedEventArgs> DownloadStarted;
     event EventHandler<DownloadFinishedEventArgs> DownloadFinished;
-    Task DownloadMissingAlbums(IReadOnlyCollection<Album> missingAlbums);
-    Task DownloadMissingTracks(IReadOnlyCollection<Track> missingTracks);
+    Task Download(IReadOnlyCollection<Album> albums);
+    Task Download(IReadOnlyCollection<Track> tracks);
 }

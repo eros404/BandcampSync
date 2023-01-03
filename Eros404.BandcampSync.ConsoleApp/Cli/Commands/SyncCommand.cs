@@ -69,9 +69,9 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
         await AnsiConsole.Status()
             .StartAsync("Downloading...", async _ =>
             {
-                await _downloadService.DownloadMissingAlbums(selectedAlbums
+                await _downloadService.Download(selectedAlbums
                     .Where(a => !string.IsNullOrEmpty(a.DownloadLink)).ToList());
-                await _downloadService.DownloadMissingTracks(selectedTracks
+                await _downloadService.Download(selectedTracks
                     .Where(a => !string.IsNullOrEmpty(a.DownloadLink)).ToList());
             });
         AnsiConsole.MarkupLine(
