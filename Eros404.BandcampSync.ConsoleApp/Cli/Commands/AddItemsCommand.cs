@@ -97,8 +97,8 @@ public class AddItemsCommand : AsyncCommand<AddItemsSettings>
                             break;
                     }
                 });
-                await _downloadService.DownloadMissingAlbums(albumsToDownload);
-                await _downloadService.DownloadMissingTracks(tracksToDownload);
+                await _downloadService.Download(albumsToDownload);
+                await _downloadService.Download(tracksToDownload);
             });
         AnsiConsole.MarkupLine(
             $"[green]{_numberOfItemDownloaded}[/] item{(_numberOfItemDownloaded > 1 ? "s" : "")} downloaded.");

@@ -13,7 +13,7 @@ public class DownloadService : IDownloadService
 
     public DownloadService(IOptions<DownloadOptions> options)
     {
-        _client = new HttpClient { Timeout = TimeSpan.FromMinutes(5) };
+        _client = new HttpClient { Timeout = TimeSpan.FromMinutes(options.Value.Timeout) };
         _albumBatchSize = options.Value.AlbumBatchSize;
         _trackBatchSize = options.Value.TrackBatchSize;
     }
@@ -21,32 +21,31 @@ public class DownloadService : IDownloadService
     public event EventHandler<DownloadStartedEventArgs>? DownloadStarted;
     public event EventHandler<DownloadFinishedEventArgs>? DownloadFinished;
 
-    public async Task DownloadMissingAlbums(IReadOnlyCollection<Album> missingAlbums)
+    public async Task Download(IReadOnlyCollection<Album> albums)
     {
-        var numberOfAlbumBatches = (int)Math.Ceiling((double)missingAlbums.Count / _albumBatchSize);
-        for (var i = 0; i < numberOfAlbumBatches; i++)
+        await Download(albums, _albumBatchSize);
+    }
+
+    public async Task Download(IReadOnlyCollection<Track> tracks)
+    {
+        await Download(tracks, _trackBatchSize);
+    }
+
+    private async Task Download(IReadOnlyCollection<CollectionItem> items, int bashSize)
+    {
+        var numberOfBatches = (int)Math.Ceiling((double)items.Count / bashSize);
+        for (var i = 0; i < numberOfBatches; i++)
         {
-            var currentAlbums = missingAlbums.Skip(i * _albumBatchSize).Take(_albumBatchSize);
-            var tasks = currentAlbums.Select(album => DownloadCollectionItem(_client, album));
+            var current = items.Skip(i * bashSize).Take(bashSize);
+            var tasks = current.Select(Download);
             await Task.WhenAll(tasks);
         }
     }
 
-    public async Task DownloadMissingTracks(IReadOnlyCollection<Track> missingTracks)
-    {
-        var numberOfAlbumBatches = (int)Math.Ceiling((double)missingTracks.Count / _trackBatchSize);
-        for (var i = 0; i < numberOfAlbumBatches; i++)
-        {
-            var currentTracks = missingTracks.Skip(i * _trackBatchSize).Take(_trackBatchSize);
-            var tasks = currentTracks.Select(track => DownloadCollectionItem(_client, track));
-            await Task.WhenAll(tasks);
-        }
-    }
-
-    private async Task DownloadCollectionItem(HttpClient client, CollectionItem item)
+    private async Task Download(CollectionItem item)
     {
         DownloadStarted?.Invoke(this, new DownloadStartedEventArgs(item));
-        var response = await client.GetAsync(item.DownloadLink);
+        var response = await _client.GetAsync(item.DownloadLink);
         response.EnsureSuccessStatusCode();
         DownloadFinished?.Invoke(this, new DownloadFinishedEventArgs(item, await response.Content.ReadAsStreamAsync()));
     }
