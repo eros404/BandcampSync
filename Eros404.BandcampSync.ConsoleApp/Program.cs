@@ -26,12 +26,12 @@ var configuration = new ConfigurationBuilder()
 
 var executingAssembly = Assembly.GetExecutingAssembly();
 var currentDirectory = Environment.CurrentDirectory;
+var userPersonalDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
 
 var services = new ServiceCollection();
 services.AddDataProtection();
 services
-    .RegisterUserSettingsService(Path.Combine(Path.GetDirectoryName(executingAssembly.Location)!,
-        "usersettings.json"))
+    .RegisterUserSettingsService(Path.Combine(userPersonalDirectory, ".bandcampsync.usersettings.json"))
     .ConfigureAllOptions(configuration)
     .AddScoped<ILogger, Logger>()
     .AddScoped<IBandcampApiService, BandcampApiService>()
@@ -64,7 +64,7 @@ app.Configure(config =>
     });
     config.AddBranch<SeeCollectionSettings>("see", see =>
     {
-        see.SetDescription("Cammands to display your collections");
+        see.SetDescription("Commands to display your collections");
         see.AddCommand<SeeBandcampCollectionCommand>("bandcamp")
             .WithDescription("Display your Bandcamp collection");
         see.AddCommand<SeeLocalCollectionCommand>("local")
