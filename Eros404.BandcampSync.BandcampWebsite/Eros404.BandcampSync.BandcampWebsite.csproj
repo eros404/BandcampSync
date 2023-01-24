@@ -1,20 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <LangVersion>11</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Eros404.BandcampSync.AppSettings\Eros404.BandcampSync.AppSettings.csproj"/>
-        <ProjectReference Include="..\Eros404.BandcampSync.Core\Eros404.BandcampSync.Core.csproj"/>
+        <ProjectReference Include="..\Eros404.BandcampSync.AppSettings\Eros404.BandcampSync.AppSettings.csproj" />
+        <ProjectReference Include="..\Eros404.BandcampSync.Core\Eros404.BandcampSync.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Selenium.Support" Version="4.7.0"/>
-        <PackageReference Include="Selenium.WebDriver" Version="4.7.0"/>
-        <PackageReference Include="WebDriverManager" Version="2.16.2"/>
+        <PackageReference Include="Selenium.Support" Version="4.8.0" />
+        <PackageReference Include="Selenium.WebDriver" Version="4.8.0" />
+        <PackageReference Include="WebDriverManager" Version="2.16.2" />
     </ItemGroup>
 
 </Project>

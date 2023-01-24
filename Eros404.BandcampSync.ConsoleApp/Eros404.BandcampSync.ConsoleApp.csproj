@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AssemblyName>Eros404.BandcampSync</AssemblyName>
@@ -18,6 +18,7 @@
         <Description>A .NET tool that make easier to download your Bandcamp collection on a local device.</Description>
         <RepositoryUrl>https://github.com/eros404/BandcampSync</RepositoryUrl>
         <FileVersion></FileVersion>
+        <LangVersion>11</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -35,8 +36,8 @@
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
-        <PackageReference Include="Spectre.Console" Version="0.45.0" />
-        <PackageReference Include="Spectre.Console.Cli" Version="0.45.0" />
+        <PackageReference Include="Spectre.Console" Version="0.46.0" />
+        <PackageReference Include="Spectre.Console.Cli" Version="0.46.0" />
     </ItemGroup>
 
     <ItemGroup>
