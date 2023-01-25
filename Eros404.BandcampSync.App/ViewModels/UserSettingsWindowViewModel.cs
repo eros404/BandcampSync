@@ -7,22 +7,25 @@ using ReactiveUI;
 
 namespace Eros404.BandcampSync.App.ViewModels;
 
-public class UserSettingsViewModel : ViewModelBase
+public class UserSettingsWindowViewModel : ViewModelBase
 {
     private readonly IUserSettingsService _userSettingsService;
     private string email;
     private string identityCookie;
 
-    public UserSettingsViewModel(IUserSettingsService userSettingsService)
+    public UserSettingsWindowViewModel(IUserSettingsService userSettingsService)
     {
         _userSettingsService = userSettingsService;
         email = _userSettingsService.GetValue(UserSettings.EmailAddress);
-        identityCookie = _userSettingsService.GetValue(UserSettings.BandcampIdentityCookie);
-        Save = ReactiveCommand.Create(() => new UserSettingsModel(Email, IdentityCookie));
-        Save.Subscribe(newSettings =>
+        identityCookie = "";
+        SaveCommand = ReactiveCommand.Create(() => new UserSettingsModel(Email, IdentityCookie));
+        SaveCommand.Subscribe(newSettings =>
         {
             _userSettingsService.UpdateValue(UserSettings.EmailAddress, newSettings.Email);
-            _userSettingsService.UpdateValue(UserSettings.BandcampIdentityCookie, newSettings.IdentityCookie);
+            if (!string.IsNullOrEmpty(newSettings.IdentityCookie))
+            {
+                _userSettingsService.UpdateValue(UserSettings.BandcampIdentityCookie, newSettings.IdentityCookie);   
+            }
         });
     }
     public string Email
@@ -35,5 +38,5 @@ public class UserSettingsViewModel : ViewModelBase
         get => identityCookie;
         set => this.RaiseAndSetIfChanged(ref identityCookie, value);
     }
-    public ReactiveCommand<Unit, UserSettingsModel> Save { get;  }
+    public ReactiveCommand<Unit, UserSettingsModel> SaveCommand { get;  }
 }

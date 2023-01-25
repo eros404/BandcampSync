@@ -1,0 +1,52 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:Eros404.BandcampSync.App.ViewModels"
+        xmlns:views="clr-namespace:Eros404.BandcampSync.App.Views"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Eros404.BandcampSync.App.Views.UserSettingsWindow"
+        Title="User Settings"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="True"
+        WindowStartupLocation="CenterOwner"
+        Width="1000"
+        Height="550">
+    
+    <Design.DataContext>
+        <vm:UserSettingsWindowViewModel></vm:UserSettingsWindowViewModel>
+    </Design.DataContext>
+    
+    <Panel>
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    BackgroundSource="Digger"
+                    TintColor="Black"
+                    TintOpacity="1"
+                    MaterialOpacity="0.65" />
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>
+        <Panel Margin="40">
+            <DockPanel>
+                <Button DockPanel.Dock="Bottom"
+                        Command="{Binding SaveCommand}"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center">
+                    SAVE
+                </Button>
+                <StackPanel>
+                    <TextBlock Text="Email" Margin="0,0,0,5"></TextBlock>
+                    <TextBox AcceptsReturn="False"
+                             Text="{Binding Email}"></TextBox>
+                    <TextBlock Text="Bandcamp identity cookie" Margin="0,20,0,5"></TextBlock>
+                    <TextBox AcceptsReturn="False"
+                             PasswordChar="*"
+                             Text="{Binding IdentityCookie}"
+                             Watermark="Enter a value to override..."></TextBox>
+                </StackPanel>
+            </DockPanel>
+        </Panel>
+    </Panel>
+</Window>

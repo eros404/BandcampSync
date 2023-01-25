@@ -10,7 +10,8 @@
         Title="BandcampSync"
         TransparencyLevelHint="AcrylicBlur"
         Background="Transparent"
-        ExtendClientAreaToDecorationsHint="True">
+        ExtendClientAreaToDecorationsHint="True"
+        WindowStartupLocation="CenterScreen">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -28,8 +29,12 @@
                     MaterialOpacity="0.65" />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
-        <Panel Margin="20">
-            <views:UserSettingsView Content="{Binding UserSettings}"/>
+        <Panel Margin="40">
+            <Button Command="{Binding ShowUserSettingsCommand}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top">
+                <PathIcon Data="{StaticResource settings_regular}"></PathIcon>
+            </Button>
         </Panel>
     </Panel>
 

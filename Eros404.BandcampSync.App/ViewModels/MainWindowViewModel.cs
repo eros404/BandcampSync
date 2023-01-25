@@ -1,15 +1,21 @@
-﻿using Eros404.BandcampSync.Core.Models;
-using Eros404.BandcampSync.Core.Services;
+﻿using System.Reactive;
+using System.Reactive.Linq;
+using System.Windows.Input;
+using Eros404.BandcampSync.App.Models;
 using ReactiveUI;
 
 namespace Eros404.BandcampSync.App.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    public MainWindowViewModel(UserSettingsViewModel userSettings)
+    public MainWindowViewModel(UserSettingsWindowViewModel userSettingsWindowViewModel)
     {
-        UserSettings = userSettings;
+        ShowUserSettingsDialog = new Interaction<UserSettingsWindowViewModel, UserSettingsModel>();
+        ShowUserSettingsCommand = ReactiveCommand.CreateFromTask(async () =>
+        {
+            await ShowUserSettingsDialog.Handle(userSettingsWindowViewModel);
+        });
     }
-
-    public UserSettingsViewModel UserSettings { get; set; }
+    public ICommand ShowUserSettingsCommand { get;  }
+    public Interaction<UserSettingsWindowViewModel, UserSettingsModel> ShowUserSettingsDialog { get; }
 }

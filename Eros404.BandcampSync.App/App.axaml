@@ -8,5 +8,6 @@
 
     <Application.Styles>
         <FluentTheme Mode="Dark"/>
+        <StyleInclude Source="avares://Eros404.BandcampSync.App/Icons.axaml"></StyleInclude>
     </Application.Styles>
 </Application>

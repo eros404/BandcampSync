@@ -45,7 +45,7 @@ public partial class App : Application
         var services = new ServiceCollection();
         services.AddDataProtection();
         services.RegisterUserSettingsService(Path.Combine(userPersonalDirectory, ".bandcampsync.usersettings.json"))
-            .AddTransient<UserSettingsViewModel>()
+            .AddTransient<UserSettingsWindowViewModel>()
             .AddTransient<MainWindowViewModel>();
         return services;
     }
