@@ -37,14 +37,24 @@
                     SAVE
                 </Button>
                 <StackPanel>
-                    <TextBlock Text="Email" Margin="0,0,0,5"></TextBlock>
+                    <TextBlock Text="Email:" Margin="0,0,0,5"></TextBlock>
                     <TextBox AcceptsReturn="False"
                              Text="{Binding Email}"></TextBox>
-                    <TextBlock Text="Bandcamp identity cookie" Margin="0,20,0,5"></TextBlock>
+                    <TextBlock Text="Bandcamp identity cookie:" Margin="0,20,0,5"></TextBlock>
                     <TextBox AcceptsReturn="False"
                              PasswordChar="*"
                              Text="{Binding IdentityCookie}"
                              Watermark="Enter a value to override..."></TextBox>
+                    <TextBlock Text="Local collection path:" Margin="0,20,0,5"></TextBlock>
+                    <DockPanel>
+                        <Button Command="{Binding SelectLocalCollectionPathCommand}"
+                                DockPanel.Dock="Left"
+                                Margin="0,0,10,0">
+                            <PathIcon Data="{StaticResource folder_regular}"></PathIcon>
+                        </Button>
+                        <TextBox AcceptsReturn="False"
+                                 Text="{Binding LocalCollectionPath}"></TextBox>
+                    </DockPanel>
                 </StackPanel>
             </DockPanel>
         </Panel>

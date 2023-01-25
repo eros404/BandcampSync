@@ -2,12 +2,14 @@
 
 public class UserSettingsModel
 {
-    public UserSettingsModel(string email, string identityCookie)
+    public UserSettingsModel(string localCollectionPath, string email, string identityCookie)
     {
         Email = email;
         IdentityCookie = identityCookie;
+        LocalCollectionPath = localCollectionPath;
     }
 
     public string Email { get; set; }
     public string IdentityCookie { get; set; }
+    public string LocalCollectionPath { get; set; }
 }

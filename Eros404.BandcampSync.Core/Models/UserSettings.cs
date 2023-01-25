@@ -3,5 +3,6 @@
 public enum UserSettings
 {
     BandcampIdentityCookie,
-    EmailAddress
+    EmailAddress,
+    LocalCollectionPath
 }
