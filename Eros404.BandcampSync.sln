@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros404.BandcampSync.Phanto
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros404.BandcampSync.Comparator", "Eros404.BandcampSync.Comparator\Eros404.BandcampSync.Comparator.csproj", "{8D22891D-40F5-4CA5-A4E8-FCDB3A04C17A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros404.BandcampSync.App", "Eros404.BandcampSync.App\Eros404.BandcampSync.App.csproj", "{0A6C89CA-33F4-4224-A5B5-0CC49898BD88}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,5 +62,9 @@ Global
 		{8D22891D-40F5-4CA5-A4E8-FCDB3A04C17A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D22891D-40F5-4CA5-A4E8-FCDB3A04C17A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D22891D-40F5-4CA5-A4E8-FCDB3A04C17A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A6C89CA-33F4-4224-A5B5-0CC49898BD88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A6C89CA-33F4-4224-A5B5-0CC49898BD88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A6C89CA-33F4-4224-A5B5-0CC49898BD88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A6C89CA-33F4-4224-A5B5-0CC49898BD88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

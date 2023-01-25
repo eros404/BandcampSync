@@ -15,7 +15,7 @@ public static class ServiceCollectionExtensions
         {
             var dataProtectionProviider = provider.GetService<IDataProtectionProvider>();
             if (dataProtectionProviider == null)
-                throw new Exception("Could not register UserSettingsService");
+                throw new Exception("Data protection is not registered.");
             return new UserSettingsService(dataProtectionProviider, filePath);
         });
     }
