@@ -11,4 +11,14 @@ public static class ServiceCollectionExtensions
     {
         return services.AddTransient<ILocalCollectionService>(_ => new LocalCollectionService(collectionPath));
     }
+    public static IServiceCollection RegisterLocalCollectionService(this IServiceCollection services)
+    {
+        return services.AddTransient<ILocalCollectionService>(provider =>
+        {
+            var userSettingsService = provider.GetService<IUserSettingsService>();
+            if (userSettingsService is null)
+                throw new Exception("Could not register LocalCollectionService.");
+            return new LocalCollectionService(userSettingsService);
+        });
+    }
 }

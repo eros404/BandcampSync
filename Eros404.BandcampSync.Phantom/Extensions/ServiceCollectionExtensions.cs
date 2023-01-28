@@ -10,4 +10,14 @@ public static class ServiceCollectionExtensions
     {
         return services.AddTransient<IPhantomService>(_ => new PhantomService(collectionPath));
     }
+    public static IServiceCollection RegisterPhantomService(this IServiceCollection services)
+    {
+        return services.AddTransient<IPhantomService>(provider =>
+        {
+            var userSettingsService = provider.GetService<IUserSettingsService>();
+            if (userSettingsService is null)
+                throw new Exception("Could not register PhantomService.");
+            return new PhantomService(userSettingsService);
+        });
+    }
 }

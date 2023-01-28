@@ -6,16 +6,34 @@ namespace Eros404.BandcampSync.Phantom.Services;
 
 public class PhantomService : IPhantomService
 {
-    private readonly string _phantomFilePath;
-    private readonly Collection _phantoms;
+    private const string PhantomFileName = ".phantoms";
+
+    private readonly string _phantomFilePath = "";
+    private readonly IUserSettingsService? _userSettingsService;
+    private Collection _phantoms;
 
     public PhantomService(string collectionPath)
     {
-        _phantomFilePath = Path.Combine(collectionPath, ".phantoms");
-        _phantoms = !File.Exists(_phantomFilePath)
-            ? new Collection()
-            : JsonSerializer.Deserialize<Collection>(File.ReadAllText(_phantomFilePath)) ?? new Collection();
+        _phantomFilePath = Path.Combine(collectionPath, PhantomFileName);
+        InitializePhantoms();
     }
+    public PhantomService(IUserSettingsService userSettingsService)
+    {
+        _userSettingsService = userSettingsService;
+        InitializePhantoms();
+    }
+
+    private void InitializePhantoms()
+    {
+        var phantomFilePath = PhantomFilePath;
+        _phantoms = !File.Exists(phantomFilePath)
+            ? new Collection()
+            : JsonSerializer.Deserialize<Collection>(File.ReadAllText(phantomFilePath)) ?? new Collection();
+    }
+
+    private string PhantomFilePath => _userSettingsService is null
+        ? _phantomFilePath
+        : Path.Combine(_userSettingsService.GetValue(UserSettings.LocalCollectionPath), PhantomFileName);
 
     public Collection GetPhantoms()
     {
@@ -66,7 +84,8 @@ public class PhantomService : IPhantomService
 
     private void SavePhantoms()
     {
-        if (!File.Exists(_phantomFilePath)) File.Create(_phantomFilePath).Dispose();
-        File.WriteAllText(_phantomFilePath, JsonSerializer.Serialize(_phantoms));
+        var phantomFilePath = PhantomFilePath;
+        if (!File.Exists(phantomFilePath)) File.Create(phantomFilePath).Dispose();
+        File.WriteAllText(phantomFilePath, JsonSerializer.Serialize(_phantoms));
     }
 }

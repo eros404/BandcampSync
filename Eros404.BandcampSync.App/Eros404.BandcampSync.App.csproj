@@ -11,6 +11,9 @@
         <Folder Include="Models\" />
         <AvaloniaResource Include="Assets\**" />
         <None Remove=".gitignore" />
+        <None Update="appsettings.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -23,11 +26,19 @@
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.18" />
         <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.18" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
         <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Eros404.BandcampSync.AppSettings\Eros404.BandcampSync.AppSettings.csproj" />
+      <ProjectReference Include="..\Eros404.BandcampSync.BandcampApi\Eros404.BandcampSync.BandcampApi.csproj" />
+      <ProjectReference Include="..\Eros404.BandcampSync.BandcampWebsite\Eros404.BandcampSync.BandcampWebsite.csproj" />
+      <ProjectReference Include="..\Eros404.BandcampSync.Comparator\Eros404.BandcampSync.Comparator.csproj" />
+      <ProjectReference Include="..\Eros404.BandcampSync.LocalCollection\Eros404.BandcampSync.LocalCollection.csproj" />
+      <ProjectReference Include="..\Eros404.BandcampSync.Mail\Eros404.BandcampSync.Mail.csproj" />
+      <ProjectReference Include="..\Eros404.BandcampSync.Phantom\Eros404.BandcampSync.Phantom.csproj" />
     </ItemGroup>
 </Project>

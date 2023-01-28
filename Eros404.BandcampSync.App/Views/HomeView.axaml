@@ -1,0 +1,37 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Eros404.BandcampSync.App.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eros404.BandcampSync.App.Views.HomeView">
+    
+    <Design.DataContext>
+        <viewModels:HomeViewModel/>
+    </Design.DataContext>
+
+    <Panel>
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    BackgroundSource="Digger"
+                    TintColor="Black"
+                    TintOpacity="1"
+                    MaterialOpacity="0.65" />
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>
+        <Panel Margin="40">
+            <Button Command="{Binding ShowUserSettingsCommand}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top">
+                <PathIcon Data="{StaticResource settings_regular}"></PathIcon>
+            </Button>
+            <TextBlock FontSize="20"
+                       FontWeight="Bold">
+                BandcampSync
+            </TextBlock>
+            <Button Command="{Binding CompareCommand}"
+                    Content="{Binding CompareButtonText}"></Button>
+        </Panel>
+    </Panel>
+</UserControl>

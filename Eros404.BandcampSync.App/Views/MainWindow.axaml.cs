@@ -11,16 +11,6 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     public MainWindow()
     {
         InitializeComponent();
-        this.WhenActivated(d => d(ViewModel!.ShowUserSettingsDialog.RegisterHandler(DoShowUserSettingsDialogAsync)));
     }
-    private async Task DoShowUserSettingsDialogAsync(InteractionContext<UserSettingsWindowViewModel, UserSettingsModel> interaction)
-    {
-        var dialog = new UserSettingsWindow
-        {
-            DataContext = interaction.Input
-        };
-
-        var result = await dialog.ShowDialog<UserSettingsModel>(this);
-        interaction.SetOutput(result);
-    }
+    
 }
