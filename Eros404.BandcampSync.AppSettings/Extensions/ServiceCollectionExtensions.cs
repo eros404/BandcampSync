@@ -11,12 +11,12 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection RegisterUserSettingsService(this IServiceCollection services, string filePath)
     {
-        return services.AddTransient<IUserSettingsService>(provider =>
+        return services.AddScoped<IUserSettingsService>(provider =>
         {
-            var dataProtectionProviider = provider.GetService<IDataProtectionProvider>();
-            if (dataProtectionProviider == null)
+            var dataProtectionProvider = provider.GetService<IDataProtectionProvider>();
+            if (dataProtectionProvider == null)
                 throw new Exception("Data protection is not registered.");
-            return new UserSettingsService(dataProtectionProviider, filePath);
+            return new UserSettingsService(dataProtectionProvider, filePath);
         });
     }
 

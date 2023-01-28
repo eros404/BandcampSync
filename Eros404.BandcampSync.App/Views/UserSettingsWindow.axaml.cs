@@ -1,6 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+﻿using Avalonia.Controls;
 using Avalonia.ReactiveUI;
 using Eros404.BandcampSync.App.ViewModels;
 using ReactiveUI;
@@ -16,8 +14,8 @@ public partial class UserSettingsWindow : ReactiveWindow<UserSettingsWindowViewM
     {
         InitializeComponent();
         this.WhenActivated(d =>
-            d(ViewModel.SelectLocalCollectionPathDialog.RegisterHandler(DoSelectLocalCollectionPathAsync)));
-        this.WhenActivated(d => d(ViewModel.SaveCommand.Subscribe(Close)));
+            d(ViewModel!.SelectLocalCollectionPathDialog.RegisterHandler(DoSelectLocalCollectionPathAsync)));
+        this.WhenActivated(d => d(ViewModel!.SaveCommand.Subscribe(Close)));
     }
 
     private async Task DoSelectLocalCollectionPathAsync(InteractionContext<Unit, string?> interaction)

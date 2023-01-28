@@ -1,4 +1,3 @@
-using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.ReactiveUI;
 using Eros404.BandcampSync.App.Models;
@@ -12,7 +11,7 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     public MainWindow()
     {
         InitializeComponent();
-        this.WhenActivated(d => d(ViewModel.ShowUserSettingsDialog.RegisterHandler(DoShowUserSettingsDialogAsync)));
+        this.WhenActivated(d => d(ViewModel!.ShowUserSettingsDialog.RegisterHandler(DoShowUserSettingsDialogAsync)));
     }
     private async Task DoShowUserSettingsDialogAsync(InteractionContext<UserSettingsWindowViewModel, UserSettingsModel> interaction)
     {

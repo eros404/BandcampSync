@@ -2,8 +2,6 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
-using Avalonia;
-using Avalonia.Controls;
 using Eros404.BandcampSync.App.Models;
 using Eros404.BandcampSync.Core.Models;
 using Eros404.BandcampSync.Core.Services;
@@ -13,28 +11,26 @@ namespace Eros404.BandcampSync.App.ViewModels;
 
 public class UserSettingsWindowViewModel : ViewModelBase
 {
-    private readonly IUserSettingsService _userSettingsService;
-    private string email;
-    private string identityCookie;
-    private string localCollectionPath;
+    private string _email;
+    private string _identityCookie;
+    private string _localCollectionPath;
 
     public UserSettingsWindowViewModel(IUserSettingsService userSettingsService)
     {
-        _userSettingsService = userSettingsService;
-        email = _userSettingsService.GetValue(UserSettings.EmailAddress);
-        identityCookie = "";
-        localCollectionPath = _userSettingsService.GetValue(UserSettings.LocalCollectionPath);
+        _email = userSettingsService.GetValue(UserSettings.EmailAddress);
+        _identityCookie = "";
+        _localCollectionPath = userSettingsService.GetValue(UserSettings.LocalCollectionPath);
         SaveCommand = ReactiveCommand.Create(() => new UserSettingsModel(LocalCollectionPath, Email, IdentityCookie));
         SaveCommand.Subscribe(newSettings =>
         {
-            _userSettingsService.UpdateValue(UserSettings.LocalCollectionPath, newSettings.LocalCollectionPath);
-            _userSettingsService.UpdateValue(UserSettings.EmailAddress, newSettings.Email);
+            userSettingsService.UpdateValue(UserSettings.LocalCollectionPath, newSettings.LocalCollectionPath);
+            userSettingsService.UpdateValue(UserSettings.EmailAddress, newSettings.Email);
             if (!string.IsNullOrEmpty(newSettings.IdentityCookie))
             {
-                _userSettingsService.UpdateValue(UserSettings.BandcampIdentityCookie, newSettings.IdentityCookie);   
+                userSettingsService.UpdateValue(UserSettings.BandcampIdentityCookie, newSettings.IdentityCookie);   
             }
         });
-        SelectLocalCollectionPathDialog = new Interaction<Unit, string>();
+        SelectLocalCollectionPathDialog = new Interaction<Unit, string?>();
         SelectLocalCollectionPathCommand = ReactiveCommand.CreateFromTask(async () =>
         {
             var result = await SelectLocalCollectionPathDialog.Handle(new Unit());
@@ -46,18 +42,18 @@ public class UserSettingsWindowViewModel : ViewModelBase
     }
     public string Email
     {
-        get => email;
-        set => this.RaiseAndSetIfChanged(ref email, value);
+        get => _email;
+        set => this.RaiseAndSetIfChanged(ref _email, value);
     }
     public string IdentityCookie
     {
-        get => identityCookie;
-        set => this.RaiseAndSetIfChanged(ref identityCookie, value);
+        get => _identityCookie;
+        set => this.RaiseAndSetIfChanged(ref _identityCookie, value);
     }
     public string LocalCollectionPath
     {
-        get => localCollectionPath;
-        set => this.RaiseAndSetIfChanged(ref localCollectionPath, value);
+        get => _localCollectionPath;
+        set => this.RaiseAndSetIfChanged(ref _localCollectionPath, value);
     }
     public ReactiveCommand<Unit, UserSettingsModel> SaveCommand { get; }
     public ICommand SelectLocalCollectionPathCommand { get; }

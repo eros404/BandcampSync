@@ -9,12 +9,23 @@ namespace Eros404.BandcampSync.LocalCollection.Services;
 
 public class LocalCollectionService : ILocalCollectionService
 {
+    private readonly IUserSettingsService? _userSettingsService;
     public LocalCollectionService(string collectionPath)
     {
-        CollectionPath = collectionPath;
+        _collectionPath = collectionPath;
     }
 
-    public string CollectionPath { get; }
+    public LocalCollectionService(IUserSettingsService userSettingsService)
+    {
+        _userSettingsService = userSettingsService;
+    }
+
+    private readonly string _collectionPath = "";
+
+    public string CollectionPath =>
+        _userSettingsService is null
+            ? _collectionPath
+            : _userSettingsService.GetValue(UserSettings.LocalCollectionPath);
 
     public Collection GetLocalCollection(bool asAlbums)
     {
