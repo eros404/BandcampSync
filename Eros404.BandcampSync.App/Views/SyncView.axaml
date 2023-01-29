@@ -1,0 +1,95 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Eros404.BandcampSync.App.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eros404.BandcampSync.App.Views.SyncView">
+    <Design.DataContext>
+        <viewModels:SyncViewModel/>
+    </Design.DataContext>
+
+    <Panel>
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    BackgroundSource="Digger"
+                    TintColor="Black"
+                    TintOpacity="1"
+                    MaterialOpacity="0.65" />
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>
+        <Panel Margin="40">
+            <StackPanel Orientation="Vertical">
+                <Panel>
+                    <TextBlock FontSize="20"
+                               FontWeight="Bold">
+                        Download items
+                    </TextBlock>
+                    <ComboBox x:Name="formatComboBox"
+                              HorizontalAlignment="Right"
+                              VerticalAlignment="Top"
+                              SelectedItem="{Binding AudioFormat}"
+                              Items="{Binding AllAudioFormats}"></ComboBox>
+                </Panel>
+                <TabControl Margin="0,20,0,20"
+                            Height="500">
+                    <TabItem Header="Albums">
+                        <Grid>
+                            <DataGrid Name="MissingAlbumsGrid"
+                                      Items="{Binding MissingAlbums}"
+                                      AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridCheckBoxColumn Binding="{Binding IsChecked}"></DataGridCheckBoxColumn>
+                                    <DataGridTextColumn Header="Title" 
+                                                        Binding="{Binding Title}"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="Band" 
+                                                        Binding="{Binding BandName}"
+                                                        IsReadOnly="True"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="Tracks"
+                                                        Binding="{Binding NumberOfTracks}"
+                                                        IsReadOnly="True"></DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Tracks">
+                        <Grid>
+                            <DataGrid Name="MissingTracksGrid"
+                                      Items="{Binding MissingTracks}"
+                                      AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridCheckBoxColumn Binding="{Binding IsChecked}"
+                                                            IsThreeState="True"></DataGridCheckBoxColumn>
+                                    <DataGridTextColumn Header="Title" 
+                                                        Binding="{Binding Title}"
+                                                        IsReadOnly="True"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="Band" 
+                                                        Binding="{Binding BandName}"
+                                                        IsReadOnly="True"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="Album"
+                                                        Binding="{Binding AlbumTitle}"
+                                                        IsReadOnly="True"></DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+                <Grid ColumnDefinitions="*,*" RowDefinitions="*">
+                    <Button Content="Cancel"
+                            HorizontalAlignment="Stretch"
+                            Grid.Column="0" Grid.Row="0"
+                            HorizontalContentAlignment="Center"
+                            Margin="0,0,10,0"
+                            Command="{Binding CancelCommand}"></Button>
+                    <Button Content="Download" 
+                            HorizontalAlignment="Stretch"
+                            Grid.Column="1" Grid.Row="0"
+                            HorizontalContentAlignment="Center"
+                            Margin="10,0,0,0"
+                            Command="{Binding DownloadCommand}"></Button>
+                </Grid>
+            </StackPanel>
+        </Panel>
+    </Panel>
+</UserControl>

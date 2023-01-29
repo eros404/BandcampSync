@@ -21,15 +21,15 @@
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
         <Panel Margin="40">
+            <TextBlock FontSize="20"
+                       FontWeight="Bold">
+                BandcampSync
+            </TextBlock>
             <Button Command="{Binding ShowUserSettingsCommand}"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top">
                 <PathIcon Data="{StaticResource settings_regular}"></PathIcon>
             </Button>
-            <TextBlock FontSize="20"
-                       FontWeight="Bold">
-                BandcampSync
-            </TextBlock>
             <Button Command="{Binding CompareCommand}"
                     Content="{Binding CompareButtonText}"></Button>
         </Panel>

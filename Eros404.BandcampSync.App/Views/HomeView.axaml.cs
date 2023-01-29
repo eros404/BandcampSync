@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using Eros404.BandcampSync.App.Models;
 using Eros404.BandcampSync.App.ViewModels;
@@ -17,14 +15,14 @@ public partial class HomeView : ReactiveUserControl<HomeViewModel>
         this.WhenActivated(d => d(ViewModel!.ShowUserSettingsDialog.RegisterHandler(DoShowUserSettingsDialogAsync)));
     }
 
-    private async Task DoShowUserSettingsDialogAsync(InteractionContext<UserSettingsWindowViewModel, UserSettingsModel> interaction)
+    private async Task DoShowUserSettingsDialogAsync(InteractionContext<UserSettingsWindowViewModel, UserSettings> interaction)
     {
         var dialog = new UserSettingsWindow
         {
             DataContext = interaction.Input
         };
 
-        var result = await dialog.ShowDialog<UserSettingsModel>((Window)Parent);
+        var result = await dialog.ShowDialog<UserSettings>((Window)Parent);
         interaction.SetOutput(result);
     }
 }

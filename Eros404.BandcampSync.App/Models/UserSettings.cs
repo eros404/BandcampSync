@@ -1,8 +1,8 @@
 ﻿namespace Eros404.BandcampSync.App.Models;
 
-public class UserSettingsModel
+public class UserSettings
 {
-    public UserSettingsModel(string localCollectionPath, string email, string identityCookie)
+    public UserSettings(string localCollectionPath, string email, string identityCookie)
     {
         Email = email;
         IdentityCookie = identityCookie;

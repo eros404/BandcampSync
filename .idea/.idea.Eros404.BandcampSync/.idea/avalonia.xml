@@ -9,6 +9,7 @@
         <entry key="Eros404.BandcampSync.App/Views/Home.axaml" value="Eros404.BandcampSync.App/Eros404.BandcampSync.App.csproj" />
         <entry key="Eros404.BandcampSync.App/Views/HomeView.axaml" value="Eros404.BandcampSync.App/Eros404.BandcampSync.App.csproj" />
         <entry key="Eros404.BandcampSync.App/Views/MainWindow.axaml" value="Eros404.BandcampSync.App/Eros404.BandcampSync.App.csproj" />
+        <entry key="Eros404.BandcampSync.App/Views/SyncView.axaml" value="Eros404.BandcampSync.App/Eros404.BandcampSync.App.csproj" />
         <entry key="Eros404.BandcampSync.App/Views/UserSettingsView.axaml" value="Eros404.BandcampSync.App/Eros404.BandcampSync.App.csproj" />
         <entry key="Eros404.BandcampSync.App/Views/UserSettingsWindow.axaml" value="Eros404.BandcampSync.App/Eros404.BandcampSync.App.csproj" />
       </map>

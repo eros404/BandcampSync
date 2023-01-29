@@ -7,4 +7,5 @@ public interface IViewModelsManager
     UserSettingsWindowViewModel UserSettingsWindowViewModel { get; }
     MainWindowViewModel MainWindowViewModel { get; }
     HomeViewModel HomeViewModel { get; }
+    SyncViewModel SyncViewModel { get; }
 }

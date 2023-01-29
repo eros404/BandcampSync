@@ -2,10 +2,9 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
-using Eros404.BandcampSync.App.Models;
-using Eros404.BandcampSync.Core.Models;
 using Eros404.BandcampSync.Core.Services;
 using ReactiveUI;
+using UserSettings = Eros404.BandcampSync.App.Models.UserSettings;
 
 namespace Eros404.BandcampSync.App.ViewModels;
 
@@ -17,17 +16,17 @@ public class UserSettingsWindowViewModel : ViewModelBase
 
     public UserSettingsWindowViewModel(IUserSettingsService userSettingsService)
     {
-        _email = userSettingsService.GetValue(UserSettings.EmailAddress);
+        _email = userSettingsService.GetValue(Core.Models.UserSettings.EmailAddress);
         _identityCookie = "";
-        _localCollectionPath = userSettingsService.GetValue(UserSettings.LocalCollectionPath);
-        SaveCommand = ReactiveCommand.Create(() => new UserSettingsModel(LocalCollectionPath, Email, IdentityCookie));
+        _localCollectionPath = userSettingsService.GetValue(Core.Models.UserSettings.LocalCollectionPath);
+        SaveCommand = ReactiveCommand.Create(() => new UserSettings(LocalCollectionPath, Email, IdentityCookie));
         SaveCommand.Subscribe(newSettings =>
         {
-            userSettingsService.UpdateValue(UserSettings.LocalCollectionPath, newSettings.LocalCollectionPath);
-            userSettingsService.UpdateValue(UserSettings.EmailAddress, newSettings.Email);
+            userSettingsService.UpdateValue(Core.Models.UserSettings.LocalCollectionPath, newSettings.LocalCollectionPath);
+            userSettingsService.UpdateValue(Core.Models.UserSettings.EmailAddress, newSettings.Email);
             if (!string.IsNullOrEmpty(newSettings.IdentityCookie))
             {
-                userSettingsService.UpdateValue(UserSettings.BandcampIdentityCookie, newSettings.IdentityCookie);   
+                userSettingsService.UpdateValue(Core.Models.UserSettings.BandcampIdentityCookie, newSettings.IdentityCookie);   
             }
         });
         SelectLocalCollectionPathDialog = new Interaction<Unit, string?>();
@@ -55,7 +54,7 @@ public class UserSettingsWindowViewModel : ViewModelBase
         get => _localCollectionPath;
         set => this.RaiseAndSetIfChanged(ref _localCollectionPath, value);
     }
-    public ReactiveCommand<Unit, UserSettingsModel> SaveCommand { get; }
+    public ReactiveCommand<Unit, UserSettings> SaveCommand { get; }
     public ICommand SelectLocalCollectionPathCommand { get; }
     public Interaction<Unit, string?> SelectLocalCollectionPathDialog { get; }
 }

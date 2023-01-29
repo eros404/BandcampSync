@@ -25,4 +25,5 @@ public class ViewModelsManager : IViewModelsManager
     public MainWindowViewModel MainWindowViewModel => new (this);
     public UserSettingsWindowViewModel UserSettingsWindowViewModel => new (GetService<IUserSettingsService>());
     public HomeViewModel HomeViewModel => new(this, GetService<IComparatorService>());
+    public SyncViewModel SyncViewModel => new();
 }
