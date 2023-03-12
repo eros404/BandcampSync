@@ -2,6 +2,6 @@
 
 namespace Eros404.BandcampSync.ConsoleApp.Cli.Settings.Set;
 
-internal class SetConfigSettings : CommandSettings
+internal abstract class SetConfigSettings : CommandSettings
 {
 }

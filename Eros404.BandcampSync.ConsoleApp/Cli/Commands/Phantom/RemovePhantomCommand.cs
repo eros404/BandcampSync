@@ -7,7 +7,7 @@ using Spectre.Console.Cli;
 
 namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands.Phantom;
 
-public class RemovePhantomCommand : Command<RemovePhantomSettings>
+internal class RemovePhantomCommand : Command<RemovePhantomSettings>
 {
     private readonly ILogger _logger;
     private readonly IPhantomService _phantomService;

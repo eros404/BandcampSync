@@ -6,7 +6,7 @@ using Spectre.Console.Cli;
 
 namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands.Phantom;
 
-public class AddPhantomCommand : AsyncCommand<AddPhantomSettings>
+internal class AddPhantomCommand : AsyncCommand<AddPhantomSettings>
 {
     private readonly IComparatorService _comparatorService;
     private readonly ILogger _logger;
@@ -21,7 +21,7 @@ public class AddPhantomCommand : AsyncCommand<AddPhantomSettings>
 
     public override async Task<int> ExecuteAsync(CommandContext context, AddPhantomSettings settings)
     {
-        var missingItems = await _comparatorService.CompareLocalWithBandcamp();
+        var missingItems = await _comparatorService.CompareLocalWithBandcamp(settings.Search);
         if (missingItems == null)
             return -1;
         if (!missingItems.MissingAlbums.Any() && !missingItems.MissingTracks.Any())

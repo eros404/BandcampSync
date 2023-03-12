@@ -2,6 +2,6 @@
 
 namespace Eros404.BandcampSync.ConsoleApp.Cli.Settings.Phantom;
 
-public class PhantomSettings : CommandSettings
+internal abstract class PhantomSettings : CommandSettings
 {
 }
