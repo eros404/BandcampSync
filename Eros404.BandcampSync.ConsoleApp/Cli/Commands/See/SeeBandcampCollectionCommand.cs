@@ -17,7 +17,7 @@ internal class SeeBandcampCollectionCommand : AsyncCommand<SeeBandcampCollection
 
     public override async Task<int> ExecuteAsync(CommandContext context, SeeBandcampCollectionSettings settings)
     {
-        var collection = await _bandCampService.GetCollectionAsync();
+        var collection = await _bandCampService.GetCollectionAsync(settings.Search);
         if (collection == null)
             return -1;
 

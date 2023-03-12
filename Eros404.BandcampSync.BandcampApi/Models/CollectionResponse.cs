@@ -22,6 +22,7 @@ internal class CollectionResponse : ErrorResponse
             switch (item.item_type)
             {
                 case "album":
+                case "package":
                     collection.Albums.Add(new Album
                     {
                         Title = item.item_title,

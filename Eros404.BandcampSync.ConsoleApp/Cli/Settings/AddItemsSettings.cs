@@ -4,7 +4,7 @@ using Spectre.Console.Cli;
 
 namespace Eros404.BandcampSync.ConsoleApp.Cli.Settings;
 
-public class AddItemsSettings : CommandSettings
+internal class AddItemsSettings : CommandSettings
 {
     [CommandArgument(0, "<downloadLink>")]
     [Description("Download links provided by Bandcamp (usually sent by mail).")]

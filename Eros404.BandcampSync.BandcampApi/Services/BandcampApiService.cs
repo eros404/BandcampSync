@@ -28,10 +28,10 @@ public class BandcampApiService : IBandcampApiService
         _getItemsCount = options.Value.GetItemsCount;
     }
 
-    public async Task<Collection?> GetCollectionAsync()
+    public async Task<Collection?> GetCollectionAsync(string? search = null)
     {
         var fanId = await GetFanIdAsync();
-        return fanId == null ? null : await GetCollectionAsync((int)fanId);
+        return fanId == null ? null : await GetCollectionAsync((int)fanId, search);
     }
 
     private async Task<int?> GetFanIdAsync()
@@ -41,7 +41,7 @@ public class BandcampApiService : IBandcampApiService
         return collectionSummary?.fan_id;
     }
 
-    private async Task<Collection?> GetCollectionAsync(int fanId)
+    private async Task<Collection?> GetCollectionAsync(int fanId, string? search = null)
     {
         CollectionResponse? lastResponse = null;
         Collection? collection = null;
@@ -55,7 +55,7 @@ public class BandcampApiService : IBandcampApiService
             else if (lastResponse != null) collection.AddDistinct(lastResponse.ToCollection());
         } while (lastResponse is { more_available: true } && !string.IsNullOrEmpty(lastResponse.last_token));
 
-        return collection;
+        return search is null ? collection : collection.Filter(search);
     }
 
     private async Task<CollectionResponse?> FetchItems(int fanId, string olderThanToken)

@@ -30,7 +30,12 @@ internal class SyncCommand : AsyncCommand<SyncSettings>
 
     public override async Task<int> ExecuteAsync(CommandContext context, SyncSettings settings)
     {
-        var compareResult = await _comparatorService.CompareLocalWithBandcamp();
+        CollectionCompareResult? compareResult = null;
+        await AnsiConsole.Status()
+            .StartAsync("Fetching collection...", async _ =>
+            {
+                compareResult = await _comparatorService.CompareLocalWithBandcamp(settings.Search);
+            });
         if (compareResult == null)
             return -1;
         AnsiConsole.Write(compareResult.ToTable("Missing Items"));

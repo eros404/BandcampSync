@@ -7,7 +7,7 @@ using Spectre.Console.Cli;
 
 namespace Eros404.BandcampSync.ConsoleApp.Cli.Commands;
 
-public class AddItemsCommand : AsyncCommand<AddItemsSettings>
+internal class AddItemsCommand : AsyncCommand<AddItemsSettings>
 {
     private readonly IBandcampApiService _bandCampService;
     private readonly IDownloadService _downloadService;

@@ -4,5 +4,5 @@ namespace Eros404.BandcampSync.Core.Services;
 
 public interface IComparatorService
 {
-    Task<CollectionCompareResult?> CompareLocalWithBandcamp(bool ignorePhantoms = false);
+    Task<CollectionCompareResult?> CompareLocalWithBandcamp(string? search = null, bool ignorePhantoms = false);
 }

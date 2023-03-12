@@ -17,9 +17,9 @@ public class ComparatorService : IComparatorService
         _phantomService = phantomService;
     }
 
-    public async Task<CollectionCompareResult?> CompareLocalWithBandcamp(bool ignorePhantoms = false)
+    public async Task<CollectionCompareResult?> CompareLocalWithBandcamp(string? search = null, bool ignorePhantoms = false)
     {
-        var bandcamp = await _bandCampService.GetCollectionAsync();
+        var bandcamp = await _bandCampService.GetCollectionAsync(search);
         if (bandcamp == null)
             return null;
         if (!ignorePhantoms) bandcamp.Remove(_phantomService.GetPhantoms());

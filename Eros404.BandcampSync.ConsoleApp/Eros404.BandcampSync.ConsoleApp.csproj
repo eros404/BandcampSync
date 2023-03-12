@@ -8,11 +8,11 @@
         <AssemblyName>Eros404.BandcampSync</AssemblyName>
         <Company>Eros404</Company>
         <Product>BandcampSync</Product>
-        <AssemblyVersion>1.2.6.0</AssemblyVersion>
+        <AssemblyVersion>1.2.7.0</AssemblyVersion>
         <UserSecretsId>9dda5abe-2f55-487d-9f92-d3bed559018c</UserSecretsId>
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>bandcampsync</ToolCommandName>
-        <PackageVersion>1.2.6.0</PackageVersion>
+        <PackageVersion>1.2.7.0</PackageVersion>
         <Title>BandcampSync</Title>
         <Authors>Eros404</Authors>
         <Description>A .NET tool that make easier to download your Bandcamp collection on a local device.</Description>

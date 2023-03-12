@@ -49,4 +49,18 @@ public class Collection
             MissingAlbums = missingAlbums
         };
     }
+
+    public Collection Filter(string search)
+    {
+        search = search.ToLower();
+        return new Collection
+        {
+            Albums = Albums.Where(a =>
+                    new List<string?> { a.Title, a.BandName }.Any(field => (field ?? "").ToLower().Contains(search)))
+                .ToList(),
+            Tracks = Tracks.Where(t =>
+                new List<string?> { t.Title, t.AlbumTitle, t.BandName }.Any(field =>
+                    (field ?? "").ToLower().Contains(search))).ToList()
+        };
+    }
 }

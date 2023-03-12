@@ -17,7 +17,7 @@ internal class CompareCollectionsCommand : AsyncCommand<CompareCollectionsSettin
 
     public override async Task<int> ExecuteAsync(CommandContext context, CompareCollectionsSettings settings)
     {
-        var compareResult = await _comparatorService.CompareLocalWithBandcamp();
+        var compareResult = await _comparatorService.CompareLocalWithBandcamp(settings.Search);
         if (compareResult == null)
             return -1;
         AnsiConsole.Write(compareResult.ToTable("Missing Items"));

@@ -4,5 +4,5 @@ namespace Eros404.BandcampSync.Core.Services;
 
 public interface IBandcampApiService
 {
-    Task<Collection?> GetCollectionAsync();
+    Task<Collection?> GetCollectionAsync(string? search = null);
 }
